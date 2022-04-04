@@ -5,7 +5,7 @@ import bitvec
 import numpy as np
 from seedpy import get_random_state
 
-from misc import is_triu, min_max
+from .misc import is_triu, min_max
 
 
 def is_qubo_like(arr):
@@ -129,7 +129,7 @@ class qubo:
     def dynamic_range(self, bits=False):
         min_, max_ = min_max(
             abs(u-v) for u, v in combinations(
-                np.r_[self.m[np.triu_indices_from(self.m)], 0], r=2))
+                np.r_[self.m[np.triu_indices_from(self.m)], 0], r=2) if not np.isclose(u, v))
         r = max_/min_
         return np.log2(r) if bits else 20*np.log10(r)
 
