@@ -101,6 +101,19 @@ class qubo:
         return min(bitvec.all(self.n, read_only=False), key=self)
 
 
+    def spectral_gap(self, return_optimum=False):
+        if self.n >= 20: warn('Calculating the spectral gap of QUBOs with n>=20 might take a very long time')
+        o1, o2 = float('inf'), float('inf')
+        for x in bitvec.all(self.n):
+            v = self(x)
+            if v < o1:
+                o1 = v
+            elif v < o2:
+                o2 = v
+        sgap = o2-o1
+        return sgap, o1 if return_optimum else sgap
+
+
     def clamp(self, partial_assignment=None):
         if partial_assignment is None:
             return self.copy(), 0, set(range(self.n))
@@ -127,10 +140,10 @@ class qubo:
 
 
     def dynamic_range(self, bits=False):
-        min_, max_ = min_max(
-            abs(u-v) for u, v in combinations(
-                np.r_[self.m[np.triu_indices_from(self.m)], 0], r=2) if not np.isclose(u, v))
-        r = max_/min_
+        params = np.sort(np.unique(np.r_[self.m[np.triu_indices_from(self.m)], 0]))
+        max_diff = params[-1]-params[0]
+        min_diff = np.min(params[1:]-params[:-1])
+        r = max_diff/min_diff
         return np.log2(r) if bits else 20*np.log10(r)
 
 

@@ -4,4 +4,4 @@ from .qubo import (
     to_triu_form
 )
 
-from . import embedding
+from . import embedding, sampling
