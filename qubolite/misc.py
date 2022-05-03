@@ -16,3 +16,11 @@ def min_max(it):
         if x < min_: min_ = x
         if x > max_: max_ = x
     return min_, max_
+
+
+def set_suffix(filename, suffix):
+    s = suffix.strip(' .')
+    if filename.lower().endswith('.'+s.lower()):
+        return filename
+    else:
+        return f'{filename}.{s}'

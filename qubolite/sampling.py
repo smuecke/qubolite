@@ -1,3 +1,4 @@
+import struct
 from collections import Counter, defaultdict
 from functools   import cached_property
 
@@ -5,8 +6,10 @@ import bitvec
 import numpy as np
 from seedpy import get_random_state
 
+from .misc import set_suffix
 
-class QUBOSample:
+
+class BinarySample:
 
     def __init__(self, *, counts: dict[str, int]=None, raw: np.ndarray=None):
         if counts is not None:
@@ -16,6 +19,35 @@ class QUBOSample:
             self.counts = dict(C)
         else:
             raise ValueError('Provide counts or raw sample data!')
+
+    def save(self, filename):
+        f = open(set_suffix(filename, 'sample'), 'wb')
+        f.write(struct.pack('<I', self.n))
+        max_count = max(self.counts.values())
+        fmt = 'B' if max_count<(1<<8) else 'H' if max_count<(1<<16) else 'I'
+        f.write(struct.pack('c', fmt.encode()))
+        b = int(np.ceil(self.n/8))
+        for x, k in self.counts.items():
+            f.write(int.to_bytes(int(x[::-1], base=2), length=b, byteorder='little', signed=False))
+            f.write(struct.pack(f'<{fmt}', k))
+        f.close()
+
+    @classmethod
+    def load(cls, filename):
+        with open(filename, 'rb') as f:
+            data = f.read()
+        n, = struct.unpack('<I', data[:4])
+        fmt, = struct.unpack('c', data[4:5])
+        fmt = fmt.decode()
+        b = int(np.ceil(n/8))
+        l = struct.calcsize(fmt)
+        counts = dict()
+        for offset in range(5, len(data), b+l):
+            i = int.from_bytes(data[offset:offset+b], byteorder='little', signed=False)
+            x = format(i, f'0{n}b')[::-1]
+            k, = struct.unpack(f'<{fmt}', data[offset+b:offset+b+l])
+            counts[x] = k
+        return cls(counts=counts)
 
     @cached_property
     def n(self):
@@ -50,6 +82,19 @@ class QUBOSample:
         p2 = np.asarray([other.counts.get(x, 0) for x in xs], dtype=np.float64)/other.shots
         return np.linalg.norm(np.sqrt(p1)-np.sqrt(p2))/np.sqrt(2.0)
 
+    def subsample(self, shots: int, random_state=None):
+        npr = get_random_state(random_state)
+
+        xs = list(sorted(self.counts.keys())) # sort for reproducibility
+        cumcs = np.cumsum(np.asarray([self.counts[x] for x in xs]))
+        mask = npr.permutation(self.shots) < shots
+        counts = dict()
+        for u, v, x in zip(np.r_[0, cumcs], cumcs, xs):
+            c = mask[u:v].sum()
+            if c > 0:
+                counts[x] = c
+        return BinarySample(counts=counts)
+
 
 def generate_num_flips(λ=1.0, random_state=None):
     npr = get_random_state(random_state)
@@ -71,7 +116,7 @@ def full(qubo, samples: int=1, temp=1.0, random_state=None):
     C = Counter(vals)
     fmt = f'0{qubo.n}b'
     counts = { format(i, fmt)[::-1]: k for i, k in C.items() }
-    return QUBOSample(counts=counts)
+    return BinarySample(counts=counts)
 
 def gibbs(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_state=None):
     npr = get_random_state(random_state)
@@ -83,6 +128,6 @@ def gibbs(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_sta
         x = npr.binomial(1, p=p)
         if t >= burn_in:
             counts[bitvec.to_string(x)] += 1
-    return QUBOSample(counts=counts)
+    return BinarySample(counts=dict(counts))
 
         

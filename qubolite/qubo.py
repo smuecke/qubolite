@@ -5,7 +5,7 @@ import bitvec
 import numpy as np
 from seedpy import get_random_state
 
-from .misc import is_triu, min_max
+from .misc import is_triu, set_suffix
 
 
 def is_qubo_like(arr):
@@ -62,12 +62,14 @@ class qubo:
         return cls(m)
 
 
-    def to_file(self, path: str):
-        return NotImplemented
+    def save(self, path: str):
+        with open(set_suffix(path, 'qubo'), 'wb') as f:
+            np.save(f, self.m)
+
 
     @classmethod
-    def from_file(cls, path: str):
-        return NotImplemented
+    def load(cls, path: str):
+        return cls(np.load(path))
 
 
     def to_dict(self, names=None, double_indices=True):
