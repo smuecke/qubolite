@@ -3,6 +3,12 @@
 A light-weight toolbox for working with QUBO instances in NumPy.
 
 
+## Installation
+
+This package was created using Python 3.10.
+You need the `bitvec` package, which you can install by running `python3.10 -m pip install git+https://github.com/smuecke/bitvec.git` (it is not yet available on PyPi).
+
+
 ## Version Log
 
 * **0.2** Added problem embeddings (binary clustering, subset sum problem)
