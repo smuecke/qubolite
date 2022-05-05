@@ -4,6 +4,7 @@ from functools   import cached_property
 
 import bitvec
 import numpy as np
+from numba  import njit
 from seedpy import get_random_state
 
 from .misc import set_suffix
@@ -118,10 +119,11 @@ def full(qubo, samples: int=1, temp=1.0, random_state=None):
     counts = { format(i, fmt)[::-1]: k for i, k in C.items() }
     return BinarySample(counts=counts)
 
-def gibbs(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_state=None):
+
+def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_state=None):
     npr = get_random_state(random_state)
     counts = defaultdict(int)
-    x = initial if initial is not None else npr.binomial(1, 0.5, size=qubo.n)
+    x = initial if initial is not None else (npr.random(qubo.n)<0.5).astype(np.float64)
     for t in range(burn_in+samples):
         exp_dx = np.exp(qubo.dx(x)*(2*x-1)/temp)
         p = exp_dx/(exp_dx+1)
@@ -130,4 +132,38 @@ def gibbs(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_sta
             counts[bitvec.to_string(x)] += 1
     return BinarySample(counts=dict(counts))
 
-        
+
+@njit
+def _marginal(qm, x, i, temp=1.0):
+    dxi = qm[i,i]+(x[:i]*qm[:i,i]).sum()+(x[i+1:]*qm[i,i+1:]).sum()
+    if x[i] == 0:
+        e0 = x @ qm @ x
+        e1 = e0+dxi
+    else:
+        e1 = x @ qm @ x
+        e0 = e1-dxi
+    p0 = np.exp(-e0/temp)
+    p1 = np.exp(-e1/temp)
+    return p1/(p0+p1)
+
+
+def gibbs(qubo, samples: int=1, burn_in=1000, keep_prob=1.0, initial=None, temp=1.0, random_state=None):
+    npr = get_random_state(random_state)
+    counts = defaultdict(int)
+    x = initial if initial is not None else (npr.random(qubo.n)<0.5).astype(np.float64)
+    sampled = -burn_in
+    while sampled < samples:
+        # iterate over all indices in random order
+        for i in npr.permutation(qubo.n):
+            # get marginal Bernoulli probability for component i
+            p = _marginal(qubo.m, x, i, temp)
+            # sample with given probability
+            x[i] = 1 if npr.random() < p else 0
+        if sampled >= 0:
+            if npr.random() < keep_prob:
+                counts[bitvec.to_string(x)] += 1
+                sampled += 1
+        else:
+            # still in burn-in phase -> discard sample
+            sampled += 1
+    return BinarySample(counts=dict(counts))

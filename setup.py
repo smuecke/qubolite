@@ -7,13 +7,13 @@ with open('README.md', 'r', encoding='utf-8') as f:
 setuptools.setup(
         name='qubolite',
         packages=['qubolite'],
-        version='0.4',
+        version='0.5',
         description='Toolbox for quadratic binary optimization',
         long_description=long_description,
         long_description_content_type='text/markdown',
         author='Sascha Muecke',
         author_email='sascha.muecke@tu-dortmund.de',
         url='https://github.com/smuecke/qubolite',
-        requires=['bitvec', 'numpy', 'seedpy'],
+        requires=['bitvec', 'numpy', 'seedpy', 'numba'],
         python_requires='>=3.10'
 )
