@@ -147,11 +147,12 @@ def _marginal(qm, x, i, temp=1.0):
     return p1/(p0+p1)
 
 
-def gibbs(qubo, samples: int=1, burn_in=1000, keep_prob=1.0, initial=None, temp=1.0, random_state=None):
+def gibbs(qubo, samples: int=1, burn_in: int=1000, keep_interval: int=10, initial=None, temp=1.0, random_state=None):
     npr = get_random_state(random_state)
     counts = defaultdict(int)
     x = initial if initial is not None else (npr.random(qubo.n)<0.5).astype(np.float64)
     sampled = -burn_in
+    skip = 0
     while sampled < samples:
         # iterate over all indices in random order
         for i in npr.permutation(qubo.n):
@@ -160,9 +161,12 @@ def gibbs(qubo, samples: int=1, burn_in=1000, keep_prob=1.0, initial=None, temp=
             # sample with given probability
             x[i] = 1 if npr.random() < p else 0
         if sampled >= 0:
-            if npr.random() < keep_prob:
+            if skip <= 0:
                 counts[bitvec.to_string(x)] += 1
                 sampled += 1
+                skip = keep_interval-1
+            else:
+                skip -= 1
         else:
             # still in burn-in phase -> discard sample
             sampled += 1

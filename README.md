@@ -15,3 +15,4 @@ You need the `bitvec` package, which you can install by running `python3.10 -m p
 * **0.3** Added `QUBOSample` class and sampling methods `full` and `gibbs`
 * **0.4** Renamed `QUBOSample` to `BinarySample`; added methods for saving and loading QUBO and Sample instances
 * **0.5** Moved `gibbs` to `mcmc` and implemented true Gibbs sampling (hopefully) as `gibbs`; added `numba` as dependency
+    * **0.5.1** changed `keep_prob` to `keep_interval` in Gibbs sampling, making the algorithm's runtime deterministic; renamed `sample` to `random` in QUBO embedding classes, added MAX 2-SAT problem embedding
