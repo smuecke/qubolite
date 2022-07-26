@@ -5,7 +5,11 @@ A light-weight toolbox for working with QUBO instances in NumPy.
 
 ## Installation
 
-This package was created using Python 3.10.
+```
+pip install qubolite
+```
+
+This package was created using Python 3.10, but runs with Python >= 3.8.
 
 
 ## Version Log
