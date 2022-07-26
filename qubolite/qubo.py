@@ -36,9 +36,15 @@ class qubo:
     def __call__(self, x: np.ndarray):
         return np.sum(np.dot(x, self.m)*x, axis=-1)
 
+    def __getitem__(self, k):
+        try:
+            i, j = sorted(k)
+            return self.m.__getitem__((i, j))
+        except TypeError:
+            return self.m.__getitem__((k, k))
+
     def copy(self):
         return qubo(self.m.copy())
-
 
     @classmethod
     def random(cls, n: int, distr='normal', density=1.0, random_state=None, **kwargs):
@@ -57,19 +63,16 @@ class qubo:
             raise ValueError(f'Unknown distribution "{distr}"')
         m = np.triu(arr+arr.T)
         if density < 1.0:
-            m *= npr.binomial(1, density, size=m.shape)
+            m *= npr.random(size=m.shape)<density
         return cls(m)
-
 
     def save(self, path: str):
         with open(set_suffix(path, 'qubo'), 'wb') as f:
             np.save(f, self.m)
 
-
     @classmethod
     def load(cls, path: str):
         return cls(np.load(path))
-
 
     def to_dict(self, names=None, double_indices=True):
         if names is None:
@@ -101,11 +104,9 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m)
 
-
     def brute_force(self):
         if self.n >= 20: warn('Brute-forcing QUBOs with n>=20 might take a very long time')
         return min(all_bitvectors(self.n, read_only=False), key=self)
-
 
     def spectral_gap(self, return_optimum=False):
         if self.n >= 20: warn('Calculating the spectral gap of QUBOs with n>=20 might take a very long time')
@@ -119,7 +120,6 @@ class qubo:
         sgap = o2-o1
         return sgap, o1 if return_optimum else sgap
 
-
     def clamp(self, partial_assignment=None):
         if partial_assignment is None:
             return self.copy(), 0, set(range(self.n))
@@ -131,7 +131,6 @@ class qubo:
             R[i, i] += sum(R[l, i] if l<i else R[i, l] for l in ones)
         return qubo(R[free,:][:,free]), const, free
 
-
     def dx(self, x: np.ndarray):
         # 1st discrete derivatice
         m_  = np.triu(self.m, 1)
@@ -139,11 +138,9 @@ class qubo:
         sign = 1-2*x
         return sign*(np.diag(self.m)+(m_*x).sum(1))
 
-
     def dx2(self, x: np.ndarray):
         # 2nd discrete derivative
         return NotImplemented
-
 
     def dynamic_range(self, bits=False):
         params = np.sort(np.unique(np.r_[self.m[np.triu_indices_from(self.m)], 0]))
@@ -152,6 +149,15 @@ class qubo:
         r = max_diff/min_diff
         return np.log2(r) if bits else 20*np.log10(r)
 
-
     def absmax(self):
         return np.max(np.abs(self.m))
+
+    def round(self, *args):
+        return qubo(self.m.round(*args))
+    
+    def scale(self, factor):
+        return qubo(self.m*factor)
+
+    def as_int(self, bits=32):
+        factor = ((1<<(bits-1))-1)/self.absmax()
+        return qubo((self.m*factor).round())
