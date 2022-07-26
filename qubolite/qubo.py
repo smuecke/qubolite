@@ -2,9 +2,8 @@ from itertools import combinations
 from warnings  import warn
 
 import numpy as np
-from seedpy import get_random_state
 
-from .misc   import all_bitvectors, is_triu, set_suffix
+from .misc   import all_bitvectors, get_random_state, is_triu, set_suffix
 
 
 def is_qubo_like(arr):

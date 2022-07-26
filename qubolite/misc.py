@@ -1,4 +1,7 @@
+from hashlib import md5
+
 import numpy as np
+from numpy.random import RandomState
 
 
 def is_symmetrical(arr):
@@ -16,6 +19,19 @@ def min_max(it):
         if x < min_: min_ = x
         if x > max_: max_ = x
     return min_, max_
+
+
+def get_random_state(state=None):
+    if isinstance(state, RandomState):
+        return state
+    if state is None:
+        return RandomState()
+    try:
+        seed = int(state)
+    except ValueError:
+        # use hash digest when seed is a (non-numerical) string
+        seed = int(md5(state.encode('utf-8')).hexdigest(), 16) & 0xffffffff
+    return RandomState(seed)
 
 
 def set_suffix(filename, suffix):

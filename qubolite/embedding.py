@@ -1,8 +1,8 @@
 from functools import partial
 
 import numpy as np
-from seedpy import get_random_state
 
+from .misc import get_random_state
 from .qubo import qubo
 
 

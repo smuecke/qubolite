@@ -21,3 +21,4 @@ This package was created using Python 3.10, but runs with Python >= 3.8.
     * **0.5.1** changed `keep_prob` to `keep_interval` in Gibbs sampling, making the algorithm's runtime deterministic; renamed `sample` to `random` in QUBO embedding classes, added MAX 2-SAT problem embedding
 * **0.6** Changed Python version to 3.8; removed `bitvec` dependency; added `scipy` dependency required for matrix operations in numba functions
     * **0.6.1** added scaling and rounding
+    * **0.6.2** removed `seedpy` dependency

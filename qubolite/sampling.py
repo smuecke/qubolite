@@ -4,9 +4,8 @@ from functools   import cached_property
 
 import numpy as np
 from numba  import njit
-from seedpy import get_random_state
 
-from .misc import all_bitvectors, bitvector_from_string, bitvector_to_string, set_suffix
+from .misc import all_bitvectors, bitvector_from_string, bitvector_to_string, get_random_state, set_suffix
 
 
 class BinarySample:
