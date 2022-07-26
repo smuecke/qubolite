@@ -1,7 +1,6 @@
 from functools import partial
 
 import numpy as np
-from bitvec import with_norm
 from seedpy import get_random_state
 
 from .qubo import qubo
@@ -86,7 +85,7 @@ class SubsetSum(qubo_embedding):
         npr = get_random_state(random_state)
         values = npr.uniform(low, high, size=n)
         k = np.arange(2, n+1) if summands is None else summands
-        subset = with_norm(n, k)().astype(bool)
+        subset = npr.permutation(n) < k
         target = values[subset].sum()
         return cls(values, target)
 

@@ -2,12 +2,11 @@ import struct
 from collections import Counter, defaultdict
 from functools   import cached_property
 
-import bitvec
 import numpy as np
 from numba  import njit
 from seedpy import get_random_state
 
-from .misc import set_suffix
+from .misc import all_bitvectors, bitvector_from_string, bitvector_to_string, set_suffix
 
 
 class BinarySample:
@@ -16,7 +15,7 @@ class BinarySample:
         if counts is not None:
             self.counts = counts
         elif raw is not None:
-            C = Counter([bitvec.to_string(x) for x in raw])
+            C = Counter([bitvector_to_string(x) for x in raw])
             self.counts = dict(C)
         else:
             raise ValueError('Provide counts or raw sample data!')
@@ -65,7 +64,7 @@ class BinarySample:
         X = np.empty((self.shots, self.n))
         pointer = 0
         for x, k in self.counts.items():
-            X[pointer:pointer+k, :] = np.tile(bitvec.from_string(x), (k, 1))
+            X[pointer:pointer+k, :] = np.tile(bitvector_from_string(x), (k, 1))
             pointer += k
         return X
 
@@ -110,7 +109,7 @@ def generate_num_flips(λ=1.0, random_state=None):
 
 def full(qubo, samples: int=1, temp=1.0, random_state=None):
     npr = get_random_state(random_state)
-    X = np.vstack(list(bitvec.all(qubo.n, read_only=False)))
+    X = np.vstack(list(all_bitvectors(qubo.n, read_only=False)))
     p = np.exp(-qubo(X)/temp)
     p = p / p.sum()
     vals = npr.choice(2**qubo.n, p=p, size=samples)
@@ -129,7 +128,7 @@ def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_stat
         p = exp_dx/(exp_dx+1)
         x = npr.binomial(1, p=p)
         if t >= burn_in:
-            counts[bitvec.to_string(x)] += 1
+            counts[bitvector_to_string(x)] += 1
     return BinarySample(counts=dict(counts))
 
 
@@ -162,7 +161,7 @@ def gibbs(qubo, samples: int=1, burn_in: int=1000, keep_interval: int=10, initia
             x[i] = 1 if npr.random() < p else 0
         if sampled >= 0:
             if skip <= 0:
-                counts[bitvec.to_string(x)] += 1
+                counts[bitvector_to_string(x)] += 1
                 sampled += 1
                 skip = keep_interval-1
             else:

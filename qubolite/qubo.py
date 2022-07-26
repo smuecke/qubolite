@@ -1,11 +1,10 @@
 from itertools import combinations
 from warnings  import warn
 
-import bitvec
 import numpy as np
 from seedpy import get_random_state
 
-from .misc import is_triu, set_suffix
+from .misc   import all_bitvectors, is_triu, set_suffix
 
 
 def is_qubo_like(arr):
@@ -90,23 +89,28 @@ class qubo:
         n = max(names.values())+1
         m = np.zeros((n, n))
         for k, v in qubo_dict.items():
-            match k:
-                case i, j: m[i, j] += v
-                case i,  : m[i, i] += v
-                case _   : pass
+            try:
+                i, j = k
+                m[i, j] += v
+            except ValueError:
+                try:
+                    i, = k
+                    m[i, i] += v
+                except ValueError:
+                    pass
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m)
 
 
     def brute_force(self):
         if self.n >= 20: warn('Brute-forcing QUBOs with n>=20 might take a very long time')
-        return min(bitvec.all(self.n, read_only=False), key=self)
+        return min(all_bitvectors(self.n, read_only=False), key=self)
 
 
     def spectral_gap(self, return_optimum=False):
         if self.n >= 20: warn('Calculating the spectral gap of QUBOs with n>=20 might take a very long time')
         o1, o2 = float('inf'), float('inf')
-        for x in bitvec.all(self.n):
+        for x in all_bitvectors(self.n):
             v = self(x)
             if v < o1:
                 o1 = v
