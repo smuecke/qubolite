@@ -22,4 +22,4 @@ This package was created using Python 3.10, but runs with Python >= 3.8.
 * **0.6** Changed Python version to 3.8; removed `bitvec` dependency; added `scipy` dependency required for matrix operations in numba functions
     * **0.6.1** added scaling and rounding
     * **0.6.2** removed `seedpy` dependency
-    * **0.6.3** cleaned up sampling, simplified type hints
+    * **0.6.3** renamed `shots` to `size` in `BinarySample`; cleaned up sampling, simplified type hints

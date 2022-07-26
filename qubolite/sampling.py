@@ -55,12 +55,12 @@ class BinarySample:
         return n
 
     @cached_property
-    def shots(self):
+    def size(self):
         return sum(self.counts.values())
 
     @cached_property
     def raw(self):
-        X = np.empty((self.shots, self.n))
+        X = np.empty((self.size, self.n))
         pointer = 0
         for x, k in self.counts.items():
             X[pointer:pointer+k, :] = np.tile(bitvector_from_string(x), (k, 1))
@@ -77,21 +77,29 @@ class BinarySample:
         xs = set(self.counts.keys())
         xs.update(other.counts.keys())
         xs = list(xs)
-        p1 = np.asarray([self.counts.get(x, 0) for x in xs], dtype=np.float64)/self.shots
-        p2 = np.asarray([other.counts.get(x, 0) for x in xs], dtype=np.float64)/other.shots
+        p1 = np.asarray([self.counts.get(x, 0) for x in xs], dtype=np.float64)/self.size
+        p2 = np.asarray([other.counts.get(x, 0) for x in xs], dtype=np.float64)/other.size
         return np.linalg.norm(np.sqrt(p1)-np.sqrt(p2))/np.sqrt(2.0)
 
-    def subsample(self, shots: int, random_state=None):
+    def subsample(self, size: int, random_state=None):
         npr = get_random_state(random_state)
         xs = list(sorted(self.counts.keys())) # sort for reproducibility
         cumcs = np.cumsum(np.asarray([self.counts[x] for x in xs]))
-        mask = npr.permutation(self.shots) < shots
+        mask = npr.permutation(self.size) < size
         counts = dict()
         for u, v, x in zip(np.r_[0, cumcs], cumcs, xs):
             c = mask[u:v].sum()
             if c > 0:
                 counts[x] = c
         return BinarySample(counts=counts)
+
+    def most_frequent(self):
+        return max(self.counts, key=self.counts.get)
+
+    def empirical_prob(self, x):
+        c = self.counts.get(x, 0)
+        return c/self.size
+        
 
 
 def full(qubo, samples: int=1, temp=1.0, random_state=None):
