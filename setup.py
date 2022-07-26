@@ -4,9 +4,6 @@ import setuptools
 with open('README.md', 'r', encoding='utf-8') as f:
     long_description = f.read()
 
-with open('requirements.txt', 'r') as f:
-    reqs = [ l.strip() for l in f ]
-
 setuptools.setup(
         name='qubolite',
         packages=['qubolite'],
@@ -17,6 +14,8 @@ setuptools.setup(
         author='Sascha Muecke',
         author_email='sascha.muecke@tu-dortmund.de',
         url='https://github.com/smuecke/qubolite',
-        install_requires=reqs,
+        install_requires=['numba>=0.55.2', 'numpy>=1.22.4', 'seedpy>=0.3', 'scipy>=0.16'],
         python_requires='>=3.8'
 )
+
+['numba>=0.55.2', 'numpy>=1.22.4', 'seedpy>=0.3', 'scipy>=0.16']
