@@ -92,7 +92,7 @@ class SubsetSum(qubo_embedding):
 
 class Max2Sat(qubo_embedding):
 
-    def __init__(self, clauses: list[list[int]], penalty=1.0):
+    def __init__(self, clauses, penalty=1.0):
         assert all(len(c)==2 for c in clauses), 'All clauses must consist of exactly 2 variables'
         assert all(0 not in c for c in clauses), '"0" cannot be a variable, use indices >= 1'
         self.__clauses = clauses

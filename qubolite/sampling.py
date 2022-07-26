@@ -10,7 +10,7 @@ from .misc import all_bitvectors, bitvector_from_string, bitvector_to_string, ge
 
 class BinarySample:
 
-    def __init__(self, *, counts: dict[str, int]=None, raw: np.ndarray=None):
+    def __init__(self, *, counts=None, raw: np.ndarray=None):
         if counts is not None:
             self.counts = counts
         elif raw is not None:
@@ -83,7 +83,6 @@ class BinarySample:
 
     def subsample(self, shots: int, random_state=None):
         npr = get_random_state(random_state)
-
         xs = list(sorted(self.counts.keys())) # sort for reproducibility
         cumcs = np.cumsum(np.asarray([self.counts[x] for x in xs]))
         mask = npr.permutation(self.shots) < shots
@@ -93,17 +92,6 @@ class BinarySample:
             if c > 0:
                 counts[x] = c
         return BinarySample(counts=counts)
-
-
-def generate_num_flips(λ=1.0, random_state=None):
-    npr = get_random_state(random_state)
-    flip_list = []
-    while True:
-        if flip_list:
-            yield flip_list.pop()
-        else:
-            ks = npr.poisson(1, size=100)
-            flip_list.extend(ks[ks>0])
 
 
 def full(qubo, samples: int=1, temp=1.0, random_state=None):
