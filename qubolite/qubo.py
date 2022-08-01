@@ -3,7 +3,7 @@ from warnings  import warn
 
 import numpy as np
 
-from .misc   import all_bitvectors, get_random_state, is_triu, set_suffix
+from .misc   import all_bitvectors, get_random_state, is_triu, set_suffix, warn_size
 
 
 def is_qubo_like(arr):
@@ -104,11 +104,11 @@ class qubo:
         return cls(m)
 
     def brute_force(self):
-        if self.n >= 20: warn('Brute-forcing QUBOs with n>=20 might take a very long time')
+        warn_size(self.n, limit=20)
         return min(all_bitvectors(self.n, read_only=False), key=self)
 
     def spectral_gap(self, return_optimum=False):
-        if self.n >= 20: warn('Calculating the spectral gap of QUBOs with n>=20 might take a very long time')
+        warn_size(self.n, limit=20)
         o1, o2 = float('inf'), float('inf')
         for x in all_bitvectors(self.n):
             v = self(x)
@@ -160,3 +160,34 @@ class qubo:
     def as_int(self, bits=32):
         factor = ((1<<(bits-1))-1)/self.absmax()
         return qubo((self.m*factor).round())
+
+    def partition_function(self, log=False, temp=1.0, fast=True):
+        Z = self.probabilities(temp=temp, unnormalized=True, fast=fast).sum()
+        return np.log(Z) if log else Z
+
+    def probabilities(self, temp=1.0, out=None, unnormalized=False, fast=True):
+        if out is None:
+            out = np.empty(1<<self.n)
+        else:
+            assert out.shape == (1<<self.n,), f'out array has wrong shape, ({1<<self.n},) expected'
+        if fast:
+            # builds the entire (2**n, n)-array of n-bit vectors
+            X = np.vstack(list(all_bitvectors(self.n, read_only=False)))
+            out[...] = np.exp(-self(X)/temp)
+        else:
+            # uses less memory, but much slower
+            warn_size(self.n, limit=20)
+            for i, x in enumerate(all_bitvectors(self.n)):
+                out[i] = np.exp(-self(x)/temp)
+        if unnormalized:
+            return out
+        return out/out.sum()
+
+    def pairwise_marginals(self, temp=1.0, fast=True):
+        warn_size(self.n, limit=20)
+        probs = self.probabilities(temp=temp, fast=fast)
+        marginals = np.zeros((self.n, self.n))
+        for x, p in zip(all_bitvectors(self.n), probs):
+            suff_stat = np.outer(x, x)
+            marginals += p*suff_stat
+        return np.triu(marginals)

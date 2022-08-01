@@ -1,4 +1,5 @@
-from hashlib import md5
+from hashlib  import md5
+from warnings import warn
 
 import numpy as np
 from numpy.random import RandomState
@@ -19,6 +20,11 @@ def min_max(it):
         if x < min_: min_ = x
         if x > max_: max_ = x
     return min_, max_
+
+
+def warn_size(n: int, limit: int=20):
+    if n > limit:
+        warn('This operation may take a very long time for n>{limit}.')
 
 
 def get_random_state(state=None):
