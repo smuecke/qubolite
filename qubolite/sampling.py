@@ -96,10 +96,20 @@ class BinarySample:
     def most_frequent(self):
         return max(self.counts, key=self.counts.get)
 
-    def empirical_prob(self, x):
+    def empirical_prob(self, x=None):
+        if x is None:
+            return self.__emp_prob
         c = self.counts.get(x, 0)
         return c/self.size
-        
+
+    @cached_property
+    def __emp_prob(self):
+        P = np.zeros(1<<self.n)
+        for x, c in self.counts.items():
+            i = int(x[::-1], base=2)
+            P[i] += c/self.size
+        assert np.isclose(P.sum(), 1.0)
+        return P
 
 
 def full(qubo, samples: int=1, temp=1.0, random_state=None):

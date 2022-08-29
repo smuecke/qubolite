@@ -24,3 +24,4 @@ This package was created using Python 3.10, but runs with Python >= 3.8.
     * **0.6.2** removed `seedpy` dependency
     * **0.6.3** renamed `shots` to `size` in `BinarySample`; cleaned up sampling, simplified type hints
     * **0.6.4** added probabilistic functions to `qubo` class
+    * **0.6.5** complete empirical prob. vector can be returned from `BinarySample`
