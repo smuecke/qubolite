@@ -1,6 +1,3 @@
-from itertools import combinations
-from warnings  import warn
-
 import numpy as np
 
 from .misc   import all_bitvectors, get_random_state, is_triu, set_suffix, warn_size
@@ -113,11 +110,11 @@ class qubo:
         for x in all_bitvectors(self.n):
             v = self(x)
             if v < o1:
-                o1 = v
+                o1, o2 = v, o1
             elif v < o2:
                 o2 = v
         sgap = o2-o1
-        return sgap, o1 if return_optimum else sgap
+        return (sgap, o1) if return_optimum else sgap
 
     def clamp(self, partial_assignment=None):
         if partial_assignment is None:
