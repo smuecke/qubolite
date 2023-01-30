@@ -56,3 +56,4 @@ array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
     * **0.6.4** added probabilistic functions to `qubo` class
     * **0.6.5** complete empirical prob. vector can be returned from `BinarySample`
     * **0.6.6** fixed spectral gap implementation
+    * **0.6.7** moved `brute_force` to new sub-module `solving`; added some approximate solving methods

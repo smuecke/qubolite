@@ -1,6 +1,9 @@
+import warnings
+from heapq import nsmallest
+
 import numpy as np
 
-from .misc   import all_bitvectors, get_random_state, is_triu, set_suffix, warn_size
+from .misc import all_bitvectors, get_random_state, is_triu, set_suffix, warn_size
 
 
 def is_qubo_like(arr):
@@ -100,20 +103,23 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m)
 
-    def brute_force(self):
+    def brute_force(self, k=1, return_value=False):
+        warnings.warn('Use `brute_force` method from `solving` sub-module', category=DeprecationWarning, stacklevel=2)        
         warn_size(self.n, limit=20)
-        return min(all_bitvectors(self.n, read_only=False), key=self)
+        if k == 1:
+            x = min(all_bitvectors(self.n, read_only=False), key=self)
+            return (x, self(x)) if return_value else x
+        elif k > 1:
+            xs = nsmallest(k, all_bitvectors(self.n, read_only=False), key=self)
+            return list(zip(xs, map(self, xs))) if return_value else xs
+        else:
+            return ValueError(f'k must be greater than 0')
 
     def spectral_gap(self, return_optimum=False):
         warn_size(self.n, limit=20)
-        o1, o2 = float('inf'), float('inf')
-        for x in all_bitvectors(self.n):
-            v = self(x)
-            if v < o1:
-                o1, o2 = v, o1
-            elif v < o2:
-                o2 = v
-        sgap = o2-o1
+        opts = self.brute_force(k=2, return_value=True)
+        sgap = opts[1][1]-opts[0][1]
+        o1 = opts[0][0]
         return (sgap, o1) if return_optimum else sgap
 
     def clamp(self, partial_assignment=None):
