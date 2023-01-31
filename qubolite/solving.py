@@ -18,14 +18,38 @@ def brute_force(Q: qubo, k=1, return_value=False):
             return ValueError(f'k must be greater than 0')
         
 
-def simulated_annealing(Q: qubo, steps=100_000, init_temp=1000, n_parallel=10, random_state=None):
+def simulated_annealing(Q: qubo, schedule='2+', steps=100_000, init_temp=None, n_parallel=10, random_state=None, halftime=0.25):
     npr = get_random_state(random_state)
+    
+    if init_temp is None:
+        # estimate initial temperature
+        EΔy, k = 0, 0
+        for _ in range(1000):
+            x  = npr.random(Q.n) < 0.5
+            Δy = Q.dx(x)
+            ix, = np.where(Δy > 0)
+            EΔy += Δy[ix].sum()
+            k += ix.size
+        EΔy /= k
+        initial_acc_prob = 0.99
+        init_temp = -EΔy/np.log(initial_acc_prob)
+        print(f'Init. temp. automatically set to {init_temp:.4f}')
+
+    # setup cooling schedule
+    if schedule == 'e+':
+        temps = init_temp/(1+np.exp(2*np.log(init_temp)*(np.linspace(0,1,steps+1)-0.5)))
+    elif schedule == '2+':
+        temps = init_temp*(1-np.linspace(0,1,steps+1))**2
+    elif schedule == 'e*':
+        temps = init_temp*(0.5**(1/halftime))**np.arange(0,1,steps+1)
+    elif schedule == '2*':
+        temps = init_temp/(1+(1/(halftime**2))*np.linspace(0,1,steps+1)**2)
+    else:
+        raise ValueError('Unknown schedule; must be one of {e*, 2*, e+, 2+}.')
+
     x = (npr.random((n_parallel, Q.n)) < 0.5).astype(np.float64)
     y = Q(x)
-    
-    #expected_y = 0.25*(Q.m+Q.m.T).sum()
-    for t in range(steps+1):
-        temp = init_temp*((steps-t)/steps)**2 # quadratic annealing
+    for temp in temps:
         z  = npr.random((n_parallel, Q.n)) < (1/Q.n)
         x_ = (x+z)%2
         Δy = Q(x_)-y
