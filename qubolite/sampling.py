@@ -5,7 +5,8 @@ from functools   import cached_property
 import numpy as np
 from numba  import njit
 
-from .misc import all_bitvectors, bitvector_from_string, bitvector_to_string, get_random_state, set_suffix
+from .bitvec import all_bitvectors, from_string, to_string
+from .misc   import get_random_state, set_suffix
 
 
 class BinarySample:
@@ -14,7 +15,7 @@ class BinarySample:
         if counts is not None:
             self.counts = counts
         elif raw is not None:
-            C = Counter([bitvector_to_string(x) for x in raw])
+            C = Counter([to_string(x) for x in raw])
             self.counts = dict(C)
         else:
             raise ValueError('Provide counts or raw sample data!')
@@ -63,7 +64,7 @@ class BinarySample:
         X = np.empty((self.size, self.n))
         pointer = 0
         for x, k in self.counts.items():
-            X[pointer:pointer+k, :] = np.tile(bitvector_from_string(x), (k, 1))
+            X[pointer:pointer+k, :] = np.tile(from_string(x), (k, 1))
             pointer += k
         return X
 
@@ -133,7 +134,7 @@ def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_stat
         p = exp_dx/(exp_dx+1)
         x = npr.binomial(1, p=p)
         if t >= burn_in:
-            counts[bitvector_to_string(x)] += 1
+            counts[to_string(x)] += 1
     return BinarySample(counts=dict(counts))
 
 
@@ -166,7 +167,7 @@ def gibbs(qubo, samples: int=1, burn_in: int=1000, keep_interval: int=10, initia
             x[i] = 1 if npr.random() < p else 0
         if sampled >= 0:
             if skip <= 0:
-                counts[bitvector_to_string(x)] += 1
+                counts[to_string(x)] += 1
                 sampled += 1
                 skip = keep_interval-1
             else:

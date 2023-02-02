@@ -4,4 +4,4 @@ from .qubo import (
     to_triu_form
 )
 
-from . import embedding, sampling, solving
+from . import bitvec, embedding, sampling, solving

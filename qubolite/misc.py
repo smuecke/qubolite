@@ -46,24 +46,3 @@ def set_suffix(filename, suffix):
         return filename
     else:
         return f'{filename}.{s}'
-
-
-def all_bitvectors(n: int, read_only=True):
-    x = np.zeros(n, dtype=np.float64)
-    while True:
-        yield x if read_only else x.copy()
-        pointer = 0
-        while x[pointer] > 0:
-            x[pointer] = 0
-            pointer += 1
-            if pointer >= n:
-                return
-        x[pointer] = 1
-
-
-def bitvector_from_string(string):
-    return np.fromiter(string, dtype=np.float64)
-
-
-def bitvector_to_string(bitvec):
-    return ''.join(str(int(x)) for x in bitvec)

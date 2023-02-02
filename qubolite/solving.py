@@ -2,8 +2,9 @@ from heapq import nsmallest
 
 import numpy as np
 
-from .misc import all_bitvectors, get_random_state, warn_size
-from .qubo import qubo
+from .bitvec import all_bitvectors
+from .misc   import get_random_state, warn_size
+from .qubo   import qubo
 
 
 def brute_force(Q: qubo, k=1, return_value=False):

@@ -1,3 +1,2 @@
-numba
-numpy
-scipy>=0.16
+numba>=0.55.2
+numpy>=1.23.5

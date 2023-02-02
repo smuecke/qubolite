@@ -3,7 +3,8 @@ from heapq import nsmallest
 
 import numpy as np
 
-from .misc import all_bitvectors, get_random_state, is_triu, set_suffix, warn_size
+from .bitvec import all_bitvectors
+from .misc   import get_random_state, is_triu, set_suffix, warn_size
 
 
 def is_qubo_like(arr):
@@ -144,12 +145,12 @@ class qubo:
         # 2nd discrete derivative
         return NotImplemented
 
-    def dynamic_range(self, bits=False):
+    def dynamic_range(self, decibel=False):
         params = np.sort(np.unique(np.r_[self.m[np.triu_indices_from(self.m)], 0]))
         max_diff = params[-1]-params[0]
         min_diff = np.min(params[1:]-params[:-1])
         r = max_diff/min_diff
-        return np.log2(r) if bits else 20*np.log10(r)
+        return 20*np.log10(r) if decibel else np.log2(r)
 
     def absmax(self):
         return np.max(np.abs(self.m))
@@ -161,7 +162,11 @@ class qubo:
         return qubo(self.m*factor)
 
     def as_int(self, bits=32):
-        factor = ((1<<(bits-1))-1)/self.absmax()
+        p_min, p_max = self.m.min(), self.m.max()
+        if np.abs(p_min) < np.abs(p_max):
+            factor = ((1<<(bits-1))-1)/np.abs(p_max)
+        else:
+            factor = (1<<(bits-1))/np.abs(p_min)
         return qubo((self.m*factor).round())
 
     def partition_function(self, log=False, temp=1.0, fast=True):
