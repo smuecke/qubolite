@@ -1,3 +1,4 @@
+import struct
 import warnings
 from heapq import nsmallest
 
@@ -66,13 +67,49 @@ class qubo:
             m *= npr.random(size=m.shape)<density
         return cls(m)
 
-    def save(self, path: str):
-        with open(set_suffix(path, 'qubo'), 'wb') as f:
-            np.save(f, self.m)
+    def save(self, path: str, atol=1e-16):
+        f = open(path, 'wb')
+        f.write(struct.pack('<4s', b'QUBO')) # magic string
+        f.write(struct.pack('<I', self.n)) # QUBO size
+        # determine mode
+        #  0x00: save flattened parameter array
+        #  0x01: save index-value pairs
+        n_nonzero = self.n**2-np.isclose(self.m, 0, atol=atol).sum()
+        size_mode0 = 4*self.n*(self.n+1)
+        size_mode1 = 16*n_nonzero
+        mode = 0 if size_mode0 <= size_mode1 else 255
+        f.write(struct.pack('B', mode)) # mode indicator
+        if mode == 0:
+            # save flattened parameter array
+            f.write(self.m[np.triu_indices_from(self.m)].tobytes())
+        else:
+            # save index-value pairs;
+            # determine index type depending on size
+            t = 'B' if self.n <= 256 else ('H' if self.n <= 65536 else 'I')
+            fmt = f'<{t}{t}d'
+            # write only non-zero parameters
+            for i, j in zip(*np.triu_indices_from(self.m)):
+                if not np.isclose(self.m[i,j], 0, atol=atol):
+                    f.write(struct.pack(fmt, i, j, self.m[i,j]))
+        f.close()
 
     @classmethod
     def load(cls, path: str):
-        return cls(np.load(path))
+        f = open(path, 'rb')
+        magic, = struct.unpack('<4s', f.read(4))
+        if magic != b'QUBO':
+            raise RuntimeError('Invalid QUBO file')
+        n, mode = struct.unpack('<IB', f.read(5))
+        m = np.zeros((n, n))
+        if mode == 0:
+            m[np.triu_indices_from(m)] = np.frombuffer(f.read())
+        else:
+            t = 'B' if n <= 256 else ('H' if n <= 65536 else 'I')
+            fmt = f'<{t}{t}d'
+            for i, j, value in struct.iter_unpack(fmt, f.read()):
+                m[i,j] = value
+        f.close()
+        return cls(m)
 
     def to_dict(self, names=None, double_indices=True):
         if names is None:

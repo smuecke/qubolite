@@ -3,7 +3,7 @@ from collections import Counter, defaultdict
 from functools   import cached_property
 
 import numpy as np
-from numba  import njit
+from numba import njit
 
 from .bitvec import all_bitvectors, from_string, to_string
 from .misc   import get_random_state, set_suffix

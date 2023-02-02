@@ -10,7 +10,7 @@ with open('requirements.txt', 'r') as f:
 setuptools.setup(
         name='qubolite',
         packages=['qubolite'],
-        version='0.6.8',
+        version='0.6.9',
         description='Toolbox for quadratic binary optimization',
         long_description=long_description,
         long_description_content_type='text/markdown',
