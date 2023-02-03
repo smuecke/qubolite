@@ -75,8 +75,9 @@ class qubo:
         #  0x00: save flattened parameter array
         #  0x01: save index-value pairs
         n_nonzero = self.n**2-np.isclose(self.m, 0, atol=atol).sum()
+        index_bytes = 1 if self.n <= 256 else (2 if self.n <= 2 else 4)
         size_mode0 = 4*self.n*(self.n+1)
-        size_mode1 = 16*n_nonzero
+        size_mode1 = (2*index_bytes+8)*n_nonzero
         mode = 0 if size_mode0 <= size_mode1 else 255
         f.write(struct.pack('B', mode)) # mode indicator
         if mode == 0:
