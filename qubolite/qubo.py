@@ -7,6 +7,12 @@ import numpy as np
 from .bitvec import all_bitvectors
 from .misc   import get_random_state, is_triu, set_suffix, warn_size
 
+try:
+    from scipy.stats import kendalltau
+    __SCIPY = True
+except ModuleNotFoundError:
+    __SCIPY = False
+
 
 def is_qubo_like(arr):
     if arr.ndim >= 2:
@@ -237,3 +243,13 @@ class qubo:
             suff_stat = np.outer(x, x)
             marginals += p*suff_stat
         return np.triu(marginals)
+
+
+def ordering_distance(Q1, Q2):
+    assert __SCIPY, 'SciPy not found!'
+    assert Q1.n == Q2.n, 'QUBO instances must have the same dimension'
+    X = np.vstack(list(all_bitvectors(Q1.n, read_only=False)))
+    rnk1 = np.argsort(np.argsort(Q1(X)))
+    rnk2 = np.argsort(np.argsort(Q2(X)))
+    tau, _ = kendalltau(rnk1, rnk2)
+    return (1-tau)/2

@@ -1,5 +1,6 @@
-from hashlib  import md5
-from warnings import warn
+from hashlib   import md5
+from importlib import import_module
+from warnings  import warn
 
 import numpy as np
 from numpy.random import RandomState
@@ -46,3 +47,13 @@ def set_suffix(filename, suffix):
         return filename
     else:
         return f'{filename}.{s}'
+    
+
+def try_import(*libs):
+    libdict = dict()
+    for lib in libs:
+        try:
+            module = import_module(lib)
+        except ModuleNotFoundError:
+            continue
+        libdict[lib] = module
