@@ -5,7 +5,8 @@ from heapq import nsmallest
 import numpy as np
 
 from .bitvec import all_bitvectors
-from .misc   import get_random_state, is_triu, set_suffix, warn_size
+from .cqubo  import brute_force as c_brute_force
+from .misc   import get_random_state, is_triu, warn_size
 
 try:
     from scipy.stats import kendalltau
@@ -148,24 +149,14 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m)
 
-    def brute_force(self, k=1, return_value=False):
-        warnings.warn('Use `brute_force` method from `solving` sub-module', category=DeprecationWarning, stacklevel=2)        
-        warn_size(self.n, limit=20)
-        if k == 1:
-            x = min(all_bitvectors(self.n, read_only=False), key=self)
-            return (x, self(x)) if return_value else x
-        elif k > 1:
-            xs = nsmallest(k, all_bitvectors(self.n, read_only=False), key=self)
-            return list(zip(xs, map(self, xs))) if return_value else xs
-        else:
-            return ValueError(f'k must be greater than 0')
-
     def spectral_gap(self, return_optimum=False):
-        warn_size(self.n, limit=20)
-        opts = self.brute_force(k=2, return_value=True)
-        sgap = opts[1][1]-opts[0][1]
-        o1 = opts[0][0]
-        return (sgap, o1) if return_optimum else sgap
+        warn_size(self.n, limit=25)
+        x, v0, v1 = c_brute_force(self.m)
+        sgap = v1-v0
+        if return_optimum:
+            return sgap, x
+        else:
+            return sgap
 
     def clamp(self, partial_assignment=None):
         if partial_assignment is None:
