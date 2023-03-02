@@ -6,15 +6,21 @@
 typedef unsigned char bit;
 
 
+void print_bits(bit *x, size_t n) {
+    for (size_t i=0; i<n; ++i)
+        printf("%d ", x[i]);
+    printf("\n");
+}
+
 double qubo_score(double **qubo, bit *x, size_t n) {
     double v = 0.0;
-    for (size_t i=0; i<n; ++i) {
+    size_t i, j;
+    for (i=0; i<n; ++i) {
         if (x[i]<=0)
             continue;
         v += qubo[i][i];
-        for (size_t j=i+1; j<n; ++j) {
+        for (j=i+1; j<n; ++j)
             v += x[j]*qubo[i][j];
-        }
     }
     return v;
 }
@@ -38,10 +44,9 @@ brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
 
     bit *min_x = (bit*) malloc(n);
     memset(min_x, 0, n);
-    double min_vals[2];
+    double min_vals[2] = {0, 0};
 
-    size_t i = 0; // bit flip index
-    size_t j;
+    size_t i, j;
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
         i = __builtin_ctzll(~it);
@@ -67,7 +72,6 @@ brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
             } else if (val>min_vals[0])
                 min_vals[1] = val;
     }
-
     brute_force_result res = {min_x, min_vals[0], min_vals[1]};
     return res;
 }
@@ -87,7 +91,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
-    size_t m = 63-__builtin_clzll(MAX_THREADS);
+    size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
     // ensure that the number of bits to optimize is positive
     if (n<=m) m = n-1;
     const size_t M = 1<<m; // first power of 2 less or equals MAX_THREADS
@@ -100,7 +104,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 
     // collect all min values (except first result)
     double all_vals[2*M-2];
-    for (size_t j=1; j<2*M; ++j) {
+    for (size_t j=1; j<M; ++j) {
         all_vals[2*j-2] = ress[j].min_val0;
         all_vals[2*j-1] = ress[j].min_val1;
     }
@@ -114,15 +118,16 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
             if (all_vals[j]<global_min_val0) {
                 global_min_val1 = global_min_val0;
                 global_min_val0 = all_vals[j];
-                global_min_ix = j;
+                global_min_ix = (j>>1)+1;
             } else if (all_vals[j]>global_min_val0)
                 global_min_val1 = all_vals[j];
 
     // prepare return values
     PyObject *min_x_obj = PyArray_SimpleNew(1, &n, NPY_DOUBLE);
     double *min_x_obj_data = PyArray_DATA((PyArrayObject*) min_x_obj);
+    bit *global_min_x = ress[global_min_ix].min_x;
     for (size_t j=0; j<n; ++j)
-        min_x_obj_data[j] = (double) ress[global_min_ix].min_x[j];
+        min_x_obj_data[j] = (double) global_min_x[j];
     for (size_t j=0; j<M; ++j)
         free(ress[j].min_x);
     PyObject *min_val0_obj = PyFloat_FromDouble(global_min_val0);

@@ -25,7 +25,7 @@ def min_max(it):
 
 def warn_size(n: int, limit: int=20):
     if n > limit:
-        warn('This operation may take a very long time for n>{limit}.')
+        warn(f'This operation may take a very long time for n>{limit}.')
 
 
 def get_random_state(state=None):
