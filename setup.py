@@ -1,10 +1,21 @@
 #!/usr/bin/env python
-import setuptools
+from setuptools import Extension, setup
+from numpy      import get_include as numpy_incl
+
 
 with open('README.md', 'r', encoding='utf-8') as f:
     long_description = f.read()
 
-setuptools.setup(
+qlc = Extension(
+    name='qlc',
+    sources=['qubolite/qlc.c'],
+    include_dirs=[numpy_incl()],
+    extra_compile_args=['-O3', '-fopenmp', '-march=native'],
+    extra_link_args=['-fopenmp']
+)
+
+
+setup(
         name='qubolite',
         packages=['qubolite'],
         version='0.6.10',
@@ -15,5 +26,6 @@ setuptools.setup(
         author_email='sascha.muecke@tu-dortmund.de',
         url='https://github.com/smuecke/qubolite',
         install_requires=['numba>=0.55.2','numpy>=1.23.5'],
+        ext_modules=[qlc],
         python_requires='>=3.8'
 )

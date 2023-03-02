@@ -1,11 +1,9 @@
 import struct
-import warnings
-from heapq import nsmallest
 
 import numpy as np
 
 from .bitvec import all_bitvectors
-from .cqubo  import brute_force as c_brute_force
+from qlc    import brute_force as brute_force_c
 from .misc   import get_random_state, is_triu, warn_size
 
 try:
@@ -151,7 +149,7 @@ class qubo:
 
     def spectral_gap(self, return_optimum=False):
         warn_size(self.n, limit=25)
-        x, v0, v1 = c_brute_force(self.m)
+        x, v0, v1 = brute_force_c(self.m)
         sgap = v1-v0
         if return_optimum:
             return sgap, x

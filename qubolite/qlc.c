@@ -1,7 +1,6 @@
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <stdio.h>
 #include <omp.h>
 
 typedef unsigned char bit;
@@ -99,21 +98,35 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         ress[omp_get_thread_num()] = _brute_force(qubo, n, m);
     }
 
-    brute_force_result res = ress[0];
-    for (size_t j=0; j<M; ++j) {
-        if (ress[j].min_val0<res.min_val0)
-            res = ress[j];
+    // collect all min values (except first result)
+    double all_vals[2*M-2];
+    for (size_t j=1; j<2*M; ++j) {
+        all_vals[2*j-2] = ress[j].min_val0;
+        all_vals[2*j-1] = ress[j].min_val1;
     }
+
+    // sort again to get two lowest values
+    double global_min_val0 = ress[0].min_val0;
+    double global_min_val1 = ress[0].min_val1;
+    size_t global_min_ix = 0;
+    for (size_t j=0; j<2*M-2; ++j)
+        if (all_vals[j]<global_min_val1)
+            if (all_vals[j]<global_min_val0) {
+                global_min_val1 = global_min_val0;
+                global_min_val0 = all_vals[j];
+                global_min_ix = j;
+            } else if (all_vals[j]>global_min_val0)
+                global_min_val1 = all_vals[j];
 
     // prepare return values
     PyObject *min_x_obj = PyArray_SimpleNew(1, &n, NPY_DOUBLE);
     double *min_x_obj_data = PyArray_DATA((PyArrayObject*) min_x_obj);
     for (size_t j=0; j<n; ++j)
-        min_x_obj_data[j] = (double) res.min_x[j];
+        min_x_obj_data[j] = (double) ress[global_min_ix].min_x[j];
     for (size_t j=0; j<M; ++j)
         free(ress[j].min_x);
-    PyObject *min_val0_obj = PyFloat_FromDouble(res.min_val0);
-    PyObject *min_val1_obj = PyFloat_FromDouble(res.min_val1);
+    PyObject *min_val0_obj = PyFloat_FromDouble(global_min_val0);
+    PyObject *min_val1_obj = PyFloat_FromDouble(global_min_val1);
     PyObject *tup = PyTuple_New(3);
     PyTuple_SetItem(tup, 0, min_x_obj);
     PyTuple_SetItem(tup, 1, min_val0_obj);
@@ -128,12 +141,12 @@ static PyMethodDef methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static struct PyModuleDef cqubo = {
-    PyModuleDef_HEAD_INIT, "cqubo",
+static struct PyModuleDef qlc = {
+    PyModuleDef_HEAD_INIT, "qlc",
     NULL, -1, methods
 };
 
-PyMODINIT_FUNC PyInit_cqubo() {
+PyMODINIT_FUNC PyInit_qlc() {
     import_array();
-    return PyModule_Create(&cqubo);
+    return PyModule_Create(&qlc);
 }

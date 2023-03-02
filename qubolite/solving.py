@@ -1,17 +1,13 @@
-from heapq import nsmallest
-
 import numpy as np
 
-from .bitvec import all_bitvectors
+from qlc  import brute_force as brute_force_c
 from .misc import get_random_state, warn_size
 from .qubo import qubo
-
-from .cqubo import brute_force as c_brute_force
 
 
 def brute_force(Q: qubo, return_value=False):
     warn_size(Q.n, limit=25)
-    x, v0, _ = c_brute_force(Q.m)
+    x, v0, _ = brute_force_c(Q.m)
     if return_value:
         return x, v0
     else:
