@@ -1,0 +1,26 @@
+[build-system]
+requires = [
+    "setuptools>=61.0",
+    "numpy>=1.23.5"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qubolite"
+version = "0.6.10"
+authors = [
+    { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" }
+]
+description = "Toolbox for quadratic binary optimization"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    "numpy>=1.23.5"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/smuecke/qubolite"
