@@ -25,7 +25,7 @@ setup(
         author='Sascha Muecke',
         author_email='sascha.muecke@tu-dortmund.de',
         url='https://github.com/smuecke/qubolite',
-        install_requires=['numba>=0.55.2','numpy>=1.23.5'],
+        install_requires=['numpy>=1.23.5'],
         ext_modules=[qlc],
         python_requires='>=3.8'
 )
