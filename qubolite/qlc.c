@@ -48,8 +48,11 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     size_t i, j;
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
+#ifdef _WIN64
+        i = __tzcnt64(~it);
+#else
         i = __builtin_ctzll(~it);
-
+#endif
         x[i] ^= 1; // flip bit
         // calculate function value offset
         dval = 0;
