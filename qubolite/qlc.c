@@ -103,7 +103,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     }
 
     // collect all min values (except first result)
-    double all_vals[2*M-2];
+    double* all_vals = (double*)malloc((2*M-2)*sizeof(double));
     for (size_t j=1; j<M; ++j) {
         all_vals[2*j-2] = ress[j].min_val0;
         all_vals[2*j-1] = ress[j].min_val1;
@@ -130,7 +130,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         min_x_obj_data[j] = (double) global_min_x[j];
     for (size_t j=0; j<M; ++j)
         free(ress[j].min_x);
-    free(res);
+    free(ress);
     PyObject *min_val0_obj = PyFloat_FromDouble(global_min_val0);
     PyObject *min_val1_obj = PyFloat_FromDouble(global_min_val1);
     PyObject *tup = PyTuple_New(3);
