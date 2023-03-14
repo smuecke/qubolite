@@ -30,7 +30,7 @@ struct _brute_force_result {
     double min_val1;
 } typedef brute_force_result;
 
-brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
+brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bits) {
     bit x[n]; // bit vector
     memset(x, 0, n);
 
