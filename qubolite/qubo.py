@@ -2,9 +2,9 @@ import struct
 
 import numpy as np
 
-from .bitvec import all_bitvectors
-from qlc    import brute_force as brute_force_c
-from .misc   import get_random_state, is_triu, warn_size
+from .bitvec   import all_bitvectors
+from _c_utils import brute_force as brute_force_c
+from .misc     import get_random_state, is_triu, warn_size
 
 try:
     from scipy.stats import kendalltau

@@ -154,12 +154,12 @@ static PyMethodDef methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
-static struct PyModuleDef qlc = {
-    PyModuleDef_HEAD_INIT, "qlc",
+static struct PyModuleDef module = {
+    PyModuleDef_HEAD_INIT, "_c_utils",
     NULL, -1, methods
 };
 
-PyMODINIT_FUNC PyInit_qlc() {
+PyMODINIT_FUNC PyInit__c_utils() {
     import_array();
-    return PyModule_Create(&qlc);
+    return PyModule_Create(&module);
 }
