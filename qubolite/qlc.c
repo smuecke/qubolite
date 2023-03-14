@@ -91,7 +91,11 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
+#ifdef _WIN64
+    size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
+#else
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
+#endif
     // ensure that the number of bits to optimize is positive
     if (n<=m) m = n-1;
     const size_t M = 1ul<<m; // first power of 2 less or equals MAX_THREADS
