@@ -37,7 +37,7 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     // fix some bits
     const size_t thread_id = omp_get_thread_num();
     for (size_t k=0; k<n_fixed_bits; ++k)
-        x[n-k-1] = (thread_id & (1<<k))>0 ? 1 : 0;
+        x[n-k-1] = (thread_id & (1ul<<k))>0 ? 1 : 0;
     double val = qubo_score(qubo, x, n); // QUBO value
     double dval; // QUBO value update
 
@@ -94,7 +94,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
     // ensure that the number of bits to optimize is positive
     if (n<=m) m = n-1;
-    const size_t M = 1<<m; // first power of 2 less or equals MAX_THREADS
+    const size_t M = 1ul<<m; // first power of 2 less or equals MAX_THREADS
     omp_set_dynamic(0);
     brute_force_result* ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
     #pragma omp parallel num_threads(M)
