@@ -16,6 +16,8 @@ setup(ext_modules=[
     Extension(
         name='qlc',
         sources=['qubolite/qlc.c'],
+        libraries=['m','npymath','npyrandom'],
         include_dirs=[numpy_incl()],
+        library_dirs=[numpy_incl() + '/../lib', numpy_incl() + '/../../random/lib'], # no official way to retrieve these directories
         extra_compile_args=C_COMP_FLAGS,
         extra_link_args=C_LINK_FLAGS)])

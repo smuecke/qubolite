@@ -14,12 +14,11 @@ void print_bits(bit *x, size_t n) {
 
 double qubo_score(double **qubo, bit *x, size_t n) {
     double v = 0.0;
-    size_t i, j;
-    for (i=0; i<n; ++i) {
+    for (size_t i=0; i<n; ++i) {
         if (x[i]<=0)
             continue;
         v += qubo[i][i];
-        for (j=i+1; j<n; ++j)
+        for (size_t j=i+1; j<n; ++j)
             v += x[j]*qubo[i][j];
     }
     return v;
