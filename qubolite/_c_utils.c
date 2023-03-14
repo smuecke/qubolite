@@ -91,6 +91,8 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
 }
 
 PyObject *py_brute_force(PyObject *self, PyObject *args) {
+	printf("BRUTEFORCE\n");
+
     PyArrayObject *arr;
     PyArg_ParseTuple(args, "O", &arr);
     if (PyErr_Occurred() || !PyArray_Check(arr))
