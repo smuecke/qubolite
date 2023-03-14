@@ -31,7 +31,7 @@ struct _brute_force_result {
 } typedef brute_force_result;
 
 brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bits) {
-    bit x[n]; // bit vector
+    bit* = (bit*)malloc(n); // bit vector
     memset(x, 0, n);
 
     // fix some bits
@@ -72,6 +72,7 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
                 min_vals[1] = val;
     }
     brute_force_result res = {min_x, min_vals[0], min_vals[1]};
+    free(x);
     return res;
 }
 
