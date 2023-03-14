@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from os.path  import join
+#from os.path  import join # NP: das funktioniert bei mir nicht?!
 from platform import system
 
 from setuptools import Extension, setup
@@ -8,11 +8,11 @@ from numpy      import get_include as numpy_incl
 
 SYSTEM = system()
 if SYSTEM == 'Windows':
-    C_LINK_FLAGS = ['/O3', '/openmp']
-    C_COMP_FLAGS = ['/openmp']
+    C_LINK_FLAGS = ['/openmp']
+    C_COMP_FLAGS = ['/O3', '/openmp']
 else: # GCC flags for Linux
-    C_LINK_FLAGS = ['-O3', '-fopenmp', '-march=native']
-    C_COMP_FLAGS = ['-fopenmp']
+    C_LINK_FLAGS = ['-fopenmp']
+    C_COMP_FLAGS = ['-O3', '-fopenmp', '-march=native']
 
 NP_INCL = numpy_incl()
 
@@ -23,7 +23,7 @@ setup(ext_modules=[
         libraries=['m','npymath','npyrandom'],
         include_dirs=[NP_INCL],
         library_dirs=[
-            join(NP_INCL, '/../lib'),
-            join(NP_INCL, '/../../random/lib')], # no official way to retrieve these directories
+            NP_INCL + '/../lib',
+            NP_INCL + '/../../random/lib'], # no official way to retrieve these directories
         extra_compile_args=C_COMP_FLAGS,
         extra_link_args=C_LINK_FLAGS)])
