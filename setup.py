@@ -8,8 +8,8 @@ from numpy      import get_include as numpy_incl
 
 SYSTEM = system()
 if SYSTEM == 'Windows':
-    C_LINK_FLAGS = ['/openmp']
-    C_COMP_FLAGS = ['/O3', '/openmp']
+    C_LINK_FLAGS = []
+    C_COMP_FLAGS = ['/O2', '/openmp']
 else: # GCC flags for Linux
     C_LINK_FLAGS = ['-fopenmp']
     C_COMP_FLAGS = ['-O3', '-fopenmp', '-march=native']
@@ -20,7 +20,7 @@ setup(ext_modules=[
     Extension(
         name='_c_utils',
         sources=['qubolite/_c_utils.c'],
-        libraries=['m','npymath','npyrandom'],
+        libraries=['npymath','npyrandom'],
         include_dirs=[NP_INCL],
         library_dirs=[
             NP_INCL + '/../lib',
