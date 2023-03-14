@@ -105,6 +105,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
+    printf("NTHREADS = %lu\n",MAX_THREADS);
 #ifdef _MSC_VER
     size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
 #else
