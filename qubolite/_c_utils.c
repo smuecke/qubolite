@@ -14,12 +14,11 @@ void print_bits(bit *x, size_t n) {
 
 double qubo_score(double **qubo, bit *x, size_t n) {
     double v = 0.0;
-    size_t i, j;
-    for (i=0; i<n; ++i) {
+    for (size_t i=0; i<n; ++i) {
         if (x[i]<=0)
             continue;
         v += qubo[i][i];
-        for (j=i+1; j<n; ++j)
+        for (size_t j=i+1; j<n; ++j)
             v += x[j]*qubo[i][j];
     }
     return v;
@@ -31,14 +30,14 @@ struct _brute_force_result {
     double min_val1;
 } typedef brute_force_result;
 
-brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
-    bit x[n]; // bit vector
+brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bits) {
+    bit* x = (bit*)malloc(n*sizeof(bit)); // bit vector
     memset(x, 0, n);
 
     // fix some bits
     const size_t thread_id = omp_get_thread_num();
     for (size_t k=0; k<n_fixed_bits; ++k)
-        x[n-k-1] = (thread_id & (1<<k))>0 ? 1 : 0;
+        x[n-k-1] = (thread_id & (1ULL<<k))>0 ? 1 : 0;
     double val = qubo_score(qubo, x, n); // QUBO value
     double dval; // QUBO value update
 
@@ -49,8 +48,11 @@ brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
     size_t i, j;
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
+#ifdef _WIN64
+        i = __tzcnt64(~it);
+#else
         i = __builtin_ctzll(~it);
-
+#endif
         x[i] ^= 1; // flip bit
         // calculate function value offset
         dval = 0;
@@ -73,6 +75,7 @@ brute_force_result _brute_force(double **qubo, size_t n, size_t n_fixed_bits) {
                 min_vals[1] = val;
     }
     brute_force_result res = {min_x, min_vals[0], min_vals[1]};
+    free(x);
     return res;
 }
 
@@ -91,19 +94,23 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
+#ifdef _WIN64
+    size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
+#else
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
+#endif
     // ensure that the number of bits to optimize is positive
     if (n<=m) m = n-1;
-    const size_t M = 1<<m; // first power of 2 less or equals MAX_THREADS
+    const size_t M = 1ULL<<m; // first power of 2 less or equals MAX_THREADS
     omp_set_dynamic(0);
-    brute_force_result ress[M];
+    brute_force_result* ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
     #pragma omp parallel num_threads(M)
     {
         ress[omp_get_thread_num()] = _brute_force(qubo, n, m);
     }
 
     // collect all min values (except first result)
-    double all_vals[2*M-2];
+    double* all_vals = (double*)malloc((2*M-2)*sizeof(double));
     for (size_t j=1; j<M; ++j) {
         all_vals[2*j-2] = ress[j].min_val0;
         all_vals[2*j-1] = ress[j].min_val1;
@@ -130,6 +137,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         min_x_obj_data[j] = (double) global_min_x[j];
     for (size_t j=0; j<M; ++j)
         free(ress[j].min_x);
+    free(ress);
     PyObject *min_val0_obj = PyFloat_FromDouble(global_min_val0);
     PyObject *min_val1_obj = PyFloat_FromDouble(global_min_val1);
     PyObject *tup = PyTuple_New(3);
