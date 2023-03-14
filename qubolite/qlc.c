@@ -31,7 +31,7 @@ struct _brute_force_result {
 } typedef brute_force_result;
 
 brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bits) {
-    bit* x = (bit*)malloc(n); // bit vector
+    bit* x = (bit*)malloc(n*sizeof(bit)); // bit vector
     memset(x, 0, n);
 
     // fix some bits
@@ -96,7 +96,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     if (n<=m) m = n-1;
     const size_t M = 1<<m; // first power of 2 less or equals MAX_THREADS
     omp_set_dynamic(0);
-    brute_force_result ress[M];
+    brute_force_result* ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
     #pragma omp parallel num_threads(M)
     {
         ress[omp_get_thread_num()] = _brute_force(qubo, n, m);
@@ -130,6 +130,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         min_x_obj_data[j] = (double) global_min_x[j];
     for (size_t j=0; j<M; ++j)
         free(ress[j].min_x);
+    free(res);
     PyObject *min_val0_obj = PyFloat_FromDouble(global_min_val0);
     PyObject *min_val1_obj = PyFloat_FromDouble(global_min_val1);
     PyObject *tup = PyTuple_New(3);
