@@ -3,6 +3,17 @@
 #include <numpy/arrayobject.h>
 #include <omp.h>
 
+#ifdef _MSC_VER
+#include <intrin.h>
+
+static uint64_t __inline __tzcnt64( uint64_t x )
+{
+   uint64_t r = 0;
+   _BitScanReverse64(&r, x);
+   return r;
+}
+#endif
+
 typedef unsigned char bit;
 
 
@@ -48,8 +59,8 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     size_t i, j;
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
-#ifdef _WIN64
-        i = __tzcnt_u64(~it);
+#ifdef _MSC_VER
+        i = __tzcnt64(~it);
 #else
         i = __builtin_ctzll(~it);
 #endif
@@ -94,7 +105,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
-#ifdef _WIN64
+#ifdef _MSC_VER
     size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
 #else
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
