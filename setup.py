@@ -14,8 +14,8 @@ else: # GCC flags for Linux
 
 setup(ext_modules=[
     Extension(
-        name='qlc',
-        sources=['qubolite/qlc.c'],
+        name='_c_utils',
+        sources=['qubolite/_c_utils.c'],
         include_dirs=[numpy_incl()],
         extra_compile_args=C_COMP_FLAGS,
         extra_link_args=C_LINK_FLAGS)])

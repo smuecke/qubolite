@@ -1,6 +1,6 @@
 import numpy as np
 
-from qlc  import brute_force as brute_force_c
+from _c_utils import brute_force as brute_force_c
 from .misc import get_random_state, warn_size
 from .qubo import qubo
 
