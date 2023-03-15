@@ -24,3 +24,8 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://github.com/smuecke/qubolite"
+
+[project.optional-dependencies]
+roof_dual = [
+    "networkx"
+]

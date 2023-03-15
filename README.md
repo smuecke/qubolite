@@ -11,6 +11,13 @@ pip install qubolite
 
 This package was created using Python 3.10, but runs with Python >= 3.8.
 
+## Optional Dependencies
+
+If you're planning to use the roof dual function as lower bound you will need to install optional
+dependencies. The networkx based lower bound function `qubolite.bounds.lb_roof_dual` requires that
+the [networkx](https://networkx.org/) library is installed. This can be done with `pip install 
+networkx` or by installing qubolite with `pip install qubolite[roof_dual]`.
+
 
 ## Usage Examples
 
