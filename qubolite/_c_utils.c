@@ -8,9 +8,15 @@
 
 static uint64_t __inline __tzcnt64( uint64_t x )
 {
-   uint64_t r = 0;
-   _BitScanReverse64(&r, x);
-   return r;
+    size_t r = 0;
+    if (_BitScanForward64(&r, x))
+    {
+        return r;
+    }
+    else
+    {
+        return 64;
+    }
 }
 #endif
 
@@ -60,6 +66,7 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
 #ifdef _MSC_VER
+        // i = _tzcnt_u64(~it); // appearently only available in some MSVC versions
         i = __tzcnt64(~it);
 #else
         i = __builtin_ctzll(~it);
@@ -91,8 +98,6 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
 }
 
 PyObject *py_brute_force(PyObject *self, PyObject *args) {
-	printf("BRUTEFORCE\n");
-
     PyArrayObject *arr;
     PyArg_ParseTuple(args, "O", &arr);
     if (PyErr_Occurred() || !PyArray_Check(arr))
@@ -107,7 +112,6 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
-    printf("NTHREADS = %lu\n",MAX_THREADS);
 #ifdef _MSC_VER
     size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
 #else

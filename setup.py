@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#from os.path  import join # NP: das funktioniert bei mir nicht?!
+from os.path  import join
 from platform import system
 
 from setuptools import Extension, setup
@@ -23,7 +23,7 @@ setup(ext_modules=[
         libraries=['npymath','npyrandom'],
         include_dirs=[NP_INCL],
         library_dirs=[
-            NP_INCL + '/../lib',
-            NP_INCL + '/../../random/lib'], # no official way to retrieve these directories
+            join(NP_INCL, '..', 'lib'),
+            join(NP_INCL, '..', '..', 'random', 'lib')], # no official way to retrieve these directories
         extra_compile_args=C_COMP_FLAGS,
         extra_link_args=C_LINK_FLAGS)])
