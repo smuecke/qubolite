@@ -3,19 +3,7 @@
 #include <numpy/arrayobject.h>
 #include <omp.h>
 
-#ifdef _MSC_VER
-#include <intrin.h>
-
-static uint64_t __inline __tzcnt64( uint64_t x )
-{
-   uint64_t r = 0;
-   _BitScanReverse64(&r, x);
-   return r;
-}
-#endif
-
 typedef unsigned char bit;
-
 
 void print_bits(bit *x, size_t n) {
     for (size_t i=0; i<n; ++i)
@@ -60,7 +48,7 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
         // get next bit flip index (gray code)
 #ifdef _MSC_VER
-        i = __tzcnt64(~it);
+        i = __tzcnt_u64(~it);
 #else
         i = __builtin_ctzll(~it);
 #endif
