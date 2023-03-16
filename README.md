@@ -74,3 +74,4 @@ array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
     * **0.6.8** added `bitvec` sub-module; `dynamic_range` now uses bits by default, changed `bits=False` to `decibel=False`; removed scipy from requirements
     * **0.6.9** new, more memory-efficient save format
     * **0.6.10** fixed requirements in `setup.py`; fixed size estimation in `qubo.save()`
+* **0.7** Added more efficient brute-force implementation using C extension; added optional dependencies for calculating bounds and ordering distance
