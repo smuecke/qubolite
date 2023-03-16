@@ -19,6 +19,10 @@ dependencies. The igraph based roof dual lower bound function can be used by cal
 installed. This can be done with `pip install igraph` or by installing qubolite with 
 `pip install qubolite[roof_dual]`.
 
+Using the function `qubolite.ordering_distance()` requires the Kendall-$\tau$ measure from the
+[scipy](https://scipy.org/) library which can be installed by `pip install scipy` or by installing 
+qubolite with `pip install qubolite[kendall_tau]`.
+
 If you would like to install all optional dependencies you can use `pip install qubolite[all]` for
 achieving this.
 
