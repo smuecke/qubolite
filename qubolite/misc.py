@@ -18,6 +18,10 @@ def warn(*args, **kwargs):
     warnings.warn(*args, **kwargs)
 
 
+def is_symmetrical(arr, rtol=1e-05, atol=1e-08):
+    return np.allclose(arr, arr.T, rtol=rtol, atol=atol)
+
+
 def is_triu(arr):
     return np.all(np.isclose(arr, np.triu(arr)))
 
@@ -79,7 +83,6 @@ def ordering_distance(Q1, Q2, X=None):
     warn_size(Q1.n, limit=22)
     if X is None:
         X = all_bitvectors_array(Q1.n)
-        # X = np.vstack(list(all_bitvectors(Q1.n, read_only=True)))
     rnk1 = np.argsort(np.argsort(Q1(X)))
     rnk2 = np.argsort(np.argsort(Q2(X)))
     tau, _ = kendalltau(rnk1, rnk2)
