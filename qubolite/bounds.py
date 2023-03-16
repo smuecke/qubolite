@@ -1,44 +1,7 @@
 import numpy as np
 
-from .misc import get_random_state, warn
+from .misc import get_random_state
 from .qubo import qubo
-
-
-def lb_roof_dual_nx(Q: qubo):
-    warn("lb_roof_dual_nx() is deprecated since it is based on a networkx implementation which is "
-         "written purely in python and thus very slow. Use lb_roof_dual() instead",
-         DeprecationWarning)
-    try:
-        from networkx import DiGraph, set_edge_attributes
-        from networkx.algorithms.flow import maximum_flow_value
-    except ImportError as e:
-        raise ImportError(
-            "networkx needs to be installed prior to running qubolite.lb_roof_dual_nx(). You can "
-            "install networkx with:\n'pip install networkx'"
-        ) from e
-
-    def to_flow_graph(P):
-        G = DiGraph()
-        for i, j in zip(*np.triu_indices_from(P[0])):
-            ni = 'x0' if i == j else f'x{i + 1}'
-            nj = f'x{j + 1}'
-
-            if not np.isclose(P[0, i, j], 0):
-                γ = 0.5 * P[0, i, j]
-                G.add_edge(ni, f'!{nj}', capacity=γ)
-                G.add_edge(nj, f'!{ni}', capacity=γ)
-            if not np.isclose(P[1, i, j], 0):
-                γ = 0.5 * P[1, i, j]
-                G.add_edge(ni, nj, capacity=γ)
-                G.add_edge(f'!{nj}', f'!{ni}', capacity=γ)
-
-        set_edge_attributes(G, 0.0, name='flow')
-        return G
-
-    P, const = Q.to_posiform()
-    G = to_flow_graph(P)
-    v = maximum_flow_value(G, 'x0', '!x0')
-    return const + v
 
 
 def lb_roof_dual(Q: qubo):

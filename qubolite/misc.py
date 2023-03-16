@@ -14,6 +14,7 @@ def _custom_showwarning(message, *args, file=None, **kwargs):
     (file or stderr).write(f'Warning: {str(message)}\n')
 warnings.showwarning = _custom_showwarning
 
+
 def warn(*args, **kwargs):
     warnings.warn(*args, **kwargs)
 
