@@ -1,7 +1,6 @@
 import numpy as np
-from warnings import warn
 
-from .misc import get_random_state
+from .misc import get_random_state, warn
 from .qubo import qubo
 
 

@@ -1,15 +1,21 @@
+import warnings
 from hashlib   import md5
 from importlib import import_module
-from warnings  import warn
+from sys       import stderr
 
 import numpy as np
 from numpy.random import RandomState
 
-from .bitvec import all_bitvectors_array, all_bitvectors
+from .bitvec import all_bitvectors_array
 
 
-def is_symmetrical(arr):
-    return NotImplemented
+# make warning message more minialistic
+def _custom_showwarning(message, *args, file=None, **kwargs):
+    (file or stderr).write(f'Warning: {str(message)}\n')
+warnings.showwarning = _custom_showwarning
+
+def warn(*args, **kwargs):
+    warnings.warn(*args, **kwargs)
 
 
 def is_triu(arr):
@@ -25,7 +31,7 @@ def min_max(it):
     return min_, max_
 
 
-def warn_size(n: int, limit: int=20):
+def warn_size(n: int, limit: int=30):
     if n > limit:
         warn(f'This operation may take a very long time for n>{limit}.')
 
