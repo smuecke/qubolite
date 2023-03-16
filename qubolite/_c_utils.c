@@ -45,7 +45,9 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     double min_vals[2] = {0, 0};
 
     size_t i, j;
-    for (int64_t it=0; it<(1<<(n-n_fixed_bits))-1; ++it) {
+    // make sure it_lim is correctly set
+    int64_t it_lim = (1ULL<<n-n_fixed_bits)-1;
+    for (int64_t it=0; it<it_lim; ++it) {
         // get next bit flip index (gray code)
 #ifdef _MSC_VER
         i = _tzcnt_u64(~it);
@@ -79,8 +81,6 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
 }
 
 PyObject *py_brute_force(PyObject *self, PyObject *args) {
-	printf("BRUTEFORCE\n");
-
     PyArrayObject *arr;
     PyArg_ParseTuple(args, "O", &arr);
     if (PyErr_Occurred() || !PyArray_Check(arr))
@@ -95,12 +95,20 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
 
     const size_t MAX_THREADS = omp_get_max_threads();
-    printf("NTHREADS = %llu\n",MAX_THREADS);
 #ifdef _MSC_VER
     size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
 #else
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
 #endif
+
+    // check if n is too large and would cause an
+    // overflow of size64_t
+    if (n-m>=64) {
+    	// return None
+	Py_INCREF(Py_None);
+	return Py_None;
+    }
+
     // ensure that the number of bits to optimize is positive
     if (n<=m) m = n-1;
     const size_t M = 1ULL<<m; // first power of 2 less or equals MAX_THREADS

@@ -7,7 +7,10 @@ from .qubo import qubo
 
 def brute_force(Q: qubo, return_value=False):
     warn_size(Q.n, limit=30)
-    x, v0, _ = brute_force_c(Q.m)
+    try:
+        x, v0, _ = brute_force_c(Q.m)
+    except TypeError:
+        raise ValueError(f'n is too large to brute-force on this system')
     if return_value:
         return x, v0
     else:

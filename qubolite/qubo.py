@@ -143,7 +143,10 @@ class qubo:
 
     def spectral_gap(self, return_optimum=False):
         warn_size(self.n, limit=25)
-        x, v0, v1 = brute_force_c(self.m)
+        try:
+            x, v0, v1 = brute_force_c(self.m)
+        except TypeError:
+            raise ValueError('n is too large to brute-force on this system')
         sgap = v1-v0
         if return_optimum:
             return sgap, x
