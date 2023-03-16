@@ -17,9 +17,9 @@ If you're planning to use the roof dual function as lower bound you will need to
 dependencies. The igraph based roof dual lower bound function can be used by calling 
 `qubolite.bounds.lb_roof_dual()`. It requires that the [igraph](https://igraph.org/) library is 
 installed. This can be done with `pip install igraph` or by installing qubolite with 
-`pip install qubolite[roof_dual]`.
+`pip install qubolite[roof_dual]`.τ
 
-Using the function `qubolite.ordering_distance()` requires the Kendall-$\tau$ measure from the
+Using the function `qubolite.ordering_distance()` requires the Kendall-τ measure from the
 [scipy](https://scipy.org/) library which can be installed by `pip install scipy` or by installing 
 qubolite with `pip install qubolite[kendall_tau]`.
 
