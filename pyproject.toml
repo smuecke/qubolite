@@ -26,6 +26,13 @@ dependencies = [
 "Homepage" = "https://github.com/smuecke/qubolite"
 
 [project.optional-dependencies]
-roof_dual = [
+nx = [
     "networkx"
+]
+ig = [
+    "igraph"
+]
+all = [
+    "networkx",
+    "igraph"
 ]

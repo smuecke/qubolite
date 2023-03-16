@@ -12,9 +12,8 @@ def lb_roof_dual(Q: qubo):
         from networkx.algorithms.flow import maximum_flow_value
     except ImportError as e:
         raise ImportError(
-            "networkx needs to be installed prior to running "
-            "any function in qubolite.lb_roof_dual(). You can install "
-            "networkx with:\n'pip install networkx'"
+            "networkx needs to be installed prior to running qubolite.lb_roof_dual(). You can "
+            "install networkx with:\n'pip install networkx'"
         ) from e
 
     @dataclass

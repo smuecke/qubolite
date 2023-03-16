@@ -14,10 +14,18 @@ This package was created using Python 3.10, but runs with Python >= 3.8.
 ## Optional Dependencies
 
 If you're planning to use the roof dual function as lower bound you will need to install optional
-dependencies. The networkx based lower bound function `qubolite.bounds.lb_roof_dual` requires that
-the [networkx](https://networkx.org/) library is installed. This can be done with `pip install 
-networkx` or by installing qubolite with `pip install qubolite[roof_dual]`.
+dependencies. The igraph based lower bound function can be used by calling 
+`qubolite.bounds.lb_roof_dual()` with `method="igraph"` and is the default method. It requires 
+that the [igraph](https://igraph.org/) library is installed. This can be done with 
+`pip install igraph` or by installing qubolite with `pip install qubolite[ig]`. By calling 
+`qubolite.bounds.lb_roof_dual` with the optional argument `method="networkx"`, the networkx based  
+method can be used. It requires that the [networkx](https://networkx.org/) library is installed. 
+This can be done with `pip install networkx` or by installing qubolite with 
+`pip install qubolite[nx]`. It is however recommended to use the faster igraph version, since 
+networkx is implemented purely in python.
 
+If you would like to install all optional dependencies you can use `pip install qubolite[all]` for
+achieving this.
 
 ## Usage Examples
 
