@@ -5,6 +5,8 @@ from warnings  import warn
 import numpy as np
 from numpy.random import RandomState
 
+from .bitvec import all_bitvectors_array
+
 
 def is_symmetrical(arr):
     return NotImplemented
@@ -57,3 +59,19 @@ def try_import(*libs):
         except ModuleNotFoundError:
             continue
         libdict[lib] = module
+
+
+def ordering_distance(Q1, Q2):
+    try:
+        from scipy.stats import kendalltau
+    except ImportError as e:
+        raise ImportError(
+            "scipy needs to be installed prior to running qubolite.misc.ordering_distance(). You "
+            "can install scipy with:\n'pip install scipy'"
+        ) from e
+    assert Q1.n == Q2.n, 'QUBO instances must have the same dimension'
+    X = np.vstack(all_bitvectors_array(Q1.n))
+    rnk1 = np.argsort(np.argsort(Q1(X)))
+    rnk2 = np.argsort(np.argsort(Q2(X)))
+    tau, _ = kendalltau(rnk1, rnk2)
+    return (1-tau)/2

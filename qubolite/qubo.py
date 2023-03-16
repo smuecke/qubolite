@@ -2,15 +2,9 @@ import struct
 
 import numpy as np
 
-from .bitvec   import all_bitvectors
+from .bitvec  import all_bitvectors
 from _c_utils import brute_force as brute_force_c
-from .misc     import get_random_state, is_triu, warn_size
-
-try:
-    from scipy.stats import kendalltau
-    __SCIPY = True
-except ModuleNotFoundError:
-    __SCIPY = False
+from .misc    import get_random_state, is_triu, warn_size
 
 
 def is_qubo_like(arr):
@@ -233,12 +227,20 @@ class qubo:
             marginals += p*suff_stat
         return np.triu(marginals)
 
-
-def ordering_distance(Q1, Q2):
-    assert __SCIPY, 'SciPy not found!'
-    assert Q1.n == Q2.n, 'QUBO instances must have the same dimension'
-    X = np.vstack(list(all_bitvectors(Q1.n, read_only=False)))
-    rnk1 = np.argsort(np.argsort(Q1(X)))
-    rnk2 = np.argsort(np.argsort(Q2(X)))
-    tau, _ = kendalltau(rnk1, rnk2)
-    return (1-tau)/2
+    def to_posiform(self):
+        posiform = np.zeros((2, self.n, self.n))
+        # posiform[0] contains terms xi* xj, and  xi on diagonal
+        # posiform[1] contains terms xi*!xj, and !xi on diagonal
+        lin = np.diag(self.m)
+        qua = np.triu(self.m, 1)
+        diag_ix = np.diag_indices_from(self.m)
+        qua_neg = np.minimum(qua, 0)
+        posiform[0] = np.maximum(qua, 0)
+        posiform[1] = -qua_neg
+        posiform[0][diag_ix] = lin + qua_neg.sum(1)
+        lin_ = posiform[0][diag_ix].copy()  # =: c'
+        lin_neg = np.minimum(lin_, 0)
+        posiform[1][diag_ix] = -lin_neg
+        posiform[0][diag_ix] = np.maximum(lin_, 0)
+        const = lin_neg.sum()
+        return posiform, const
