@@ -52,16 +52,22 @@ class qubo:
         if distr == 'normal':
             arr = npr.normal(
                 kwargs.get('loc', 0.0),
-                kwargs.get('scale', 1.0)/2,
+                kwargs.get('scale', 1.0),
                 size=(n, n))
         elif distr == 'uniform':
             arr = npr.uniform(
                 kwargs.get('low', -1.0),
                 kwargs.get('high', 1.0),
-                size=(n, n))/2
+                size=(n, n))
+        elif distr == 'triangular':
+            arr = npr.triangular(
+                kwargs.get('left', -1.0),
+                kwargs.get('mode', 0.0),
+                kwargs.get('right', 1.0),
+                size=(n, n))
         else:
             raise ValueError(f'Unknown distribution "{distr}"')
-        m = np.triu(arr+arr.T)
+        m = np.triu(arr)
         if density < 1.0:
             m *= npr.random(size=m.shape)<density
         return cls(m)
