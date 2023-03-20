@@ -1,5 +1,6 @@
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <Python.h>
+#include <math.h>
 #include <numpy/arrayobject.h>
 #include <omp.h>
 
@@ -41,8 +42,8 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
     double dval; // QUBO value update
 
     bit *min_x = (bit*) malloc(n);
-    memset(min_x, 0, n);
-    double min_vals[2] = {0, 0};
+    memcpy(min_x, x, n);
+    double min_vals[2] = {val, INFINITY};
 
     size_t i, j;
     // make sure it_lim is correctly set
@@ -101,16 +102,17 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
 #endif
 
+    // ensure that the number of bits to optimize is positive
+    if (n<=m) m = n-1;
+
     // check if n is too large and would cause an
     // overflow of size64_t
     if (n-m>=64) {
     	// return None
-	Py_INCREF(Py_None);
-	return Py_None;
+	    Py_INCREF(Py_None);
+	    return Py_None;
     }
 
-    // ensure that the number of bits to optimize is positive
-    if (n<=m) m = n-1;
     const size_t M = 1ULL<<m; // first power of 2 less or equals MAX_THREADS
     omp_set_dynamic(0);
     brute_force_result* ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
@@ -130,14 +132,17 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     double global_min_val0 = ress[0].min_val0;
     double global_min_val1 = ress[0].min_val1;
     size_t global_min_ix = 0;
-    for (size_t j=0; j<2*M-2; ++j)
-        if (all_vals[j]<global_min_val1)
+    for (size_t j=0; j<2*M-2; ++j) {
+        if (all_vals[j]<global_min_val1) {
             if (all_vals[j]<global_min_val0) {
                 global_min_val1 = global_min_val0;
                 global_min_val0 = all_vals[j];
                 global_min_ix = (j>>1)+1;
-            } else if (all_vals[j]>global_min_val0)
+            } else if (all_vals[j]>global_min_val0) {
                 global_min_val1 = all_vals[j];
+            }
+        }
+    }
 
     // prepare return values
     PyObject *min_x_obj = PyArray_SimpleNew(1, &n, NPY_DOUBLE);
