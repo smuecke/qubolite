@@ -1,11 +1,10 @@
 import struct
-import warnings
-from heapq import nsmallest
 
 import numpy as np
 
-from .bitvec import all_bitvectors
-from .misc   import get_random_state, is_triu, set_suffix, warn_size
+from .bitvec  import all_bitvectors
+from _c_utils import brute_force as brute_force_c
+from .misc    import get_random_state, is_triu, warn_size
 
 
 def is_qubo_like(arr):
@@ -53,16 +52,22 @@ class qubo:
         if distr == 'normal':
             arr = npr.normal(
                 kwargs.get('loc', 0.0),
-                kwargs.get('scale', 1.0)/2,
+                kwargs.get('scale', 1.0),
                 size=(n, n))
         elif distr == 'uniform':
             arr = npr.uniform(
                 kwargs.get('low', -1.0),
                 kwargs.get('high', 1.0),
-                size=(n, n))/2
+                size=(n, n))
+        elif distr == 'triangular':
+            arr = npr.triangular(
+                kwargs.get('left', -1.0),
+                kwargs.get('mode', 0.0),
+                kwargs.get('right', 1.0),
+                size=(n, n))
         else:
             raise ValueError(f'Unknown distribution "{distr}"')
-        m = np.triu(arr+arr.T)
+        m = np.triu(arr)
         if density < 1.0:
             m *= npr.random(size=m.shape)<density
         return cls(m)
@@ -142,24 +147,17 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m)
 
-    def brute_force(self, k=1, return_value=False):
-        warnings.warn('Use `brute_force` method from `solving` sub-module', category=DeprecationWarning, stacklevel=2)        
-        warn_size(self.n, limit=20)
-        if k == 1:
-            x = min(all_bitvectors(self.n, read_only=False), key=self)
-            return (x, self(x)) if return_value else x
-        elif k > 1:
-            xs = nsmallest(k, all_bitvectors(self.n, read_only=False), key=self)
-            return list(zip(xs, map(self, xs))) if return_value else xs
-        else:
-            return ValueError(f'k must be greater than 0')
-
     def spectral_gap(self, return_optimum=False):
-        warn_size(self.n, limit=20)
-        opts = self.brute_force(k=2, return_value=True)
-        sgap = opts[1][1]-opts[0][1]
-        o1 = opts[0][0]
-        return (sgap, o1) if return_optimum else sgap
+        warn_size(self.n, limit=25)
+        try:
+            x, v0, v1 = brute_force_c(self.m)
+        except TypeError:
+            raise ValueError('n is too large to brute-force on this system')
+        sgap = v1-v0
+        if return_optimum:
+            return sgap, x
+        else:
+            return sgap
 
     def clamp(self, partial_assignment=None):
         if partial_assignment is None:
@@ -237,3 +235,21 @@ class qubo:
             suff_stat = np.outer(x, x)
             marginals += p*suff_stat
         return np.triu(marginals)
+
+    def to_posiform(self):
+        posiform = np.zeros((2, self.n, self.n))
+        # posiform[0] contains terms xi* xj, and  xi on diagonal
+        # posiform[1] contains terms xi*!xj, and !xi on diagonal
+        lin = np.diag(self.m)
+        qua = np.triu(self.m, 1)
+        diag_ix = np.diag_indices_from(self.m)
+        qua_neg = np.minimum(qua, 0)
+        posiform[0] = np.maximum(qua, 0)
+        posiform[1] = -qua_neg
+        posiform[0][diag_ix] = lin + qua_neg.sum(1)
+        lin_ = posiform[0][diag_ix].copy()  # =: c'
+        lin_neg = np.minimum(lin_, 0)
+        posiform[1][diag_ix] = -lin_neg
+        posiform[0][diag_ix] = np.maximum(lin_, 0)
+        const = lin_neg.sum()
+        return posiform, const

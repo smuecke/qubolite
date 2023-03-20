@@ -1,57 +1,20 @@
-from heapq import nsmallest
-
 import numpy as np
 
-from .bitvec import all_bitvectors
+from _c_utils import brute_force as brute_force_c
 from .misc import get_random_state, warn_size
 from .qubo import qubo
 
 
-def brute_force(Q: qubo, k=1, return_value=False):
-    warn_size(Q.n, limit=20)
-    if k == 1:
-        x = min(all_bitvectors(Q.n, read_only=False), key=Q)
-        return (x, Q(x)) if return_value else x
-    elif k > 1:
-        xs = nsmallest(k, all_bitvectors(Q.n, read_only=False), key=Q)
-        return list(zip(xs, map(Q, xs))) if return_value else xs
+def brute_force(Q: qubo, return_value=False):
+    warn_size(Q.n, limit=30)
+    try:
+        x, v0, _ = brute_force_c(Q.m)
+    except TypeError:
+        raise ValueError(f'n is too large to brute-force on this system')
+    if return_value:
+        return x, v0
     else:
-        return ValueError(f'k must be greater than 0')
-
-
-def get_binary_number_matrix(n):
-    """Fast method for creating all binary states with dimension n"""
-    if n == 1:
-        return np.array([[0], [1]])
-    B = np.zeros((2 ** n, n))
-    B_ = get_binary_number_matrix(n=n - 1)
-    B[:2 ** (n - 1), 1:] = B_
-    B[2 ** (n - 1):, 0] = 1
-    B[2 ** (n - 1):, 1:] = B_
-    return B
-
-
-def brute_force_new(Q: qubo, k=1, return_value=False, X=None):
-    warn_size(Q.n, limit=20)
-    if X is None:
-        X = get_binary_number_matrix(Q.n)
-    elif X == "bitvec":
-        X = np.vstack(list(all_bitvectors(Q.n, read_only=False)))
-    Q_values = Q(X)
-    if k == 1:
-        best_index = np.argmin(Q_values)
-        x = X[best_index]
-        return (x, Q_values[best_index]) if return_value else x
-    elif 1 < k <= 2 * Q.n:  # runtime of np.argpartition is O(n * k)
-        best_indices = np.argpartition(Q_values, np.arange(k))[:k]
-        xs = X[best_indices]
-        return list(zip(xs, Q_values[best_indices])) if return_value else xs
-    elif k > 2 * Q.n:  # runtime of np.argsort is O(n * log n)
-        best_indices = np.argsort(Q_values)[:k]
-        xs = X[best_indices]
-        return list(zip(xs, Q_values[best_indices])) if return_value else xs
-    else:
-        return ValueError(f'k must be greater than 0')
+        return x
 
 
 def simulated_annealing(Q: qubo, schedule='2+', steps=100_000, init_temp=None, n_parallel=10,

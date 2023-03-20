@@ -1,19 +1,29 @@
 #!/usr/bin/env python
-import setuptools
+from os.path  import join
+from platform import system
 
-with open('README.md', 'r', encoding='utf-8') as f:
-    long_description = f.read()
+from setuptools import Extension, setup
+from numpy      import get_include as numpy_incl
 
-setuptools.setup(
-        name='qubolite',
-        packages=['qubolite'],
-        version='0.6.9',
-        description='Toolbox for quadratic binary optimization',
-        long_description=long_description,
-        long_description_content_type='text/markdown',
-        author='Sascha Muecke',
-        author_email='sascha.muecke@tu-dortmund.de',
-        url='https://github.com/smuecke/qubolite',
-        install_requires=['numba>=0.55.2','numpy>=1.23.5'],
-        python_requires='>=3.8'
-)
+
+SYSTEM = system()
+if SYSTEM == 'Windows':
+    C_LINK_FLAGS = []
+    C_COMP_FLAGS = ['/O2', '/openmp']
+else: # GCC flags for Linux
+    C_LINK_FLAGS = ['-fopenmp']
+    C_COMP_FLAGS = ['-O3', '-fopenmp', '-march=native']
+
+NP_INCL = numpy_incl()
+
+setup(ext_modules=[
+    Extension(
+        name='_c_utils',
+        sources=['qubolite/_c_utils.c'],
+        libraries=['npymath','npyrandom'],
+        include_dirs=[NP_INCL],
+        library_dirs=[
+            join(NP_INCL, '..', 'lib'),
+            join(NP_INCL, '..', '..', 'random', 'lib')], # no official way to retrieve these directories
+        extra_compile_args=C_COMP_FLAGS,
+        extra_link_args=C_LINK_FLAGS)])

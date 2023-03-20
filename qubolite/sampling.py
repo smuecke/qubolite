@@ -3,7 +3,6 @@ from collections import Counter, defaultdict
 from functools   import cached_property
 
 import numpy as np
-from numba import njit
 
 from .bitvec import all_bitvectors, from_string, to_string
 from .misc   import get_random_state, set_suffix
@@ -138,7 +137,6 @@ def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_stat
     return BinarySample(counts=dict(counts))
 
 
-@njit
 def _marginal(qm, x, i, temp=1.0):
     dxi = qm[i,i]+(x[:i]*qm[:i,i]).sum()+(x[i+1:]*qm[i,i+1:]).sum()
     if x[i] == 0:
