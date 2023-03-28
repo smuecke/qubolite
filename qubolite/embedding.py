@@ -144,8 +144,7 @@ class Kernel2MeansClustering(qubo_embedding):
         # fix z_n=0 for cluster assignment
         if unambiguous:
             n = K.shape[0]
-            q_ = q.copy()[:n-1, :n-1]
-            np.fill_diagonal(q_, q_.diagonal() + 2 * q[:n-1, n-1])
+            q = q[:n-1, :n-1]
         return qubo(q)
 
     def map_solution(self, x):
