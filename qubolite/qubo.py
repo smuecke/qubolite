@@ -175,7 +175,7 @@ class qubo:
         m_  = np.triu(self.m, 1)
         m_ += m_.T
         sign = 1-2*x
-        return sign*(np.diag(self.m)+(m_*x).sum(1))
+        return sign*(np.diag(self.m)+(m_ @ x.T).T)
 
     def dx2(self, x: np.ndarray):
         # 2nd discrete derivative
