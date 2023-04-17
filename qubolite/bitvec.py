@@ -15,15 +15,10 @@ def all_bitvectors(n: int, read_only=True):
         x[pointer] = 1
 
 
-def all_bitvectors_array(n):
-    """Fast recursive method for creating all binary states with dimension n"""
-    if n == 1:
-        return np.array([[0], [1]])
-    B = np.zeros((2 ** n, n))
-    B_ = all_bitvectors_array(n=n-1)
-    B[:2 ** (n - 1), 1:] = B_
-    B[2 ** (n - 1):, 0] = 1
-    B[2 ** (n - 1):, 1:] = B_
+def all_bitvectors_fast(n, as_int=False):
+    B = np.arange(1<<n)[:, np.newaxis] & (1<<np.arange(n)) > 0
+    if as_int:
+        B = B.astype(int)
     return B
 
 
