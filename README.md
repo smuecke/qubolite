@@ -23,6 +23,10 @@ Using the function `qubolite.ordering_distance()` requires the Kendall-τ measur
 [scipy](https://scipy.org/) library which can be installed by `pip install scipy` or by installing 
 qubolite with `pip install qubolite[kendall_tau]`.
 
+For exemplary QUBO embeddings (e.g. clustering or subset sum), the 
+[scikit-learn](https://scikit-learn.org/) library is required. It can be installed by either using 
+`pip install scikit-learn` or installing qubolite with `pip install qubolite[embeddings]`.
+
 If you would like to install all optional dependencies you can use `pip install qubolite[all]` for
 achieving this.
 
