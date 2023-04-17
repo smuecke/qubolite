@@ -1,6 +1,8 @@
 from functools import partial
 
 import numpy as np
+from sklearn.metrics import pairwise_kernels
+from sklearn.preprocessing import KernelCenterer
 
 from .misc import get_random_state
 from .qubo import qubo
@@ -56,70 +58,17 @@ class BinaryClustering(qubo_embedding):
         return cls(data)
 
 
-class Kernel:
-    def __call__(self, x: np.ndarray):
-        return NotImplementedError
-
-    @staticmethod
-    def center_kernel_matrix(K):
-        n = K.shape[0]
-        ones = np.ones(n)
-        n_frac = 1.0 / n
-        left = ones @ K
-        return K - n_frac * left - n_frac * K @ ones - n_frac ** 2 * left @ ones
-
-
-class GaussianKernel(Kernel):
-    def __init__(self, delta=1.0):
-        self.__delta = delta
-
-    def __call__(self, X: np.ndarray, Y: np.ndarray = None):
-        if Y is None:
-            Y = X
-        if X.ndim == 1:
-            assert len(X) == X.shape[0]
-            D = ((X - Y) ** 2).sum(-1)
-        else:
-            assert X.ndim == 2 and Y.ndim == 2 and X.shape[1] == Y.shape[1]
-            D = ((X[:, None] - Y) ** 2).sum(-1)
-        return np.exp(- self.__delta * D)
-
-
-class LaplacianKernel(Kernel):
-    def __init__(self, delta=1.0):
-        self.__delta = delta
-
-    def __call__(self, X: np.ndarray, Y: np.ndarray = None):
-        if Y is None:
-            Y = X
-        if X.ndim == 1:
-            assert len(X) == X.shape[0]
-            D = (np.abs(X - Y)).sum(-1)
-        else:
-            assert X.ndim == 2 and Y.ndim == 2 and X.shape[1] == Y.shape[1]
-            D = (np.abs(X[:, None] - Y)).sum(-1)
-        return np.exp(- self.__delta * D)
-
-
-class ProductKernel(Kernel):
-    def __call__(self, X: np.ndarray, Y: np.ndarray = None):
-        if Y is None:
-            Y = X
-        if X.ndim == 1:
-            assert len(X) == X.shape[0]
-        else:
-            assert X.ndim == 2 and Y.ndim == 2 and X.shape[1] == Y.shape[1]
-        return (X @ Y.T).T
-
-
 class Kernel2MeansClustering(qubo_embedding):
-    def __init__(self, data, kernel: Kernel = None):
+    def __init__(self, data, kernel=None, centered=True, unambiguous=True, **kernel_params):
+        # for different kernels: https://scikit-learn.org/stable/modules/metrics.html
         self.__data = data
         if kernel is None:
-            self.__kernel = GaussianKernel()
+            self.__kernel = 'linear'
+            self.__kernel_params = {}
         else:
             self.__kernel = kernel
-        self.__Q = self.__from_data(data, kernel)
+            self.__kernel_params = kernel_params
+        self.__Q = self.__from_data(data, kernel, centered, unambiguous, **kernel_params)
 
     @property
     def qubo(self):
@@ -129,16 +78,12 @@ class Kernel2MeansClustering(qubo_embedding):
     def data(self):
         return dict(points=self.__data)
 
-    @property
-    def kernel(self):
-        return self.__kernel
-
-    def __from_data(self, data, kernel, centered=True, unambiguous=True):
+    def __from_data(self, data, kernel, centered=True, unambiguous=True, **kernel_params):
         # calculate kernel matrix
-        K = kernel(X=data)
+        K = pairwise_kernels(X=data, metric=kernel, **kernel_params)
         # center kernel matrix
         if centered:
-            K = kernel.center_kernel_matrix(K)
+            K = KernelCenterer().fit_transform(K)
         q = -K
         np.fill_diagonal(q, K.sum(1) - K.diagonal())
         # fix z_n=0 for cluster assignment
@@ -152,16 +97,18 @@ class Kernel2MeansClustering(qubo_embedding):
         return 2 * x - 1
 
     @classmethod
-    def random(cls, n: int, dim=2, dist=2.0, random_state=None,
-               kernel: Kernel = None):
+    def random(cls, n: int, dim=2, dist=2.0, random_state=None, kernel=None, centered=True,
+               unambiguous=True, **kernel_params):
         if kernel is None:
-            kernel = GaussianKernel()
+            kernel = 'linear'
+            kernel_params = {}
         npr = get_random_state(random_state)
         data = npr.normal(size=(n, dim))
         mask = npr.permutation(n) < n // 2
         data[mask, :] += dist / np.sqrt(dim)
         data -= data.mean(0)
-        return data, cls(data, kernel=kernel)
+        return data, cls(data, kernel=kernel, centered=centered, unambiguous=unambiguous,
+                         **kernel_params)
 
 
 class SubsetSum(qubo_embedding):
