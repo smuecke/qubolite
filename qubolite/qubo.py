@@ -2,7 +2,7 @@ import struct
 
 import numpy as np
 
-from .bitvec  import all_bitvectors
+from .bitvec  import all_bitvectors, all_bitvectors_array
 from _c_utils import brute_force as brute_force_c
 from .misc    import get_random_state, is_triu, warn_size
 
@@ -216,7 +216,7 @@ class qubo:
             assert out.shape == (1<<self.n,), f'out array has wrong shape, ({1<<self.n},) expected'
         if fast:
             # builds the entire (2**n, n)-array of n-bit vectors
-            X = np.vstack(list(all_bitvectors(self.n, read_only=False)))
+            X = all_bitvectors_array(self.n)
             out[...] = np.exp(-self(X)/temp)
         else:
             # uses less memory, but much slower

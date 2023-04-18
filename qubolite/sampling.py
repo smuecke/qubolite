@@ -4,7 +4,7 @@ from functools   import cached_property
 
 import numpy as np
 
-from .bitvec import all_bitvectors, from_string, to_string
+from .bitvec import all_bitvectors_array, from_string, to_string
 from .misc   import get_random_state, set_suffix
 
 
@@ -114,7 +114,7 @@ class BinarySample:
 
 def full(qubo, samples: int=1, temp=1.0, random_state=None):
     npr = get_random_state(random_state)
-    X = np.vstack(list(all_bitvectors(qubo.n, read_only=False)))
+    X = all_bitvectors_array(qubo.n)
     p = np.exp(-qubo(X)/temp)
     p = p / p.sum()
     vals = npr.choice(2**qubo.n, p=p, size=samples)
