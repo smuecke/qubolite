@@ -80,7 +80,7 @@ class Kernel2MeansClustering(qubo_embedding):
     def data(self):
         return dict(points=self.__data)
 
-    def __from_data():
+    def __from_data(self):
         # calculate kernel matrix
         K = pairwise_kernels(X=self.__data, metric=self.__kernel, **self.__kernel_params)
         # center kernel matrix
