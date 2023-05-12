@@ -68,7 +68,9 @@ class Kernel2MeansClustering(qubo_embedding):
         else:
             self.__kernel = kernel
             self.__kernel_params = kernel_params
-        self.__Q = self.__from_data(data, kernel, centered, unambiguous, **kernel_params)
+        self.__centered = centered
+        self.__unambiguous = unambiguous
+        self.__Q = self.__from_data()
 
     @property
     def qubo(self):
@@ -78,16 +80,16 @@ class Kernel2MeansClustering(qubo_embedding):
     def data(self):
         return dict(points=self.__data)
 
-    def __from_data(self, data, kernel, centered=True, unambiguous=True, **kernel_params):
+    def __from_data():
         # calculate kernel matrix
-        K = pairwise_kernels(X=data, metric=kernel, **kernel_params)
+        K = pairwise_kernels(X=self.__data, metric=self.__kernel, **self.__kernel_params)
         # center kernel matrix
-        if centered:
+        if self.__centered:
             K = KernelCenterer().fit_transform(K)
         q = -K
         np.fill_diagonal(q, K.sum(1) - K.diagonal())
         # fix z_n=0 for cluster assignment
-        if unambiguous:
+        if self.__unambiguous:
             n = K.shape[0]
             q = q[:n-1, :n-1]
         return qubo(q)
