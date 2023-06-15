@@ -200,9 +200,9 @@ class qubo:
     def as_int(self, bits=32):
         p_min, p_max = self.m.min(), self.m.max()
         if np.abs(p_min) < np.abs(p_max):
-            factor = ((1<<(bits-1))-1)/np.abs(p_max)
+            factor = ((2**(bits-1))-1)/np.abs(p_max)
         else:
-            factor = (1<<(bits-1))/np.abs(p_min)
+            factor = (2**(bits-1))/np.abs(p_min)
         return qubo((self.m*factor).round())
 
     def partition_function(self, log=False, temp=1.0, fast=True):
