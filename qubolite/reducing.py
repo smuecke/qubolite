@@ -1,40 +1,36 @@
 import numpy as np
-from numpy import newaxis as na
-from .dr_heuristics import ReduceHeuristic
+
 from . import qubo
 from .bounds import lb_roof_dual, lb_negative_parameters, ub_local_search, ub_sample
-from .solving import brute_force
+from .dr_heuristics import ReduceHeuristic
 
 
-def decide_index(unique, heuristic=None, lower_bound_method="roof_dual",
-                 upper_bound_method="gradient", npr=None, set_to_zero=True,
-                 change_tol=1e-08, change_diff=1e-08):
+def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to_zero=True,
+                 change_tol=1e-08):
     if npr is None:
         npr = np.random.RandomState()
     if heuristic is None:
-        row_indices, column_indices = np.where(np.invert(np.isclose(unique.matrix, 0)))
+        row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
         try:
             random_index = npr.randint(row_indices.shape[0])
             i, j = row_indices[random_index], column_indices[random_index]
         except ValueError:
             i, j = 0, 0
     elif isinstance(heuristic, ReduceHeuristic):
-        unique_indices = unique.dynamic_range_impact()
-        indices = unique.to_matrix_indices(unique_indices, unique.qubo.n)
+        order_indices = matrix_order.dynamic_range_impact()
+        indices = matrix_order.to_matrix_indices(order_indices, matrix_order.qubo.n)
         drs = [dynamic_range_change(x[0], x[1],
-                                    compute_final_change(unique, x[0], x[1],
-                                                         lower_bound_method=lower_bound_method,
-                                                         upper_bound_method=upper_bound_method,
+                                    compute_final_change(matrix_order, x[0], x[1],
+                                                         bound_dict=bound_dict,
                                                          heuristic=heuristic,
                                                          change_tol=change_tol,
-                                                         change_diff=change_diff,
                                                          set_to_zero=set_to_zero),
-                                    unique) for x in indices]
+                                    matrix_order) for x in indices]
         if np.any(drs):
             index = np.argmax(drs)
             i, j = indices[index]
         else:
-            row_indices, column_indices = np.where(np.invert(np.isclose(unique.matrix, 0)))
+            row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
             try:
                 random_index = npr.randint(row_indices.shape[0])
                 i, j = row_indices[random_index], column_indices[random_index]
@@ -45,20 +41,23 @@ def decide_index(unique, heuristic=None, lower_bound_method="roof_dual",
     return i, j
 
 
-def compute_opt_pre_bound(Q, i, j, increase=True, lower_bound_method="roof_dual",
-                          upper_bound_method="local_search", change_diff=1e-08):
-    if lower_bound_method == "roof_dual":
+def compute_opt_pre_bound(Q, i, j, increase=True, bound_dict=None):
+    if bound_dict is None:
+        bound_dict = {'upper_bound': 'local_search', 'lower_bound': 'roof_dual',
+                      'change_diff': 1e-08, 'upper_bound_args': None, 'lower_bound_args': None}
+    if bound_dict['lower_bound'] == "roof_dual":
         lower_bound = lb_roof_dual
-    elif lower_bound_method == "min_sum":
+    elif bound_dict['lower_bound'] == "min_sum":
         lower_bound = lb_negative_parameters
     else:
         raise NotImplementedError
-    if upper_bound_method == "local_search":
+    if bound_dict['upper_bound'] == "local_search":
         upper_bound = ub_local_search
-    elif upper_bound_method == "sample":
+    elif bound_dict['upper_bound'] == "sample":
         upper_bound = ub_sample
     else:
         raise NotImplementedError
+    change_diff = bound_dict['change_diff']
     if i != j:
         # Define sub-qubos
         Q_00, c_00, _ = Q.clamp({i: 0, j: 0})
@@ -124,18 +123,15 @@ def dynamic_range_change(i, j, change, matrix_order):
     return dynamic_range_diff
 
 
-def compute_final_change(matrix_order, i, j, lower_bound_method="roof_dual",
-                         upper_bound_method="local_search",
-                         heuristic=None, change_tol=1e-08, change_diff=1e-08, set_to_zero=True):
+def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, change_tol=1e-08,
+                         set_to_zero=True):
     # Decide whether to increase or decrease
     increase = heuristic.decide_increase(matrix_order, i, j)
     # Bounds on changes based on reducing the dynamic range
     dyn_range_change = heuristic.compute_change(matrix_order, i, j, increase)
     # Bounds on changes based on maintaining the optimum
     main_opt_change = compute_opt_pre_bound(matrix_order.qubo, i, j, increase,
-                                            lower_bound_method=lower_bound_method,
-                                            upper_bound_method=upper_bound_method,
-                                            change_diff=change_diff)
+                                            bound_dict=bound_dict)
     if increase:
         change = min(main_opt_change, dyn_range_change)
         if change < 0 or np.isclose(change, 0, atol=change_tol):
