@@ -2,7 +2,7 @@ import numpy as np
 
 from . import qubo
 from .bounds import lb_roof_dual, lb_negative_parameters, ub_local_search, ub_sample
-from .dr_heuristics import ReduceHeuristic
+from .dr_heuristics import ReduceHeuristic, MatrixOrder, Greedy
 
 
 def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to_zero=True,
@@ -41,7 +41,7 @@ def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to
     return i, j
 
 
-def compute_opt_pre_bound(Q, i, j, increase=True, bound_dict=None):
+def compute_pre_opt_bound(Q, i, j, increase=True, bound_dict=None):
     if bound_dict is None:
         bound_dict = {'upper_bound': 'local_search', 'lower_bound': 'roof_dual',
                       'change_diff': 1e-08, 'upper_bound_args': None, 'lower_bound_args': None}
@@ -58,6 +58,7 @@ def compute_opt_pre_bound(Q, i, j, increase=True, bound_dict=None):
     else:
         raise NotImplementedError
     change_diff = bound_dict['change_diff']
+    Q = qubo(Q)
     if i != j:
         # Define sub-qubos
         Q_00, c_00, _ = Q.clamp({i: 0, j: 0})
@@ -129,17 +130,16 @@ def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, ch
     increase = heuristic.decide_increase(matrix_order, i, j)
     # Bounds on changes based on reducing the dynamic range
     dyn_range_change = heuristic.compute_change(matrix_order, i, j, increase)
-    # Bounds on changes based on maintaining the optimum
-    main_opt_change = compute_opt_pre_bound(matrix_order.qubo, i, j, increase,
-                                            bound_dict=bound_dict)
+    # Bounds on changes based on preserving the optimum
+    pre_opt_change = compute_pre_opt_bound(matrix_order, i, j, increase, bound_dict=bound_dict)
     if increase:
-        change = min(main_opt_change, dyn_range_change)
+        change = min(pre_opt_change, dyn_range_change)
         if change < 0 or np.isclose(change, 0, atol=change_tol):
             change = 0
         elif 0 > matrix_order.matrix[i, j] > - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
     else:
-        change = max(main_opt_change, dyn_range_change)
+        change = max(pre_opt_change, dyn_range_change)
         if change > 0 or np.isclose(change, 0, atol=change_tol):
             change = 0
         elif 0 < matrix_order.matrix[i, j] < - change and set_to_zero:
@@ -147,5 +147,22 @@ def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, ch
     return change
 
 
-def reduce_dr(Q: qubo, iterations=100):
-    return NotImplemented
+def reduce_dr(Q: qubo, iterations=100, callback=None, set_to_zero=True, heuristic=None, npr=None,
+              bound_dict=None, change_tol=1e-08):
+    if heuristic is None:
+        heuristic = Greedy()
+    Q_copy = Q.copy()
+    matrix_order = MatrixOrder(Q_copy)
+    stop_update = False
+    for it in range(iterations):
+        if not stop_update:
+            i, j = decide_index(matrix_order, heuristic=heuristic, bound_dict=bound_dict, npr=npr,
+                                set_to_zero=set_to_zero, change_tol=change_tol)
+            change = compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=heuristic,
+                                          change_tol=change_tol, set_to_zero=set_to_zero)
+            stop_update = matrix_order.update_entry(i, j, change)
+            if callback is not None:
+                callback(i, j, change, matrix_order, it)
+        else:
+            break
+    return Q_copy
