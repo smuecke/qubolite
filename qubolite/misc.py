@@ -8,6 +8,18 @@ import numpy as np
 from .bitvec import all_bitvectors_array
 
 
+class Intervals:
+    def __init__(self, ivs=None):
+        return NotImplemented
+
+    def union(self, *others):
+        return NotImplemented
+
+    def intersect(self, *others):
+        return NotImplemented
+
+
+
 # make warning message more minialistic
 def _custom_showwarning(message, *args, file=None, **kwargs):
     (file or stderr).write(f'Warning: {str(message)}\n')
@@ -41,14 +53,14 @@ def warn_size(n: int, limit: int=30):
 
 
 def get_random_state(state=None):
+    if state is None:
+        return np.random.default_rng()
     if isinstance(state, np.random._generator.Generator):
         return state
     if isinstance(state, np.random.RandomState):
         # for compatibility
         seed = state.randint(1<<32)
         return np.random.default_rng(seed)
-    if state is None:
-        return np.random.default_rng()
     try:
         seed = int(state)
     except ValueError:
