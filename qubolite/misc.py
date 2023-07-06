@@ -1,6 +1,7 @@
 import warnings
 from hashlib   import md5
 from importlib import import_module
+from operator  import itemgetter
 from sys       import stderr
 
 import numpy as np
@@ -10,14 +11,67 @@ from .bitvec import all_bitvectors_array
 
 class Intervals:
     def __init__(self, ivs=None):
-        return NotImplemented
+        if ivs is None:
+            self.__ivs = np.empty((0, 2))
+        self.__ivs = self.__normalize(ivs)
+
+    @classmethod
+    def from_points(cls, x, radius):
+        return cls(np.vstack([x-radius, x+radius]).T)
+
+    def copy(self):
+        return Intervals(self)
+
+    def __repr__(self):
+        return f'Intervals({list(map(tuple, self.__ivs)).__repr__()})'
+
+    def __iter__(self):
+        return iter(self.__ivs)
+
+    def __normalize(self, ivs):
+        iv_iter = iter(sorted(ivs, key=itemgetter(0)))
+        ivs_ = [*next(iv_iter)]
+        for u, v in iv_iter:
+            assert u < v, 'left interval boundary must be less than right boundary'
+            if u <= ivs_[-1]:
+                if ivs_[-1] < v:
+                    ivs_[-1] = v
+            else:
+                ivs_.extend([u, v])
+        return np.asarray(ivs_, dtype=np.float64).reshape((-1, 2))
 
     def union(self, *others):
-        return NotImplemented
+        if len(others) == 0:
+            return self.copy()
+        return Intervals(np.vstack([obj.__ivs for obj in [self, *others]]))
 
     def intersect(self, *others):
-        return NotImplemented
-
+        ivs = []
+        m = len(others)+1 # number of Intervals objects
+        if m == 1:
+            return self.copy()
+        l = max([obj.__ivs.shape[0] for obj in [self, *others]]) # max. num. of intervals
+        uvs = np.full((m, l, 2), np.infty)
+        for i, obj in enumerate([self, *others]):
+            uvs[i, :obj.__ivs.shape[0], :] = obj.__ivs
+        states = np.ones(len(others)+1)
+        prev_state_sum = states.sum()
+        print(uvs)
+        for i, j, k in zip(*np.unravel_index(np.argsort(uvs, axis=None), uvs.shape)):
+            states[i] = k
+            value = uvs[i, j, k]
+            if value == np.infty:
+                break
+            state_sum = states.sum()
+            if state_sum == 0 or (prev_state_sum == 0 and state_sum == 1):
+                # all intervals are open (0), or
+                # one interval just closed (0->1)
+                ivs.append(uvs[i, j, k])
+            prev_state_sum = state_sum
+        return Intervals(np.asarray(ivs).reshape((-1, 2)))
+        
+    def difference(self, *others):
+        raise NotImplementedError()
 
 
 # make warning message more minialistic
@@ -59,7 +113,7 @@ def get_random_state(state=None):
         return state
     if isinstance(state, np.random.RandomState):
         # for compatibility
-        seed = state.randint(1<<32)
+        seed = state.randint(0xffffffff)
         return np.random.default_rng(seed)
     try:
         seed = int(state)
