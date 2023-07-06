@@ -3,52 +3,52 @@ import numpy as np
 
 class ReduceHeuristic:
     @staticmethod
-    def compute_change(matrix_unique, i, j, increase=True):
+    def compute_change(matrix_order, i, j, increase=True):
         pass
 
     @staticmethod
-    def decide_increase(unique, i, j):
+    def decide_increase(matrix_order, i, j):
         pass
 
 
 class Greedy(ReduceHeuristic):
     @staticmethod
-    def compute_change(matrix_unique, i, j, increase=True):
-        sorted_index = matrix_unique.get_sorted_index(i, j)
-        S = matrix_unique.unique_elements
-        sorted = matrix_unique.unique
-        second_min_distance = matrix_unique.second_min_distance
+    def compute_change(matrix_order, i, j, increase=True):
+        sorted_index = matrix_order.get_sorted_index(i, j)
+        S = matrix_order.unique_elements
+        sorted = matrix_order.unique
+        second_min_distance = matrix_order.second_min_distance
         if sorted_index == 0:
-            if matrix_unique.min_index_lower == sorted_index and not np.isclose(second_min_distance,
-                                                                                matrix_unique.min_distance):
-                change = sorted[S - 1] - 2 * sorted[0] + sorted[1] + matrix_unique.extra_summand
+            if matrix_order.min_index_lower == sorted_index and not np.isclose(second_min_distance,
+                                                                               matrix_order.min_distance):
+                change = sorted[S - 1] - 2 * sorted[0] + sorted[1] + matrix_order.extra_summand
             else:
                 change = sorted[S - 1] - 2 * sorted[0] + sorted[1]
         elif sorted_index == S - 1:
-            if matrix_unique.min_index_upper == sorted_index and not np.isclose(second_min_distance,
-                                                                                matrix_unique.min_distance):
-                change = sorted[0] - 2 * sorted[S - 1] + sorted[S - 2] - matrix_unique.extra_summand
+            if matrix_order.min_index_upper == sorted_index and not np.isclose(second_min_distance,
+                                                                               matrix_order.min_distance):
+                change = sorted[0] - 2 * sorted[S - 1] + sorted[S - 2] - matrix_order.extra_summand
             else:
                 change = sorted[0] - 2 * sorted[S - 1] + sorted[S - 2]
         else:
             if increase:
-                if matrix_unique.min_index_lower == sorted_index and not np.isclose(second_min_distance,
-                                                                                    matrix_unique.min_distance):
-                    change = sorted[S - 1] - sorted[sorted_index] + matrix_unique.extra_summand
+                if matrix_order.min_index_lower == sorted_index and not np.isclose(second_min_distance,
+                                                                                   matrix_order.min_distance):
+                    change = sorted[S - 1] - sorted[sorted_index] + matrix_order.extra_summand
                 else:
-                    change = sorted[S - 1] - sorted[sorted_index] - matrix_unique.min_distance
+                    change = sorted[S - 1] - sorted[sorted_index] - matrix_order.min_distance
             else:
-                if matrix_unique.min_index_upper == sorted_index and not np.isclose(second_min_distance,
-                                                                                    matrix_unique.min_distance):
-                    change = sorted[1] - sorted[sorted_index] - matrix_unique.extra_summand
+                if matrix_order.min_index_upper == sorted_index and not np.isclose(second_min_distance,
+                                                                                   matrix_order.min_distance):
+                    change = sorted[1] - sorted[sorted_index] - matrix_order.extra_summand
                 else:
-                    change = sorted[1] - sorted[sorted_index] + matrix_unique.min_distance
+                    change = sorted[1] - sorted[sorted_index] + matrix_order.min_distance
         return change
 
     @staticmethod
-    def decide_increase(unique, i, j):
-        sorted_index = unique.get_sorted_index(i, j)
-        if unique.unique[sorted_index] < 0:
+    def decide_increase(matrix_order, i, j):
+        sorted_index = matrix_order.get_sorted_index(i, j)
+        if matrix_order.unique[sorted_index] < 0:
             increase = True
         else:
             increase = False
@@ -57,56 +57,56 @@ class Greedy(ReduceHeuristic):
 
 class MaintainOrder(ReduceHeuristic):
     @staticmethod
-    def compute_change(matrix_unique, i, j, increase=True):
-        sorted_index = matrix_unique.get_sorted_index(i, j)
-        S = matrix_unique.unique_elements
-        sorted = matrix_unique.unique
+    def compute_change(matrix_order, i, j, increase=True):
+        sorted_index = matrix_order.get_sorted_index(i, j)
+        S = matrix_order.unique_elements
+        sorted = matrix_order.unique
         if sorted_index == 0:
             if increase:
-                change = sorted[1] - sorted[0] - matrix_unique.min_distance
+                change = sorted[1] - sorted[0] - matrix_order.min_distance
             else:
-                change = - matrix_unique.extra_summand
+                change = - matrix_order.extra_summand
         elif sorted_index == S - 1:
             if increase:
-                change = matrix_unique.extra_summand
+                change = matrix_order.extra_summand
             else:
-                change = sorted[S - 2] - sorted[S - 1] + matrix_unique.min_distance
+                change = sorted[S - 2] - sorted[S - 1] + matrix_order.min_distance
         else:
             current = sorted[sorted_index]
             if increase:
-                lower, upper = matrix_unique.obtain_increase_bounds(sorted_index)
+                lower, upper = matrix_order.obtain_increase_bounds(sorted_index)
                 mid = (upper - lower) / 2.0
                 min_Q = min(upper - current, current - lower)
                 change = mid - min_Q
             else:
-                lower, upper = matrix_unique.obtain_decrease_bounds(sorted_index)
+                lower, upper = matrix_order.obtain_decrease_bounds(sorted_index)
                 mid = (lower - upper) / 2.0
                 min_Q = min(upper - current, current - lower)
                 change = mid + min_Q
         return change
 
     @staticmethod
-    def decide_increase(unique, i, j):
-        sorted_index = unique.get_sorted_index(i, j)
-        sorted = unique.unique
+    def decide_increase(matrix_order, i, j):
+        sorted_index = matrix_order.get_sorted_index(i, j)
+        sorted = matrix_order.unique
         if sorted_index == 0:
-            second_min_distance = unique.second_min_distance
-            if unique.min_index_lower == sorted_index and not np.isclose(second_min_distance,
-                                                                         unique.min_distance):
+            second_min_distance = matrix_order.second_min_distance
+            if matrix_order.min_index_lower == sorted_index and not np.isclose(second_min_distance,
+                                                                               matrix_order.min_distance):
                 increase = False
             else:
                 increase = True
         elif sorted_index == sorted.shape[0] - 1:
-            second_min_distance = unique.second_min_distance
-            if unique.min_index_upper == sorted_index and not np.isclose(second_min_distance,
-                                                                         unique.min_distance):
+            second_min_distance = matrix_order.second_min_distance
+            if matrix_order.min_index_upper == sorted_index and not np.isclose(second_min_distance,
+                                                                               matrix_order.min_distance):
                 increase = True
             else:
                 increase = False
         else:
             current = sorted[sorted_index]
-            lower, _ = unique.obtain_decrease_bounds(sorted_index)
-            _, upper = unique.obtain_increase_bounds(sorted_index)
+            lower, _ = matrix_order.obtain_decrease_bounds(sorted_index)
+            _, upper = matrix_order.obtain_increase_bounds(sorted_index)
             if current - lower < upper - current:
                 increase = True
             else:
