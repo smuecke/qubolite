@@ -113,7 +113,7 @@ def get_random_state(state=None):
         return state
     if isinstance(state, np.random.RandomState):
         # for compatibility
-        seed = state.randint(0xffffffff)
+        seed = state.randint(1<<31)
         return np.random.default_rng(seed)
     try:
         seed = int(state)
