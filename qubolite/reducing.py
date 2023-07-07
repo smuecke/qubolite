@@ -124,6 +124,26 @@ def dynamic_range_change(i, j, change, matrix_order):
     return dynamic_range_diff
 
 
+def check_to_next_increase(matrix_order, change, i, j):
+    new_entry = matrix_order.matrix[i, j] + change
+    unique_index = np.searchsorted(matrix_order.unique, new_entry, side='right')
+    if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
+        change = matrix_order.unique[unique_index - 1] - matrix_order.matrix[i, j]
+    elif matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
+        change = matrix_order.unique[unique_index] - matrix_order.matrix[i, j] - matrix_order.min_distance
+    return change
+
+
+def check_to_next_decrease(matrix_order, change, i, j):
+    new_entry = matrix_order.matrix[i, j] + change
+    unique_index = np.searchsorted(matrix_order.unique, new_entry, side='left')
+    if matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
+        change = matrix_order.matrix[i, j] - matrix_order.unique[unique_index]
+    if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
+        change = matrix_order.matrix[i, j] - matrix_order.unique[unique_index - 1] + matrix_order.min_distance
+    return change
+
+
 def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, change_tol=1e-08,
                          set_to_zero=True):
     # Decide whether to increase or decrease
@@ -138,12 +158,16 @@ def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, ch
             change = 0
         elif 0 > matrix_order.matrix[i, j] > - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
+        else:
+            change = check_to_next_increase(matrix_order, change, i, j)
     else:
         change = max(pre_opt_change, dyn_range_change)
         if change > 0 or np.isclose(change, 0, atol=change_tol):
             change = 0
         elif 0 < matrix_order.matrix[i, j] < - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
+        else:
+            change = check_to_next_decrease(matrix_order, change, i, j)
     return change
 
 
@@ -158,8 +182,9 @@ def reduce_dr(Q: qubo, iterations=100, callback=None, set_to_zero=True, heuristi
         if not stop_update:
             i, j = decide_index(matrix_order, heuristic=heuristic, bound_dict=bound_dict, npr=npr,
                                 set_to_zero=set_to_zero, change_tol=change_tol)
-            change = compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=heuristic,
-                                          change_tol=change_tol, set_to_zero=set_to_zero)
+            change = compute_final_change(matrix_order, i, j, bound_dict=bound_dict,
+                                          heuristic=heuristic, change_tol=change_tol,
+                                          set_to_zero=set_to_zero)
             stop_update = matrix_order.update_entry(i, j, change)
             if callback is not None:
                 callback(i, j, change, matrix_order, it)
