@@ -114,6 +114,12 @@ class MaintainOrder(ReduceHeuristic):
         return increase
 
 
+HEURISTICS = {
+    'greedy': Greedy,
+    'order':  MaintainOrder
+}
+
+
 class MatrixOrder:
     def __init__(self, matrix, precision=8):
         self.precision = precision
