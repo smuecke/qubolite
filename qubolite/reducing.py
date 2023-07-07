@@ -1,6 +1,7 @@
 from functools import partial
 
 import numpy as np
+import portion as P
 
 from . import qubo
 from .bounds import lb_roof_dual, lb_negative_parameters, ub_local_search, ub_sample
@@ -130,25 +131,41 @@ def dynamic_range_change(i, j, change, matrix_order):
 
 
 def check_to_next_increase(matrix_order, change, i, j):
-    new_entry = matrix_order.matrix[i, j] + change
-    unique_index = np.searchsorted(matrix_order.unique, new_entry, side='right')
-    if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
-        change = matrix_order.unique[unique_index - 1] - matrix_order.matrix[i, j]
-    elif matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
-        change = matrix_order.unique[unique_index] - matrix_order.matrix[
-            i, j] - matrix_order.min_distance
-    return change
+    current_entry = matrix_order.matrix[i, j]
+    new_entry = current_entry + change
+    lower_index = np.searchsorted(matrix_order.unique, new_entry, side='right')
+    lower_entry = matrix_order.unique[lower_index - 1]
+    min_dis = matrix_order.min_distance
+    lower_interval = P.open(lower_entry - min_dis, lower_entry + min_dis)
+    try:
+        upper_entry = matrix_order.unique[lower_index]
+        upper_interval = P.open(upper_entry - min_dis, upper_entry + min_dis)
+        forbidden_interval = lower_interval | upper_interval
+    except IndexError:
+        forbidden_interval = lower_interval
+    possible_interval = P.openclosed(-P.inf, new_entry)
+    difference = possible_interval.difference(forbidden_interval)
+    difference = difference | P.singleton(lower_entry)
+    return difference.upper - current_entry
 
 
 def check_to_next_decrease(matrix_order, change, i, j):
-    new_entry = matrix_order.matrix[i, j] + change
-    unique_index = np.searchsorted(matrix_order.unique, new_entry, side='left')
-    if matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
-        change = matrix_order.matrix[i, j] - matrix_order.unique[unique_index]
-    if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
-        change = matrix_order.matrix[i, j] - matrix_order.unique[
-            unique_index - 1] + matrix_order.min_distance
-    return change
+    current_entry = matrix_order.matrix[i, j]
+    new_entry = current_entry + change
+    upper_index = np.searchsorted(matrix_order.unique, new_entry, side='left')
+    upper_entry = matrix_order.unique[upper_index]
+    min_dis = matrix_order.min_distance
+    upper_interval = P.open(upper_entry - min_dis, upper_entry + min_dis)
+    try:
+        lower_entry = matrix_order.unique[upper_index - 1]
+        lower_interval = P.open(lower_entry - min_dis, lower_entry + min_dis)
+        forbidden_interval = lower_interval | upper_interval
+    except IndexError:
+        forbidden_interval = upper_interval
+    possible_interval = P.openclosed(new_entry, P.inf)
+    difference = possible_interval.difference(forbidden_interval)
+    difference = difference | P.singleton(upper_entry)
+    return difference.lower - current_entry
 
 
 def compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, **kwargs):
@@ -165,12 +182,16 @@ def compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, *
             change = 0
         elif 0 > matrix_order.matrix[i, j] > - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
+        else:
+            change = check_to_next_increase(matrix_order, change, i, j)
     else:
         change = max(pre_opt_change, dyn_range_change)
         if change > 0 or np.isclose(change, 0, atol=change_tol):
             change = 0
         elif 0 < matrix_order.matrix[i, j] < - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
+        else:
+            change = check_to_next_decrease(matrix_order, change, i, j)
     return change
 
 
