@@ -1,17 +1,7 @@
 import numpy as np
 
 
-class ReduceHeuristic:
-    @staticmethod
-    def compute_change(matrix_order, i, j, increase=True):
-        pass
-
-    @staticmethod
-    def decide_increase(matrix_order, i, j):
-        pass
-
-
-class Greedy(ReduceHeuristic):
+class Greedy:
     @staticmethod
     def compute_change(matrix_order, i, j, increase=True):
         sorted_index = matrix_order.get_sorted_index(i, j)
@@ -54,8 +44,26 @@ class Greedy(ReduceHeuristic):
             increase = False
         return increase
 
+    @staticmethod
+    def set_to_zero():
+        return False
 
-class MaintainOrder(ReduceHeuristic):
+
+class GreedyZero:
+    @staticmethod
+    def compute_change(matrix_order, i, j, increase=True):
+        return Greedy.compute_change(matrix_order, i, j, increase=increase)
+
+    @staticmethod
+    def decide_increase(matrix_order, i, j):
+        return Greedy.decide_increase(matrix_order, i, j)
+
+    @staticmethod
+    def set_to_zero():
+        return True
+
+
+class MaintainOrder:
     @staticmethod
     def compute_change(matrix_order, i, j, increase=True):
         sorted_index = matrix_order.get_sorted_index(i, j)
@@ -113,8 +121,13 @@ class MaintainOrder(ReduceHeuristic):
                 increase = False
         return increase
 
+    @staticmethod
+    def set_to_zero():
+        return False
+
 
 HEURISTICS = {
+    'greedy0': GreedyZero,
     'greedy': Greedy,
     'order':  MaintainOrder
 }

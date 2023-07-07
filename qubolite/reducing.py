@@ -4,34 +4,37 @@ import numpy as np
 
 from . import qubo
 from .bounds import lb_roof_dual, lb_negative_parameters, ub_local_search, ub_sample
-from .dr_heuristics import ReduceHeuristic, MatrixOrder, HEURISTICS
+from .dr_heuristics import MatrixOrder, HEURISTICS
 
 
-def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to_zero=True,
-                 change_tol=1e-08, **kwargs):
+def compute_final_change(matrix_order, heuristic=None, decision='heuristic',
+                         npr=None, change_tol=1e-08, **kwargs):
     if npr is None:
         npr = np.random.RandomState()
-    if heuristic is None:
+    if decision == 'random':
         row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
         try:
             random_index = npr.randint(row_indices.shape[0])
             i, j = row_indices[random_index], column_indices[random_index]
         except ValueError:
             i, j = 0, 0
-    elif isinstance(heuristic, ReduceHeuristic):
+        change = compute_index_change(matrix_order, i, j,
+                                      heuristic=heuristic,
+                                      change_tol=change_tol
+                                      **kwargs)
+    elif decision == 'heuristic':
         order_indices = matrix_order.dynamic_range_impact()
         indices = matrix_order.to_matrix_indices(order_indices, matrix_order.matrix.shape[0])
-        drs = [dynamic_range_change(x[0], x[1],
-                                    compute_final_change(matrix_order, x[0], x[1],
-                                                         bound_dict=bound_dict,
-                                                         heuristic=heuristic,
-                                                         change_tol=change_tol,
-                                                         set_to_zero=set_to_zero,
-                                                         **kwargs),
-                                    matrix_order) for x in indices]
+        changes = [compute_index_change(matrix_order, x[0], x[1],
+                                        heuristic=heuristic,
+                                        change_tol=change_tol,
+                                        **kwargs) for x in indices]
+        drs = [dynamic_range_change(x[0], x[1], changes[index],
+                                    matrix_order) for index, x in enumerate(indices)]
         if np.any(drs):
             index = np.argmax(drs)
             i, j = indices[index]
+            change = changes[index]
         else:
             row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
             try:
@@ -39,20 +42,24 @@ def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to
                 i, j = row_indices[random_index], column_indices[random_index]
             except ValueError:
                 i, j = 0, 0
+        change = compute_index_change(matrix_order, i, j,
+                                      heuristic=heuristic,
+                                      change_tol=change_tol,
+                                      **kwargs)
     else:
         raise NotImplementedError
-    return i, j
+    return i, j, change
 
 
 def compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
     lower_bound = {
-            'roofdual': lb_roof_dual,
-            'minsum':   lb_negative_parameters
-        }[kwargs.get('lower_bound', 'roof_dual')]
+        'roof_dual': lb_roof_dual,
+        'min_sum': lb_negative_parameters
+    }[kwargs.get('lower_bound', 'roof_dual')]
     upper_bound = {
-            'localsearch': ub_local_search,
-            'sample':      ub_sample
-        }
+        'local_search': ub_local_search,
+        'sample': ub_sample
+    }[kwargs.get('upper_bound', 'local_search')]
     lower_bound = partial(lower_bound, **kwargs.get('lower_bound_kwargs', {}))
     upper_bound = partial(upper_bound, **kwargs.get('upper_bound_kwargs', {}))
     change_diff = kwargs.get('change_diff', 1e-08)
@@ -128,7 +135,8 @@ def check_to_next_increase(matrix_order, change, i, j):
     if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
         change = matrix_order.unique[unique_index - 1] - matrix_order.matrix[i, j]
     elif matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
-        change = matrix_order.unique[unique_index] - matrix_order.matrix[i, j] - matrix_order.min_distance
+        change = matrix_order.unique[unique_index] - matrix_order.matrix[
+            i, j] - matrix_order.min_distance
     return change
 
 
@@ -138,20 +146,19 @@ def check_to_next_decrease(matrix_order, change, i, j):
     if matrix_order.unique[unique_index] - new_entry < matrix_order.min_distance:
         change = matrix_order.matrix[i, j] - matrix_order.unique[unique_index]
     if new_entry - matrix_order.unique[unique_index - 1] < matrix_order.min_distance:
-        change = matrix_order.matrix[i, j] - matrix_order.unique[unique_index - 1] + matrix_order.min_distance
+        change = matrix_order.matrix[i, j] - matrix_order.unique[
+            unique_index - 1] + matrix_order.min_distance
     return change
 
 
-def compute_final_change(matrix_order, i, j, bound_dict=None, heuristic=None, change_tol=1e-08,
-                         set_to_zero=True):
-def compute_final_change(matrix_order, i, j, heuristic=None, change_tol=1e-08,
-                         set_to_zero=True, **kwargs):
+def compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, **kwargs):
     # Decide whether to increase or decrease
     increase = heuristic.decide_increase(matrix_order, i, j)
     # Bounds on changes based on reducing the dynamic range
     dyn_range_change = heuristic.compute_change(matrix_order, i, j, increase)
     # Bounds on changes based on preserving the optimum
     pre_opt_change = compute_pre_opt_bound(matrix_order.matrix, i, j, increase, **kwargs)
+    set_to_zero = heuristic.set_to_zero()
     if increase:
         change = min(pre_opt_change, dyn_range_change)
         if change < 0 or np.isclose(change, 0, atol=change_tol):
@@ -168,27 +175,24 @@ def compute_final_change(matrix_order, i, j, heuristic=None, change_tol=1e-08,
 
 
 def reduce_dr(Q: qubo,
-        iterations=100,
-        callback=None,
-        set_to_zero=True,
-        heuristic='greedy',
-        npr=None,
-        change_tol=1e-08,
-        **kwargs):
-
+              iterations=100,
+              callback=None,
+              heuristic='greedy0',
+              npr=None,
+              change_tol=1e-08,
+              decision='heuristic',
+              **kwargs):
     try:
         heuristic = HEURISTICS[heuristic]
     except KeyError:
-        raise ValueError(f'Unknown heuristic "{heuristic}", available are "greedy" and "order"')
+        raise ValueError(f'Unknown heuristic "{heuristic}", available are "greedy0", "greedy" and "order"')
     Q_copy = Q.copy()
     matrix_order = MatrixOrder(Q_copy.m)
     stop_update = False
     for it in range(iterations):
         if not stop_update:
-            i, j = decide_index(matrix_order, heuristic=heuristic, npr=npr,
-                                set_to_zero=set_to_zero, change_tol=change_tol, **kwargs)
-            change = compute_final_change(matrix_order, i, j, heuristic=heuristic,
-                                          change_tol=change_tol, set_to_zero=set_to_zero, **kwargs)
+            i, j, change = compute_final_change(matrix_order, heuristic=heuristic, npr=npr,
+                                                decision=decision, change_tol=change_tol, **kwargs)
             stop_update = matrix_order.update_entry(i, j, change)
             if callback is not None:
                 callback(i, j, change, matrix_order, it)
