@@ -8,7 +8,7 @@ from .dr_heuristics import ReduceHeuristic, MatrixOrder, HEURISTICS
 
 
 def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to_zero=True,
-                 change_tol=1e-08):
+                 change_tol=1e-08, **kwargs):
     if npr is None:
         npr = np.random.RandomState()
     if heuristic is None:
@@ -26,7 +26,8 @@ def decide_index(matrix_order, heuristic=None, bound_dict=None, npr=None, set_to
                                                          bound_dict=bound_dict,
                                                          heuristic=heuristic,
                                                          change_tol=change_tol,
-                                                         set_to_zero=set_to_zero),
+                                                         set_to_zero=set_to_zero,
+                                                         **kwargs),
                                     matrix_order) for x in indices]
         if np.any(drs):
             index = np.argmax(drs)
