@@ -9,7 +9,7 @@ from .bounds import (
         lb_negative_parameters,
         ub_local_search,
         ub_sample)
-from .dr_heuristics import MatrixOrder, HEURISTICS
+from ._heuristics import MatrixOrder, HEURISTICS
 
 
 def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
@@ -91,15 +91,9 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
         suboptimal = lower_11 > min(upper_00, upper_01, upper_10)
         optimal = upper_11 < min(lower_00, lower_01, lower_10)
         if increase:
-            if suboptimal:
-                bound = float("inf")
-            else:
-                bound = lower_or - upper_11 - change_diff
+            bound = float('inf') if suboptimal else lower_or-upper_11-change_diff
         else:
-            if optimal:
-                bound = - float("inf")
-            else:
-                bound = upper_or - lower_11 + change_diff
+            bound = -float('inf') if optimal else upper_or-lower_11+change_diff
     else:
         # Define sub-qubos
         Q_0, c_0, _ = Q.clamp({i: 0})
@@ -113,15 +107,9 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
         suboptimal = lower_1 > upper_0
         optimal = upper_1 < lower_0
         if increase:
-            if suboptimal:
-                bound = float("inf")
-            else:
-                bound = lower_0 - upper_1 - change_diff
+            bound = float("inf") if suboptimal else lower_0-upper_1-change_diff
         else:
-            if optimal:
-                bound = -float("inf")
-            else:
-                bound = upper_0 - lower_1 + change_diff
+            bound = -float("inf") if optimal else upper_0-lower_1+change_diff
     return bound
 
 
