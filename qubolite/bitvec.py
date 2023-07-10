@@ -26,6 +26,16 @@ def to_string(bitvec: ArrayLike):
     else:
         return np.apply_along_axis(to_string, -1, bitvec)
     
+def from_dict(d: dict, n=None):
+    n = max(d.keys())+1 if n is None else n
+    x = np.zeros(n)
+    for i, b in d.items():
+        x[i] = b
+    return x
+
+def to_dict(bitvec: ArrayLike):
+    return { i: int(b) for i, b in enumerate(bitvec) }
+
 
 _BITVEC_EXPR = re.compile(r'[01*]|\[!?\d+\]')
 

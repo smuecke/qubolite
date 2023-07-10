@@ -3,7 +3,7 @@ import struct
 import numpy as np
 
 from .bitvec  import all_bitvectors, all_bitvectors_array
-from _c_utils import brute_force as brute_force_c
+from _c_utils import brute_force as _brute_force_c
 from .misc    import get_random_state, is_triu, warn_size
 
 
@@ -42,6 +42,18 @@ class qubo:
             return self.m.__getitem__((i, j))
         except TypeError:
             return self.m.__getitem__((k, k))
+
+    def __add__(self, other):
+        return qubo(self.m + other.m)
+    
+    def __sub__(self, other):
+        return qubo(self.m - other.m)
+
+    def __mul__(self, other):
+        return qubo(self.m * other.m)
+
+    def __truediv__(self, other):
+        return qubo(self.m / other.m)
 
     def copy(self):
         return qubo(self.m.copy())
@@ -150,7 +162,7 @@ class qubo:
     def spectral_gap(self, return_optimum=False):
         warn_size(self.n, limit=25)
         try:
-            x, v0, v1 = brute_force_c(self.m)
+            x, v0, v1 = _brute_force_c(self.m)
         except TypeError:
             raise ValueError('n is too large to brute-force on this system')
         sgap = v1-v0
