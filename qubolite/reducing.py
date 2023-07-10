@@ -5,15 +5,15 @@ import portion as P
 
 from . import qubo
 from .bounds import (
-        lb_roof_dual,
-        lb_negative_parameters,
-        ub_local_search,
-        ub_sample)
+    lb_roof_dual,
+    lb_negative_parameters,
+    ub_local_search,
+    ub_sample)
 from ._heuristics import MatrixOrder, HEURISTICS
 from .misc import get_random_state
 
 def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
-                         npr=None, change_tol=1e-08, **kwargs):
+                          npr=None, **kwargs):
     if npr is None:
         npr = np.random.RandomState()
     if decision == 'random':
@@ -24,18 +24,16 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
         except ValueError:
             i, j = 0, 0
         change = _compute_index_change(matrix_order, i, j,
-                                      heuristic=heuristic,
-                                      change_tol=change_tol
-                                      **kwargs)
+                                       heuristic=heuristic,
+                                                  ** kwargs)
     elif decision == 'heuristic':
         order_indices = matrix_order.dynamic_range_impact()
         indices = matrix_order.to_matrix_indices(order_indices, matrix_order.matrix.shape[0])
         changes = [_compute_index_change(matrix_order, x[0], x[1],
-                                        heuristic=heuristic,
-                                        change_tol=change_tol,
-                                        **kwargs) for x in indices]
+                                         heuristic=heuristic,
+                                         **kwargs) for x in indices]
         drs = [_dynamic_range_change(x[0], x[1], changes[index],
-                                    matrix_order) for index, x in enumerate(indices)]
+                                     matrix_order) for index, x in enumerate(indices)]
         if np.any(drs):
             index = np.argmax(drs)
             i, j = indices[index]
@@ -47,10 +45,9 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
                 i, j = row_indices[random_index], column_indices[random_index]
             except ValueError:
                 i, j = 0, 0
-        change = _compute_index_change(matrix_order, i, j,
-                                      heuristic=heuristic,
-                                      change_tol=change_tol,
-                                      **kwargs)
+            change = _compute_index_change(matrix_order, i, j,
+                                           heuristic=heuristic,
+                                           **kwargs)
     else:
         raise NotImplementedError
     return i, j, change
@@ -91,9 +88,9 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
         suboptimal = lower_11 > min(upper_00, upper_01, upper_10)
         optimal = upper_11 < min(lower_00, lower_01, lower_10)
         if increase:
-            bound = float('inf') if suboptimal else lower_or-upper_11-change_diff
+            bound = float('inf') if suboptimal else lower_or - upper_11 - change_diff
         else:
-            bound = -float('inf') if optimal else upper_or-lower_11+change_diff
+            bound = -float('inf') if optimal else upper_or - lower_11 + change_diff
     else:
         # Define sub-qubos
         Q_0, c_0, _ = Q.clamp({i: 0})
@@ -107,9 +104,9 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
         suboptimal = lower_1 > upper_0
         optimal = upper_1 < lower_0
         if increase:
-            bound = float("inf") if suboptimal else lower_0-upper_1-change_diff
+            bound = float("inf") if suboptimal else lower_0 - upper_1 - change_diff
         else:
-            bound = -float("inf") if optimal else upper_0-lower_1+change_diff
+            bound = -float("inf") if optimal else upper_0 - lower_1 + change_diff
     return bound
 
 
@@ -160,7 +157,7 @@ def _check_to_next_decrease(matrix_order, change, i, j):
     return difference.lower - current_entry
 
 
-def _compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, **kwargs):
+def _compute_index_change(matrix_order, i, j, heuristic=None, **kwargs):
     # Decide whether to increase or decrease
     increase = heuristic.decide_increase(matrix_order, i, j)
     # Bounds on changes based on reducing the dynamic range
@@ -170,7 +167,7 @@ def _compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, 
     set_to_zero = heuristic.set_to_zero()
     if increase:
         change = min(pre_opt_change, dyn_range_change)
-        if change < 0 or np.isclose(change, 0, atol=change_tol):
+        if change < 0 or np.isclose(change, 0):
             change = 0
         elif 0 > matrix_order.matrix[i, j] > - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
@@ -178,7 +175,7 @@ def _compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, 
             change = _check_to_next_increase(matrix_order, change, i, j)
     else:
         change = max(pre_opt_change, dyn_range_change)
-        if change > 0 or np.isclose(change, 0, atol=change_tol):
+        if change > 0 or np.isclose(change, 0):
             change = 0
         elif 0 < matrix_order.matrix[i, j] < - change and set_to_zero:
             change = - matrix_order.matrix[i, j]
@@ -188,13 +185,12 @@ def _compute_index_change(matrix_order, i, j, heuristic=None, change_tol=1e-08, 
 
 
 def compress_parameters(Q: qubo,
-              iterations=100,
-              callback=None,
-              heuristic='greedy0',
-              change_tol=1e-08,
-              decision='heuristic',
-              random_state=None,
-              **kwargs):
+                        iterations=100,
+                        callback=None,
+                        heuristic='greedy0',
+                        random_state=None,
+                        decision='heuristic',
+                        **kwargs):
     try:
         heuristic = HEURISTICS[heuristic]
     except KeyError:
@@ -203,10 +199,11 @@ def compress_parameters(Q: qubo,
     Q_copy = Q.copy()
     matrix_order = MatrixOrder(Q_copy.m)
     stop_update = False
+    matrix_order.matrix = np.round(matrix_order.matrix, decimals=8)
     for it in range(iterations):
         if not stop_update:
             i, j, change = _compute_final_change(matrix_order, heuristic=heuristic, npr=npr,
-                                                decision=decision, change_tol=change_tol, **kwargs)
+                                                 decision=decision, **kwargs)
             stop_update = matrix_order.update_entry(i, j, change)
             if callback is not None:
                 callback(i, j, change, matrix_order, it)
