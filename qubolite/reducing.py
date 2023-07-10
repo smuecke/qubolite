@@ -53,7 +53,7 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
     return i, j, change
 
 
-def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
+def _compute_pre_opt_bounds(Q, i, j, **kwargs):
     lower_bound = {
         'roof_dual': lb_roof_dual,
         'min_sum': lb_negative_parameters
@@ -87,10 +87,8 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
 
         suboptimal = lower_11 > min(upper_00, upper_01, upper_10)
         optimal = upper_11 < min(lower_00, lower_01, lower_10)
-        if increase:
-            bound = float('inf') if suboptimal else lower_or - upper_11 - change_diff
-        else:
-            bound = -float('inf') if optimal else upper_or - lower_11 + change_diff
+        upper_bound = float('inf') if suboptimal else lower_or - upper_11 - change_diff
+        lower_bound = -float('inf') if optimal else upper_or - lower_11 + change_diff
     else:
         # Define sub-qubos
         Q_0, c_0, _ = Q.clamp({i: 0})
@@ -103,15 +101,27 @@ def _compute_pre_opt_bound(Q, i, j, increase=True, **kwargs):
         upper_1 = upper_bound(Q_1) + c_1
         suboptimal = lower_1 > upper_0
         optimal = upper_1 < lower_0
-        if increase:
-            bound = float("inf") if suboptimal else lower_0 - upper_1 - change_diff
+        upper_bound = float("inf") if suboptimal else lower_0 - upper_1 - change_diff
+        lower_bound = -float("inf") if optimal else upper_0 - lower_1 + change_diff
+    return lower_bound, upper_bound
+
+
+def _compute_pre_opt_bounds_all(Q, **kwargs):
+    indices = np.triu_indices(Q.n)
+    bounds = np.zeros((len(indices[0]), 2))
+    for index, index_pair in enumerate(zip(indices[0], indices[1])):
+        i, j = index_pair[0], index_pair[1]
+        res = _compute_pre_opt_bounds(Q, i=i, j=j, **kwargs)
+        if isinstance(res[0], qubo):
+            print(f'Optimal configuration is found, clamped QUBO should be returned!')
+            # return res
         else:
-            bound = -float("inf") if optimal else upper_0 - lower_1 + change_diff
-    return bound
+            bounds[index, 0] = res[0]
+            bounds[index, 1] = res[1]
+    return bounds
 
 
 def _dynamic_range_change(i, j, change, matrix_order):
-    # TODO: dynamic range change can be improved
     old_dynamic_range = matrix_order.dynamic_range
     matrix = matrix_order.update_entry(i, j, change, True)
     new_dynamic_range = qubo(matrix).dynamic_range()
@@ -163,7 +173,10 @@ def _compute_index_change(matrix_order, i, j, heuristic=None, **kwargs):
     # Bounds on changes based on reducing the dynamic range
     dyn_range_change = heuristic.compute_change(matrix_order, i, j, increase)
     # Bounds on changes based on preserving the optimum
-    pre_opt_change = _compute_pre_opt_bound(matrix_order.matrix, i, j, increase, **kwargs)
+    if increase:
+        _, pre_opt_change = _compute_pre_opt_bounds(matrix_order.matrix, i, j, **kwargs)
+    else:
+        pre_opt_change, _ = _compute_pre_opt_bounds(matrix_order.matrix, i, j, **kwargs)
     set_to_zero = heuristic.set_to_zero()
     if increase:
         change = min(pre_opt_change, dyn_range_change)
