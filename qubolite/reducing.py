@@ -10,7 +10,7 @@ from .bounds import (
     ub_local_search,
     ub_sample)
 from ._heuristics import MatrixOrder, HEURISTICS
-
+from .misc import get_random_state
 
 def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
                           npr=None, **kwargs):
@@ -19,7 +19,7 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
     if decision == 'random':
         row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
         try:
-            random_index = npr.randint(row_indices.shape[0])
+            random_index = npr.integers(row_indices.shape[0])
             i, j = row_indices[random_index], column_indices[random_index]
         except ValueError:
             i, j = 0, 0
@@ -41,7 +41,7 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
         else:
             row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
             try:
-                random_index = npr.randint(row_indices.shape[0])
+                random_index = npr.integers(row_indices.shape[0])
                 i, j = row_indices[random_index], column_indices[random_index]
             except ValueError:
                 i, j = 0, 0
@@ -188,14 +188,14 @@ def compress_parameters(Q: qubo,
                         iterations=100,
                         callback=None,
                         heuristic='greedy0',
-                        npr=None,
+                        random_state=None,
                         decision='heuristic',
                         **kwargs):
     try:
         heuristic = HEURISTICS[heuristic]
     except KeyError:
-        raise ValueError(
-            f'Unknown heuristic "{heuristic}", available are "greedy0", "greedy" and "order"')
+        raise ValueError(f'Unknown heuristic "{heuristic}", available are "greedy0", "greedy" and "order"')
+    npr = get_random_state(random_state)
     Q_copy = Q.copy()
     matrix_order = MatrixOrder(Q_copy.m)
     stop_update = False

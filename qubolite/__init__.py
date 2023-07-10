@@ -6,4 +6,4 @@ from .qubo import (
 
 from .misc import ordering_distance
 
-from . import bitvec, bounds, embedding, sampling, solving
+from . import bitvec, bounds, embedding, sampling, solving, reducing
