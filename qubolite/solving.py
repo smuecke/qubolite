@@ -63,8 +63,16 @@ def simulated_annealing(Q: qubo, schedule='2+', steps=100_000, init_temp=None, n
     return x[srt, :], y[srt]
 
 
-def local_descent(Q: qubo, x):
-    x_ = x.copy()
+def local_descent(Q: qubo, x=None, n_parallel=None, random_state=None):
+    if x is None:
+        rng = get_random_state(random_state)
+        r = (32_000 // Q.n) if n_parallel is None else n_parallel
+        x_ = rng.random((r, Q.n)) < 0.5
+    else:
+        x_ = x.copy()
+        # TODO
+
+    # TODO: Parallelize this correctly!
     Δx = Q.dx(x_)
     am = np.argmin(Δx)
     while Δx[am] < 0:
@@ -72,3 +80,24 @@ def local_descent(Q: qubo, x):
         Δx = Q.dx(x_)
         am = np.argmin(Δx)
     return x_, Q(x_)
+
+
+def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
+    rng = get_random_state(random_state)
+    if n_parallel is None:
+        n_parallel = 32_000 // Q.n
+    x_min = np.empty(Q.n)
+    y_min = np.infty
+    remaining = steps
+    x = np.empty((n_parallel, Q.n))
+    y = np.empty(n_parallel)
+    while remaining > 0:
+        r = min(remaining, n_parallel)
+        x[:r] = rng.random((r, Q.n)) < 0.5
+        y[:] = Q(x)
+        i_min = np.argmin(y)
+        if y[i_min] < y_min:
+            x_min[:] = x[i_min, :]
+            y_min = y[i_min]
+        remaining -= r
+    return x_min, y_min

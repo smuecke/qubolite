@@ -61,6 +61,27 @@ The bit vector must be a `numpy.ndarray` of size `(n,)` or `(m, n)`.
 array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
 ```
 
+### Solving
+
+The submodule `solving` contains several methods to obtain the minimizing bit vector or energy value of a given QUBO instance, both exact and approximative.
+
+```
+>>> from qubolite.solving import brute_force
+>>> x_min, value = brute_force(Q, return_value=True)
+>>> x_min
+array([1., 1., 1., 0., 1., 0., 0., 0.])
+>>> value
+-3.394893116198653
+```
+
+The method `brute_force` is implemented efficiently in C and parallelized with OpenMP.
+Still, for instances with more than 30 variables take a long time to solve this way.
+
+```
+>>> from qubolite.solving import simulated_annealing
+>>> 
+```
+
 
 ## Version Log
 
