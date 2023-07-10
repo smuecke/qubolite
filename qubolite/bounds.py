@@ -1,6 +1,6 @@
 import numpy as np
 
-from .misc import get_random_state
+from ._misc import get_random_state
 from .qubo import qubo
 
 

@@ -4,6 +4,13 @@ from .qubo import (
     to_triu_form
 )
 
-from .misc import ordering_distance
+from ._misc import ordering_distance
 
-from . import bitvec, bounds, embedding, sampling, solving, reducing
+from . import (
+    bitvec,
+    bounds,
+    compression,
+    embedding,
+    sampling,
+    solving
+)
