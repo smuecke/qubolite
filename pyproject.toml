@@ -7,9 +7,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qubolite"
-version = "0.7"
+version = "0.8"
 authors = [
-    { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" }
+    { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" },
+    { name = "Thore Gerlach", email="thore.gerlach@iais.fraunhofer.de" }
 ]
 description = "Toolbox for quadratic binary optimization"
 readme = "README.md"
@@ -31,12 +32,14 @@ roof_dual = [
 kendall_tau = [
     "scipy>=1.10.1"
 ]
-
-embeddings = [
+embedding = [
     "scikit-learn>=1.2.2"
 ]
-
+compression = [
+    "portion>=2.4.0"
+]
 all = [
     "igraph>=0.10.4",
+    "portion>=2.4.0",
     "scipy>=1.10.1"
 ]
