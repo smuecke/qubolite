@@ -5,7 +5,7 @@ from functools   import cached_property
 import numpy as np
 
 from .bitvec import all_bitvectors_array, from_string, to_string
-from .misc   import get_random_state, set_suffix
+from ._misc   import get_random_state, set_suffix
 
 
 class BinarySample:
@@ -150,7 +150,13 @@ def _marginal(qm, x, i, temp=1.0):
     return p1/(p0+p1)
 
 
-def gibbs(qubo, samples: int=1, burn_in: int=1000, keep_interval: int=10, initial=None, temp=1.0, random_state=None):
+def gibbs(qubo,
+          samples: int=1,
+          burn_in: int=1000,
+          keep_interval: int=10,
+          initial=None,
+          temp=1.0,
+          random_state=None):
     npr = get_random_state(random_state)
     counts = defaultdict(int)
     x = initial if initial is not None else (npr.random(qubo.n)<0.5).astype(np.float64)

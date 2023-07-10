@@ -1,26 +1,27 @@
 import numpy as np
 
-from _c_utils import brute_force as brute_force_c
-from .misc import get_random_state, warn_size
+from _c_utils import brute_force as _brute_force_c
+from ._misc import get_random_state, warn_size
 from .qubo import qubo
 
 
-def brute_force(Q: qubo, return_value=False):
+def brute_force(Q: qubo):
     warn_size(Q.n, limit=30)
     try:
-        x, v0, _ = brute_force_c(Q.m)
+        x, v, _ = _brute_force_c(Q.m)
     except TypeError:
         raise ValueError(f'n is too large to brute-force on this system')
-    if return_value:
-        return x, v0
-    else:
-        return x
+    return x, v
 
 
-def simulated_annealing(Q: qubo, schedule='2+', steps=100_000, init_temp=None, n_parallel=10,
-                        random_state=None, halftime=0.25):
+def simulated_annealing(Q: qubo,
+                        schedule='2+',
+                        halftime=0.25,
+                        steps=100_000,
+                        init_temp=None,
+                        n_parallel=10,
+                        random_state=None):
     npr = get_random_state(random_state)
-
     if init_temp is None:
         # estimate initial temperature
         EΔy, k = 0, 0
@@ -63,16 +64,12 @@ def simulated_annealing(Q: qubo, schedule='2+', steps=100_000, init_temp=None, n
     return x[srt, :], y[srt]
 
 
-def local_descent(Q: qubo, x=None, n_parallel=None, random_state=None):
+def local_descent(Q: qubo, x=None, random_state=None):
     if x is None:
         rng = get_random_state(random_state)
-        r = (32_000 // Q.n) if n_parallel is None else n_parallel
-        x_ = rng.random((r, Q.n)) < 0.5
+        x_ = rng.random(Q.n) < 0.5
     else:
         x_ = x.copy()
-        # TODO
-
-    # TODO: Parallelize this correctly!
     Δx = Q.dx(x_)
     am = np.argmin(Δx)
     while Δx[am] < 0:

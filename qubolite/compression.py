@@ -10,12 +10,11 @@ from .bounds import (
     ub_local_search,
     ub_sample)
 from ._heuristics import MatrixOrder, HEURISTICS
-from .misc import get_random_state
+from ._misc import get_random_state
+
 
 def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
                           npr=None, **kwargs):
-    if npr is None:
-        npr = np.random.RandomState()
     if decision == 'random':
         row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
         try:

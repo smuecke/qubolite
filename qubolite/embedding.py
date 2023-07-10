@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.metrics import pairwise_kernels
 from sklearn.preprocessing import KernelCenterer
 
-from .misc import get_random_state
+from ._misc import get_random_state
 from .qubo import qubo
 
 
