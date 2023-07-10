@@ -107,7 +107,7 @@ def _compute_pre_opt_bounds(Q, i, j, **kwargs):
 
 
 def _compute_pre_opt_bounds_all(Q, **kwargs):
-    indices = np.triu_indices(Q.n)
+    indices = np.triu_indices(Q.shape[0])
     bounds = np.zeros((len(indices[0]), 2))
     for index, index_pair in enumerate(zip(indices[0], indices[1])):
         i, j = index_pair[0], index_pair[1]
