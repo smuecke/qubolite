@@ -5,7 +5,7 @@ from numpy.typing import ArrayLike
 
 
 def all_bitvectors(n: int):
-    """Generate all bit vectors of size `n` in lexicographical order, starting from all zeros.
+    """Generate all bit vectors of size ``n`` in lexicographical order, starting from all zeros.
     The least significant bit is at index 0. Note that always the same array object is yielded,
     so to persist the bit vectors you need to make copies.
 
@@ -13,7 +13,7 @@ def all_bitvectors(n: int):
         n (int): Number of bits.
 
     Yields:
-        numpy.ndarray: Array of shape `(n,)` containing a bit vector.
+        numpy.ndarray: Array of shape ``(n,)`` containing a bit vector.
 
     Exapmles:
         This method can be used to obtain all possible energy values for a given QUBO instance:
@@ -39,20 +39,20 @@ def all_bitvectors(n: int):
    
     
 def all_bitvectors_array(n: int):
-    """Create an array containing all bit vectors of size `n` in
+    """Create an array containing all bit vectors of size ``n`` in
     lexicographical order.
 
     Args:
         n (int): Size of bit vectors.
 
     Returns:
-        numpy.ndarray: Array of shape `(2**n, n)`
+        numpy.ndarray: Array of shape ``(2**n, n)``
     """
     return np.arange(1<<n)[:, np.newaxis] & (1<<np.arange(n)) > 0
 
 
 def from_string(string: str):
-    """Convert a string consisting of `0` and `1` to a bit vector.
+    """Convert a string consisting of ``0`` and ``1`` to a bit vector.
 
     Args:
         string (str): Binary string.
@@ -72,11 +72,11 @@ def from_string(string: str):
 
 def to_string(bitvec: ArrayLike):
     """Convert a bit vector to a string.
-    If an array of bit vectors (shape `(m, n)`) is passed, a numpy.ndarray
+    If an array of bit vectors (shape ``(m, n)``) is passed, a numpy.ndarray
     containing string objects is returned, one for each row.
 
     Args:
-        bitvec (ArrayLike): Bit vector `(n,)` or array of bit vectors `(m, n)`
+        bitvec (ArrayLike): Bit vector ``(n,)`` or array of bit vectors ``(m, n)``
 
     Returns:
         string: Binary string
@@ -90,11 +90,11 @@ def to_string(bitvec: ArrayLike):
 def from_dict(d: dict, n=None):
     """Convert a dictionary to a bit vector.
     The dictionary should map indices (int) to binary values (0 or 1).
-    If `n` is specified, the vector is padded with zeros to length `n`.
+    If ``n`` is specified, the vector is padded with zeros to length ``n``.
 
     Args:
         d (dict): Dictionary containing index to bit assignments.
-        n (int, optional): Length of the bit vector. Defaults to None, which uses the highest index in `d` as length.
+        n (int, optional): Length of the bit vector. Defaults to None, which uses the highest index in ``d`` as length.
 
     Returns:
         numpy.ndarray: Bit vector.
@@ -111,7 +111,7 @@ def to_dict(bitvec: ArrayLike):
     to bit value (0 or 1).
 
     Args:
-        bitvec (ArrayLike): Bit vector of shape `(n,)`.
+        bitvec (ArrayLike): Bit vector of shape ``(n,)``.
 
     Returns:
         dict: Dictionary representation of the bit vector.
@@ -154,19 +154,17 @@ def _expr_normal_form(tokens):
 def from_expression(expr: str):
     """Generate an array of bit vectors from a string
     containing a bit vector expression. Such an expression
-    consists of a sequence of these symbols:
+    consists of a sequence of these symbols::
 
-        {
-            0     a constant 0
-            1     a constant 1
-            *     all combinations of 0 and 1
-            [i]   the same as the bit at index i
-            [!i]  the inverse of the bit at index i
-        }
+        0     a constant 0
+        1     a constant 1
+        *     all combinations of 0 and 1
+        [i]   the same as the bit at index i
+        [!i]  the inverse of the bit at index i
 
-    The last two symbols are called references, and `i` their
+    The last two symbols are called references, and ``i`` their
     pointing index (counting from 0). A reference can only ever
-    point to a constant or `*`, i.e., higher-order references are
+    point to a constant or ``*``, i.e., higher-order references are
     not allowed (and not necessary).
 
     Args:

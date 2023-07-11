@@ -7,7 +7,7 @@ from . import qubo
 from .bounds import (
     lb_roof_dual,
     lb_negative_parameters,
-    ub_local_search,
+    ub_local_descent,
     ub_sample)
 from ._heuristics import MatrixOrder, HEURISTICS
 from ._misc import get_random_state
@@ -58,9 +58,9 @@ def _compute_pre_opt_bounds(Q, i, j, **kwargs):
         'min_sum': lb_negative_parameters
     }[kwargs.get('lower_bound', 'roof_dual')]
     upper_bound = {
-        'local_search': ub_local_search,
+        'local_descent': ub_local_descent,
         'sample': ub_sample
-    }[kwargs.get('upper_bound', 'local_search')]
+    }[kwargs.get('upper_bound', 'local_descent')]
     lower_bound = partial(lower_bound, **kwargs.get('lower_bound_kwargs', {}))
     upper_bound = partial(upper_bound, **kwargs.get('upper_bound_kwargs', {}))
     change_diff = kwargs.get('change_diff', 1e-08)

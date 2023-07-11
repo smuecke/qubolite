@@ -40,11 +40,9 @@ def simulated_annealing(Q: qubo,
     Args:
         Q (qubo): QUBO instance.
         schedule (str, optional): The annealing schedule to employ.
-            Possible values are: `2+` (quadratic additive), `2*` (quadratic multiplicative),
-            `e+` (exponential additive) and `e*` (exponential multiplicative).
-            See here for further infos:
-            http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/
-            Defaults to '2+'.
+            Possible values are: ``2+`` (quadratic additive), ``2*`` (quadratic multiplicative),
+            ``e+`` (exponential additive) and ``e*`` (exponential multiplicative).
+            See `here <http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/>`__  for further infos. Defaults to '2+'.
         halftime (float, optional): For multiplicative schedules only:
             The percentage of steps after which the temperature is halved. Defaults to 0.25.
         steps (int, optional): Number of annealing steps to perform. Defaults to 100_000.
@@ -56,9 +54,9 @@ def simulated_annealing(Q: qubo,
         ValueError: Raised if the specificed schedule is unknown.
 
     Returns:
-        A tuple `(x, y)` containing the solution bit vectors and their respective energies.
-        The shape of `x` is `(n_parallel, n)`, where `n` is the QUBO size; the shape of `y`
-        is `(n_parallel,)`. Bit vector `x[i]` has energy `y[i]` for each `i`.
+        A tuple ``(x, y)`` containing the solution bit vectors and their respective energies.
+        The shape of ``x`` is ``(n_parallel, n)``, where ``n`` is the QUBO size; the shape of ``y``
+        is ``(n_parallel,)``. Bit vector ``x[i]`` has energy ``y[i]`` for each ``i``.
     """
     npr = get_random_state(random_state)
     if init_temp is None:
@@ -141,7 +139,7 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
         steps (int, optional): Number of steps to perform. Defaults to 100_000.
         n_parallel (int, optional): Number of random bit vectors to sample at a time.
             This does *not* increase the number of bit vectors sampled in total
-            (specified by `steps`), but makes the procedure faster by using NumPy
+            (specified by ``steps``), but makes the procedure faster by using NumPy
             vectorization. Defaults to None, which chooses a value such that the
             resulting bit vector array has about 32k elements.
         random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
