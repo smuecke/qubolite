@@ -6,6 +6,19 @@ from .qubo import qubo
 
 
 def brute_force(Q: qubo):
+    """Solve QUBO instance exactly by brute force.
+    Note that this method is infeasible for instances
+    with a size beyond around 30.
+
+    Args:
+        Q (qubo): QUBO instance to solve.
+
+    Raises:
+        ValueError: Raised if the QUBO size is too large to be brute-forced on the present system.
+
+    Returns:
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+    """
     warn_size(Q.n, limit=30)
     try:
         x, v, _ = _brute_force_c(Q.m)
@@ -21,6 +34,32 @@ def simulated_annealing(Q: qubo,
                         init_temp=None,
                         n_parallel=10,
                         random_state=None):
+    """Performs simulated annealing to approximate the minimizing
+    vector and minimal energy of a given QUBO instance.
+
+    Args:
+        Q (qubo): QUBO instance.
+        schedule (str, optional): The annealing schedule to employ.
+            Possible values are: `2+` (quadratic additive), `2*` (quadratic multiplicative),
+            `e+` (exponential additive) and `e*` (exponential multiplicative).
+            See here for further infos:
+            http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/
+            Defaults to '2+'.
+        halftime (float, optional): For multiplicative schedules only:
+            The percentage of steps after which the temperature is halved. Defaults to 0.25.
+        steps (int, optional): Number of annealing steps to perform. Defaults to 100_000.
+        init_temp (float, optional): Initial temperature. Defaults to None, which estimates an initial temperature.
+        n_parallel (int, optional): Number of random initial solutions to anneal simultaneously. Defaults to 10.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+    Raises:
+        ValueError: Raised if the specificed schedule is unknown.
+
+    Returns:
+        A tuple `(x, y)` containing the solution bit vectors and their respective energies.
+        The shape of `x` is `(n_parallel, n)`, where `n` is the QUBO size; the shape of `y`
+        is `(n_parallel,)`. Bit vector `x[i]` has energy `y[i]` for each `i`.
+    """
     npr = get_random_state(random_state)
     if init_temp is None:
         # estimate initial temperature
@@ -65,6 +104,20 @@ def simulated_annealing(Q: qubo,
 
 
 def local_descent(Q: qubo, x=None, random_state=None):
+    """Starting from a given bit vector, find improvements in the
+    1-neighborhood and follow them until a local optimum is found.
+    If no initial vector is specified, a random vector is sampled.
+    At each step, the method greedily flips the bit that yields
+    greatest energy improvement.
+
+    Args:
+        Q (qubo): QUBO instance.
+        x (numpy.ndarray, optional): Initial bit vector. Defaults to None.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+    Returns:
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+    """
     if x is None:
         rng = get_random_state(random_state)
         x_ = rng.random(Q.n) < 0.5
@@ -80,6 +133,22 @@ def local_descent(Q: qubo, x=None, random_state=None):
 
 
 def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
+    """Perform a random search in the space of bit vectors and return
+    the lowest-energy solution found.
+
+    Args:
+        Q (qubo): QUBO instance.
+        steps (int, optional): Number of steps to perform. Defaults to 100_000.
+        n_parallel (int, optional): Number of random bit vectors to sample at a time.
+            This does *not* increase the number of bit vectors sampled in total
+            (specified by `steps`), but makes the procedure faster by using NumPy
+            vectorization. Defaults to None, which chooses a value such that the
+            resulting bit vector array has about 32k elements.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+    Returns:
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+    """
     rng = get_random_state(random_state)
     if n_parallel is None:
         n_parallel = 32_000 // Q.n

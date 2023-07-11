@@ -41,6 +41,14 @@ def to_triu_form(arr):
         return np.triu(arr + np.tril(arr, -1).T)
 
 
+def __unwrap_value(obj):
+    try:
+        v = obj.m
+    except AttributeError:
+        v = obj
+    return v
+
+
 class qubo:
     """
     Standard class for QUBO instances.
@@ -85,16 +93,16 @@ class qubo:
             return self.m.__getitem__((k, k))
 
     def __add__(self, other):
-        return qubo(self.m + other.m)
+        return qubo(self.m + __unwrap_value(other))
     
     def __sub__(self, other):
-        return qubo(self.m - other.m)
+        return qubo(self.m - __unwrap_value(other))
 
     def __mul__(self, other):
-        return qubo(self.m * other.m)
+        return qubo(self.m * __unwrap_value(other))
 
     def __truediv__(self, other):
-        return qubo(self.m / other.m)
+        return qubo(self.m / __unwrap_value(other))
 
     def copy(self):
         """Create a copy of this instance.
@@ -110,9 +118,14 @@ class qubo:
 
         Args:
             n (int): QUBO size
-            distr (str, optional): Distribution from which the parameters are sampled. Possible values are 'normal', 'uniform' and 'triangular'. Additional keyword arguments will be passed to the corresponding methods from `numpy.random`. Defaults to 'normal'.
-            density (float, optional): Probability for each parameter to be set to 0. Defaults to 1.0.
-            random_state (_type_, optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+            distr (str, optional): Distribution from which the parameters are sampled.
+                Possible values are 'normal', 'uniform' and 'triangular'.
+                Additional keyword arguments will be passed to the corresponding
+                methods from `numpy.random`. Defaults to 'normal'.
+            density (float, optional): Expected density of the parameter matrix.
+                Each parameter is set to 0 with probability `1-density`.
+                Defaults to 1.0.
+            random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
 
         Raises:
             ValueError: Raised if the `distr` argument is unknown.
@@ -212,12 +225,26 @@ class qubo:
         Contains entries only for non-zero parameters.
         
         Args:
-            names (dict, optional): Dictionary mapping variables indices (counting from 0) to names. By default, just the integer indices are used.
-            double_indices (bool, optional): If `True`, use `(i, i)` as the key for diagonal entries, otherwise `(i,)`. Defaults to True.
-            atol (float, optional): Parameters with absolute value below this value will be treated as 0. Defaults to 1e-16.
+            names (dict, optional): Dictionary mapping variables indices
+                (counting from 0) to names. By default, just the integer
+                indices are used.
+            double_indices (bool, optional): If `True`, use `(i, i)` as
+                the key for diagonal entries, otherwise `(i,)`. Defaults to True.
+            atol (float, optional): Parameters with absolute value below
+                this value will be treated as 0. Defaults to 1e-16.
             
         Returns:
             dict: Dictionary containing QUBO parameters.
+
+        Examples:
+            >>> Q = qubo.random(4, density=0.25).round(1)
+            >>> Q
+            qubo([[ 0.6,  0. ,  0.5,  0. ],
+                  [ 0. ,  0. , -0.4,  0. ],
+                  [ 0. ,  0. ,  0. , -0.3],
+                  [ 0. ,  0. ,  0. ,  0. ]])
+            >>> Q.to_dict()
+            {(0, 0): 0.6, (0, 2): 0.5, (1, 2): -0.4, (2, 3): -0.3}
         """
         if names is None:
             names = { i: i for i in range(self.n) }

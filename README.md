@@ -77,11 +77,6 @@ array([1., 1., 1., 0., 1., 0., 0., 0.])
 The method `brute_force` is implemented efficiently in C and parallelized with OpenMP.
 Still, for instances with more than 30 variables take a long time to solve this way.
 
-```
->>> from qubolite.solving import simulated_annealing
->>> 
-```
-
 
 ## Version Log
 
@@ -102,3 +97,4 @@ Still, for instances with more than 30 variables take a long time to solve this 
     * **0.6.9** new, more memory-efficient save format
     * **0.6.10** fixed requirements in `setup.py`; fixed size estimation in `qubo.save()`
 * **0.7** Added more efficient brute-force implementation using C extension; added optional dependencies for calculating bounds and ordering distance
+* **0.8** New embeddings, new solving methods; switched to NumPy random generators from `RandomState`; added parameter compression for dynamic range reduction
