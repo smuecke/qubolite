@@ -16,6 +16,8 @@ jobs:
       uses: ammaraskar/sphinx-action@master
       with:
         pre-build-command: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install sphinx-book-theme
           sphinx-apidoc --force --output-dir docs/ qubolite
         docs-folder: "docs/"
     - name: Publish documentation
