@@ -2,8 +2,9 @@
 
 A light-weight toolbox for working with QUBO instances in NumPy.
 
-![qubolite logo](qubolite.png)
+
 <img src="qubolite.png"  width="30" height="30">
+
 
 ## Installation
 
