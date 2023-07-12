@@ -5,4 +5,3 @@ qubolite
    :maxdepth: 4
 
    qubolite
-   setup

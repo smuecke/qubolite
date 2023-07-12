@@ -1,4 +1,5 @@
 import struct
+from functools import reduce
 
 import numpy as np
 
@@ -263,33 +264,46 @@ class qubo:
         return qubo_dict
 
     @classmethod
-    def from_dict(cls, qubo_dict, n=None):
-        """Create QUBO instance from a dictionary mapping variable indices to QUBO parameters.
-        Note that unused variables are eliminated, e.g., the dictionary ``{(0,): 2, (100,): -3}`` yields a QUBO instance of size n=2.
-        If you want to keep unused variables, insert them with value 0, e.g., ``{(1,): 0, (2,): 0, ...}``.
+    def from_dict(cls, qubo_dict, n=None, relabel=True):
+        """Create QUBO instance from a dictionary mapping variable indices
+        to QUBO parameters. Note that, by default, unused variables are eliminated,
+        e.g., the dictionary ``{(0,): 2, (100,): -3}`` yields a QUBO instance
+        of size n=2. If you want to use the dictionary keys as variable indices
+        as-is, set ``relabel=False``.
 
         Args:
             qubo_dict (dict): Dictionary mapping indices to QUBO parameters.
-            n (int, optional): Specifies QUBO size. If None, the size is derived from the number of variable names.
+            n (int, optional): Specifies QUBO size. If None, the size is derived
+                from the number of variable names.
+            relabel (bool, optional): Indicate whether the variables should
+                be used as indices as-is, instead of removing unused variables.
+                This works only for integer keys.
 
         Returns:
             qubo: QUBO instance with parameters taken from dictionary.
+            dict: Dictionary mapping the names of the variables used in
+                the input dictionary to the indices of the QUBO instance.
+                If ``relabel=False``, this dictionary will be an identity map.
         """
-        names = { name: i for i, name in enumerate(sorted(qubo_dict.keys())) }
+        if relabel:
+            names = { k: i for i, k in enumerate(sorted(set().union(*qubo_dict.keys()))) }
+        else:
+            names = { i: i for i in set().union(*qubo_dict.keys()) }
+
         n = max(names.values())+1 if n is None else n
         m = np.zeros((n, n))
         for k, v in qubo_dict.items():
             try:
                 i, j = k
-                m[i, j] += v
+                m[names[i], names[j]] += v
             except ValueError:
                 try:
                     i, = k
-                    m[i, i] += v
+                    m[names[i], names[i]] += v
                 except ValueError:
                     pass
         m = np.triu(m + np.tril(m, -1).T)
-        return cls(m)
+        return cls(m), { i: k for k, i in names.items() }
 
     def spectral_gap(self, return_optimum=False):
         """Calculate the spectral gap of this QUBO instance.
