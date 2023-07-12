@@ -78,6 +78,9 @@ array([1., 1., 1., 0., 1., 0., 0., 0.])
 The method `brute_force` is implemented efficiently in C and parallelized with OpenMP.
 Still, for instances with more than 30 variables take a long time to solve this way.
 
+## Documentation
+
+The complete API documentation can be found [here](https://smuecke.github.com/qubolite).
 
 ## Version Log
 
