@@ -3,7 +3,7 @@
 A light-weight toolbox for working with QUBO instances in NumPy.
 
 
-<img src="qubolite.png"  width="30" height="30">
+<img src="qubolite.png"  width="100" height="100">
 
 
 ## Installation
