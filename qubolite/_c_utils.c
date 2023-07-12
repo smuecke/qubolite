@@ -2,9 +2,14 @@
 #include <Python.h>
 #include <math.h>
 #include <numpy/arrayobject.h>
+#include <numpy/random/bitgen.h>
+#include <numpy/random/distributions.h>
 #include <omp.h>
 
 typedef unsigned char bit;
+
+bitgen_t *B = 0;
+
 
 void print_bits(bit *x, size_t n) {
     for (size_t i=0; i<n; ++i)
@@ -163,6 +168,20 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         return NULL;
     return tup;
 }
+
+
+/* ################################################
+ * Gibbs sampling
+ * ################################################ */
+
+int gibbs_sample(double **qubo, bit *state, size_t burn_in, double temp) {
+    return -1;
+}
+
+
+/* ################################################
+ * Python module def                              
+ * ################################################ */
 
 static PyMethodDef methods[] = {
     {"brute_force", py_brute_force, METH_VARARGS, "Solves QUBO the hard way"},

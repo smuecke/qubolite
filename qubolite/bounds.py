@@ -1,10 +1,25 @@
 import numpy as np
 
-from .misc import get_random_state
-from .qubo import qubo
-
+from ._misc   import get_random_state
+from .qubo    import qubo
+from .solving import random_search, local_descent
 
 def lb_roof_dual(Q: qubo):
+    """Compute the Roof Dual bound, as described in `[1] <https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization>`__.
+    To this end, the QUBO instance is converted to a
+    corresponding flow network, whose maximum flow value
+    yields the roof dual lower bound.
+
+    Args:
+        Q (qubo): QUBO instance.
+
+    Raises:
+        ImportError: Raised if the ``igraph`` package is missing.
+            This package is required for this method.
+
+    Returns:
+        float: A lower bound on the minimal energy value.
+    """
     try:
         from igraph import Graph
     except ImportError as e:
@@ -51,30 +66,57 @@ def lb_roof_dual(Q: qubo):
 
 
 def lb_negative_parameters(Q: qubo):
+    """Compute a simple lower bound on the minimal energy
+    by summing up all negative parameters. As all QUBO
+    energy values are sums of parameter subsets, the
+    smallest subset sum is a lower bound for the minimal energy.
+    This bound is very fast, but very weak, especially for large
+    QUBO sizes.
+
+    Args:
+        Q (qubo): QUBO instance.
+
+    Returns:
+        float: A lower bound on the minimal energy value.
+    """
     return np.minimum(Q.m, 0).sum()
 
 
 # upper bounds ------------------------
 
-def ub_sample(Q: qubo, samples=1000, random_state=None):
-    npr = get_random_state(random_state)
-    min_val = float('inf')
-    for _ in range(samples):
-        val = Q(npr.random(Q.n)<0.5)
-        min_val = min(min_val, val)
-    return min_val
+def ub_sample(Q: qubo, samples=10_000, random_state=None):
+    """Compute an upper bound on the minimal energy by sampling
+    and taking the minimal encountered value.
+
+    Args:
+        Q (qubo): QUBO instance.
+        samples (int, optional): Number of samples. Defaults to 10_000.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+    Returns:
+        float: An upper bound on the minimal energy value.
+    """
+    _, v = random_search(Q, steps=samples, random_state=random_state)
+    return v
 
 
-def ub_local_search(Q: qubo, restarts=10, random_state=None):
+def ub_local_descent(Q: qubo, restarts=10, random_state=None):
+    """Compute an upper bound on the minimal energy by repeatedly
+    performing a local optimization heuristic and returning the
+    lowest energy value encountered.
+
+    Args:
+        Q (qubo): QUBO instance.
+        restarts (int, optional): Number of local searches with
+            random initial bit vectors. Defaults to 10.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+    Returns:
+        float: An upper bound on the minimal energy value.
+    """
     npr = get_random_state(random_state)
     min_val = float('inf')
     for _ in range(restarts):
-        x = (npr.random(Q.n)<0.5).astype(np.float64)
-        dQdx = Q.dx(x)
-        i = np.argmin(dQdx)
-        while dQdx[i] < 0:
-            x[i] = 1-x[i]
-            dQdx = Q.dx(x)
-            i = np.argmin(dQdx)
-        min_val = min(min_val, Q(x))
+        _, v = local_descent(Q, random_state=npr)
+        min_val = min(min_val, v)
     return min_val

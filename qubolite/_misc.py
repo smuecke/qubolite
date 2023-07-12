@@ -4,7 +4,6 @@ from importlib import import_module
 from sys       import stderr
 
 import numpy as np
-from numpy.random import RandomState
 
 from .bitvec import all_bitvectors_array
 
@@ -42,16 +41,20 @@ def warn_size(n: int, limit: int=30):
 
 
 def get_random_state(state=None):
-    if isinstance(state, RandomState):
-        return state
     if state is None:
-        return RandomState()
+        return np.random.default_rng()
+    if isinstance(state, np.random._generator.Generator):
+        return state
+    if isinstance(state, np.random.RandomState):
+        # for compatibility
+        seed = state.randint(1<<31)
+        return np.random.default_rng(seed)
     try:
         seed = int(state)
     except ValueError:
         # use hash digest when seed is a (non-numerical) string
         seed = int(md5(state.encode('utf-8')).hexdigest(), 16) & 0xffffffff
-    return RandomState(seed)
+    return np.random.default_rng(seed)
 
 
 def set_suffix(filename, suffix):

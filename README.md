@@ -2,7 +2,9 @@
 
 A light-weight toolbox for working with QUBO instances in NumPy.
 
-![qubolite logo](qubolite.png)
+
+<img src="qubolite.png"  width="30" height="30">
+
 
 ## Installation
 
@@ -23,6 +25,10 @@ installed. This can be done with `pip install igraph` or by installing qubolite 
 Using the function `qubolite.ordering_distance()` requires the Kendall-τ measure from the
 [scipy](https://scipy.org/) library which can be installed by `pip install scipy` or by installing 
 qubolite with `pip install qubolite[kendall_tau]`.
+
+For exemplary QUBO embeddings (e.g. clustering or subset sum), the 
+[scikit-learn](https://scikit-learn.org/) library is required. It can be installed by either using 
+`pip install scikit-learn` or installing qubolite with `pip install qubolite[embeddings]`.
 
 If you would like to install all optional dependencies you can use `pip install qubolite[all]` for
 achieving this.
@@ -56,6 +62,22 @@ The bit vector must be a `numpy.ndarray` of size `(n,)` or `(m, n)`.
 array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
 ```
 
+### Solving
+
+The submodule `solving` contains several methods to obtain the minimizing bit vector or energy value of a given QUBO instance, both exact and approximative.
+
+```
+>>> from qubolite.solving import brute_force
+>>> x_min, value = brute_force(Q, return_value=True)
+>>> x_min
+array([1., 1., 1., 0., 1., 0., 0., 0.])
+>>> value
+-3.394893116198653
+```
+
+The method `brute_force` is implemented efficiently in C and parallelized with OpenMP.
+Still, for instances with more than 30 variables take a long time to solve this way.
+
 
 ## Version Log
 
@@ -76,3 +98,4 @@ array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
     * **0.6.9** new, more memory-efficient save format
     * **0.6.10** fixed requirements in `setup.py`; fixed size estimation in `qubo.save()`
 * **0.7** Added more efficient brute-force implementation using C extension; added optional dependencies for calculating bounds and ordering distance
+* **0.8** New embeddings, new solving methods; switched to NumPy random generators from `RandomState`; added parameter compression for dynamic range reduction
