@@ -1,0 +1,35 @@
+name: build-and-deploy-docs
+
+on:
+  push:
+    branches:    
+      - master
+      
+jobs:
+  # build and push documentation to gh-pages
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build documentation
+      uses: ammaraskar/sphinx-action@master
+      with:
+        pre-build-command: |
+          sphinx-apidoc --force --output-dir docs/ qubolite
+        docs-folder: "docs/"
+    - name: Publish documentation
+      run: |
+        git clone ${{ github.server_url }}/${{ github.repository }}.git --branch gh-pages --single-branch __gh-pages/
+        cp -r docs/_build/html/* __gh-pages/
+        cd __gh-pages/
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add .
+        git commit -am "Documentation based on ${{ github.sha }}" || true
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        branch: gh-pages
+        directory: __gh-pages/
+        github_token: ${{ secrets.GITHUB_TOKEN }}
