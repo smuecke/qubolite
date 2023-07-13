@@ -40,6 +40,7 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -275,12 +276,96 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qubo">QUBO</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bit-vectors">Bit Vectors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bounds">Bounds</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-compression">Parameter Compression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qubo">QUBO</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo"><code class="docutils literal notranslate"><span class="pre">qubo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.absmax"><code class="docutils literal notranslate"><span class="pre">qubo.absmax()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.as_int"><code class="docutils literal notranslate"><span class="pre">qubo.as_int()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.clamp"><code class="docutils literal notranslate"><span class="pre">qubo.clamp()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.copy"><code class="docutils literal notranslate"><span class="pre">qubo.copy()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.dx"><code class="docutils literal notranslate"><span class="pre">qubo.dx()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.dynamic_range"><code class="docutils literal notranslate"><span class="pre">qubo.dynamic_range()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.from_dict"><code class="docutils literal notranslate"><span class="pre">qubo.from_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load"><code class="docutils literal notranslate"><span class="pre">qubo.load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.probabilities"><code class="docutils literal notranslate"><span class="pre">qubo.probabilities()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.random"><code class="docutils literal notranslate"><span class="pre">qubo.random()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.round"><code class="docutils literal notranslate"><span class="pre">qubo.round()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save"><code class="docutils literal notranslate"><span class="pre">qubo.save()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.scale"><code class="docutils literal notranslate"><span class="pre">qubo.scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.spectral_gap"><code class="docutils literal notranslate"><span class="pre">qubo.spectral_gap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_dict"><code class="docutils literal notranslate"><span class="pre">qubo.to_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bit-vectors">Bit Vectors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.all_bitvectors"><code class="docutils literal notranslate"><span class="pre">all_bitvectors()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.all_bitvectors_array"><code class="docutils literal notranslate"><span class="pre">all_bitvectors_array()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_dict"><code class="docutils literal notranslate"><span class="pre">from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_expression"><code class="docutils literal notranslate"><span class="pre">from_expression()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_string"><code class="docutils literal notranslate"><span class="pre">from_string()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.to_string"><code class="docutils literal notranslate"><span class="pre">to_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.brute_force"><code class="docutils literal notranslate"><span class="pre">brute_force()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local_descent"><code class="docutils literal notranslate"><span class="pre">local_descent()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.random_search"><code class="docutils literal notranslate"><span class="pre">random_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering"><code class="docutils literal notranslate"><span class="pre">BinaryClustering</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.data"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.map_solution"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.qubo"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.random"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.data"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.map_solution"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.qubo"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.random"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat"><code class="docutils literal notranslate"><span class="pre">Max2Sat</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.data"><code class="docutils literal notranslate"><span class="pre">Max2Sat.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.map_solution"><code class="docutils literal notranslate"><span class="pre">Max2Sat.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.qubo"><code class="docutils literal notranslate"><span class="pre">Max2Sat.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.random"><code class="docutils literal notranslate"><span class="pre">Max2Sat.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum"><code class="docutils literal notranslate"><span class="pre">SubsetSum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.data"><code class="docutils literal notranslate"><span class="pre">SubsetSum.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.map_solution"><code class="docutils literal notranslate"><span class="pre">SubsetSum.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.qubo"><code class="docutils literal notranslate"><span class="pre">SubsetSum.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.random"><code class="docutils literal notranslate"><span class="pre">SubsetSum.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding"><code class="docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.data"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.map_solution"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.qubo"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.random"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.random()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bounds">Bounds</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.lb_negative_parameters"><code class="docutils literal notranslate"><span class="pre">lb_negative_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.lb_roof_dual"><code class="docutils literal notranslate"><span class="pre">lb_roof_dual()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.ub_local_descent"><code class="docutils literal notranslate"><span class="pre">ub_local_descent()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.ub_sample"><code class="docutils literal notranslate"><span class="pre">ub_sample()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-compression">Parameter Compression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.compression.compress_parameters"><code class="docutils literal notranslate"><span class="pre">compress_parameters()</span></code></a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -298,30 +383,990 @@ document.write(`
 <section id="qubo">
 <h2>QUBO<a class="headerlink" href="#qubo" title="Permalink to this heading">#</a></h2>
 <p>The base class for QUBO instances is <code class="docutils literal notranslate"><span class="pre">qubo</span></code>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="qubolite.qubo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Standard class for QUBO instances.
+This is mainly a wrapper around an upper triangular NumPy matrix with
+lots of helpful methods. The passed array must be of the shape <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">n)</span></code>
+for any positive <code class="docutils literal notranslate"><span class="pre">n</span></code>. The linear coefficients lie along the diagonal.
+A non-triangular matrix will be converted, i.e., the lower triangle will
+be transposed and added to the upper triangle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>m</strong> (<em>np.ndarray</em>) – Array containing the QUBO parameters.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>If you have linear and quadratic coefficients in separate arrays,
+e.g., <code class="docutils literal notranslate"><span class="pre">lin</span></code> with shape <code class="docutils literal notranslate"><span class="pre">(n,)</span></code> and <code class="docutils literal notranslate"><span class="pre">qua</span></code> with shape <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">n)</span></code>,
+they can be combined to a <code class="docutils literal notranslate"><span class="pre">qubo</span></code> instance through <code class="docutils literal notranslate"><span class="pre">qubo(np.diag(lin)</span> <span class="pre">+</span> <span class="pre">qua)</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.absmax">
+<span class="sig-name descname"><span class="pre">absmax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.absmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.absmax" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the largest parameter by absolute value.
+This is equivalent to the infinity norm of the QUBO matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>largest parameter by absolute value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.as_int">
+<span class="sig-name descname"><span class="pre">as_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">32</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.as_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.as_int" title="Permalink to this definition">#</a></dt>
+<dd><p>Scales and rounds the QUBO parameters to fit a given number of bits.
+The number format is assumed to be signed integer, therefore <code class="docutils literal notranslate"><span class="pre">b</span></code> bits yields a value range of <code class="docutils literal notranslate"><span class="pre">-2**(b-1)</span></code> to <code class="docutils literal notranslate"><span class="pre">2**(b-1)-1</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bits</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of bits to represent the parameters. Defaults to 32.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QUBO instance with scaled and rounded parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.clamp">
+<span class="sig-name descname"><span class="pre">clamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partial_assignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.clamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.clamp" title="Permalink to this definition">#</a></dt>
+<dd><p>Create QUBO instance equivalent to this but with a subset of parameters fixed (_clamped_) to constant values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>partial_assignment</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping variable indices (counting from 0) to constant values 0 or 1. Defaults to None, which does nothing and returns a copy of this QUBO instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Clamped QUBO instance.
+const (float): Constant offset value, which must be added to the QUBO energy to obtain the original energy.
+free (list): List of indices which the variable indices of the new QUBO instance correspond to (i.e., those indices that were not clamped).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.copy" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a copy of this instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copy of this QUBO instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.dx">
+<span class="sig-name descname"><span class="pre">dx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.dx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.dx" title="Permalink to this definition">#</a></dt>
+<dd><p>Discrete derivative w.r.t. <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+The element at index <code class="docutils literal notranslate"><span class="pre">i</span></code> gives the QUBO energy change upon flipping the value of <code class="docutils literal notranslate"><span class="pre">x[i]</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>np.ndarray</em>) – Bit vector w.r.t. which the discrete derivative is calculated. Can be an array of multiple bit vectors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vector of discrete derivatives of this QUBO instance w.r.t. <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.dynamic_range">
+<span class="sig-name descname"><span class="pre">dynamic_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decibel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.dynamic_range"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.dynamic_range" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the dynamic range (DR) of the QUBO parameters,
+i.e., the logarithmic ratio between the largest and the smallest difference between all pairs of unique parameter values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>decibel</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, outputs the DR in the unit decibels. Defaults to False, which outputs the DR in bits.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dynamic range value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.from_dict">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qubo_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.from_dict" title="Permalink to this definition">#</a></dt>
+<dd><p>Create QUBO instance from a dictionary mapping variable indices
+to QUBO parameters. Note that, by default, unused variables are eliminated,
+e.g., the dictionary <code class="docutils literal notranslate"><span class="pre">{(0,):</span> <span class="pre">2,</span> <span class="pre">(100,):</span> <span class="pre">-3}</span></code> yields a QUBO instance
+of size n=2. If you want to use the dictionary keys as variable indices
+as-is, set <code class="docutils literal notranslate"><span class="pre">relabel=False</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qubo_dict</strong> (<em>dict</em>) – Dictionary mapping indices to QUBO parameters.</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Specifies QUBO size. If None, the size is derived
+from the number of variable names.</p></li>
+<li><p><strong>relabel</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate whether the variables should
+be used as indices as-is, instead of removing unused variables.
+This works only for integer keys.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>QUBO instance with parameters taken from dictionary.
+dict: Dictionary mapping the names of the variables used in</p>
+<blockquote>
+<div><p>the input dictionary to the indices of the QUBO instance.
+If <code class="docutils literal notranslate"><span class="pre">relabel=False</span></code>, this dictionary will be an identity map.</p>
+</div></blockquote>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.load" title="Permalink to this definition">#</a></dt>
+<dd><p>Load QUBO instance from disk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – QUBO file path.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – Raised if the file contains no valid QUBO.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QUBO instance loaded from disk.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.pairwise_marginals">
+<span class="sig-name descname"><span class="pre">pairwise_marginals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.pairwise_marginals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.pairwise_marginals" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the marginal probabilities for each variable pair to assume the value (1, 1) under the Gibbs distribution induced by this QUBO instance.
+Note that this operation’s runtime is exponential in QUBO size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature parameter of the Gibbs distribution. Defaults to 1.0.</p></li>
+<li><p><strong>fast</strong> (<em>bool</em><em>, </em><em>optional</em>) – Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Upper triangular matrix of probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.partition_function">
+<span class="sig-name descname"><span class="pre">partition_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.partition_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.partition_function" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the partition function of the Ising model induced by this QUBO instance.
+That is, return the sum of <code class="docutils literal notranslate"><span class="pre">exp(-Q(x)/temp)</span></code> over all bit vectors <code class="docutils literal notranslate"><span class="pre">x</span></code>.
+Note that this is infeasibly slow for QUBO sizes much larger than 20.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return the natural log of the partition function instead. Defaults to False.</p></li>
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature parameter of the Gibbs distribution. Defaults to 1.0.</p></li>
+<li><p><strong>fast</strong> (<em>bool</em><em>, </em><em>optional</em>) – Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Value of the partition function, or the log partition function if <code class="docutils literal notranslate"><span class="pre">log=True</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.probabilities">
+<span class="sig-name descname"><span class="pre">probabilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unnormalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fast</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.probabilities" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the complete vector of probabilities for observing a vector <code class="docutils literal notranslate"><span class="pre">x</span></code> under the Gibbs distribution induced by this QUBO instance.
+The entries of the resulting array are sorted in lexicographic order by bit vector, e.g. for size 3: <code class="docutils literal notranslate"><span class="pre">[000,</span> <span class="pre">100,</span> <span class="pre">010,</span> <span class="pre">110,</span> <span class="pre">001,</span> <span class="pre">101,</span> <span class="pre">011,</span> <span class="pre">111]</span></code>.
+Note that this method requires memory space exponential in QUBO size, which quickly becomes infeasible, depending on your system.
+If <code class="docutils literal notranslate"><span class="pre">n</span></code> is the QUBO size, the output will have size <code class="docutils literal notranslate"><span class="pre">2**n</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Temperature parameter of the Gibbs distribution. Defaults to 1.0.</p></li>
+<li><p><strong>out</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Array to write the probabilities to. Defaults to None, which creates a new array.</p></li>
+<li><p><strong>unnormalized</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return the unnormalized probabilities. Defaults to False.</p></li>
+<li><p><strong>fast</strong> (<em>bool</em><em>, </em><em>optional</em>) – Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array containing probabilities.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.random" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a QUBO instance with parameters sampled from a random distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em>) – QUBO size</p></li>
+<li><p><strong>distr</strong> (<em>str</em><em>, </em><em>optional</em>) – Distribution from which the parameters are sampled.
+Possible values are ‘normal’, ‘uniform’ and ‘triangular’.
+Additional keyword arguments will be passed to the corresponding
+methods from <code class="docutils literal notranslate"><span class="pre">numpy.random</span></code>. Defaults to ‘normal’.</p></li>
+<li><p><strong>density</strong> (<em>float</em><em>, </em><em>optional</em>) – Expected density of the parameter matrix.
+Each parameter is set to 0 with probability <code class="docutils literal notranslate"><span class="pre">1-density</span></code>.
+Defaults to 1.0.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if the <code class="docutils literal notranslate"><span class="pre">distr</span></code> argument is unknown.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Random QUBO instance</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.round">
+<span class="sig-name descname"><span class="pre">round</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.round"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.round" title="Permalink to this definition">#</a></dt>
+<dd><p>Rounds the QUBO parameters to the nearest integers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>QUBO instance with rounded parameters.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.save" title="Permalink to this definition">#</a></dt>
+<dd><p>Save the QUBO instance to disk.
+If the file exists, it will be overwritten.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Target file path.</p></li>
+<li><p><strong>atol</strong> (<em>float</em><em>, </em><em>optional</em>) – Parameters with absolute value below this value will be treated as 0. Defaults to 1e-16.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.scale">
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.scale" title="Permalink to this definition">#</a></dt>
+<dd><p>Scale the QUBO parameters by a constant factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>factor</strong> (<em>float</em>) – Scaling factor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>QUBO instance with scaled parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo">qubo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.spectral_gap">
+<span class="sig-name descname"><span class="pre">spectral_gap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">return_optimum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.spectral_gap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.spectral_gap" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculate the spectral gap of this QUBO instance.
+Here, this is defined as the difference between the lowest and second-to lowest QUBO energy value across all bit vectors.
+Note that the QUBO instance must be solved for calculating this value, therefore only QUBOs of sizes up to about 30 are feasible in practice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>return_optimum</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the minimizing bit vector of this QUBO instance (which is calculated anyway). Defaults to False.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if this QUBO instance is too large to be solved by brute force on the given system.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Spectral gap.
+x (numpy.ndarray, optional): Minimizing bit vector.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>sgap (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">double_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-16</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.to_dict" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a dictionary mapping variable indices to QUBO parameters.
+Contains entries only for non-zero parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>names</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping variables indices
+(counting from 0) to names. By default, just the integer
+indices are used.</p></li>
+<li><p><strong>double_indices</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, use <code class="docutils literal notranslate"><span class="pre">(i,</span> <span class="pre">i)</span></code> as
+the key for diagonal entries, otherwise <code class="docutils literal notranslate"><span class="pre">(i,)</span></code>. Defaults to True.</p></li>
+<li><p><strong>atol</strong> (<em>float</em><em>, </em><em>optional</em>) – Parameters with absolute value below
+this value will be treated as 0. Defaults to 1e-16.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary containing QUBO parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">qubo</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span>
+<span class="go">qubo([[ 0.6,  0. ,  0.5,  0. ],</span>
+<span class="go">      [ 0. ,  0. , -0.4,  0. ],</span>
+<span class="go">      [ 0. ,  0. ,  0. , -0.3],</span>
+<span class="go">      [ 0. ,  0. ,  0. ,  0. ]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<span class="go">{(0, 0): 0.6, (0, 2): 0.5, (1, 2): -0.4, (2, 3): -0.3}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.to_posiform">
+<span class="sig-name descname"><span class="pre">to_posiform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.to_posiform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.to_posiform" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the unique posiform representation of this QUBO instance,
+using the approach described in section 2.1 of [1].
+The result is a tuple of an array <code class="docutils literal notranslate"><span class="pre">P</span></code> of shape <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">n,</span> <span class="pre">n)</span></code>, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the QUBO size,
+and a constant offset value. All entries of the array are positive.
+<code class="docutils literal notranslate"><span class="pre">P[0]</span></code> contains the coefficients for the literals <code class="docutils literal notranslate"><span class="pre">Xi*Xj</span></code>, and <code class="docutils literal notranslate"><span class="pre">Xi</span></code> on the diagonal, while
+<code class="docutils literal notranslate"><span class="pre">P[1]</span></code> contains the coefficients for <code class="docutils literal notranslate"><span class="pre">Xi*!Xj</span></code> (<code class="docutils literal notranslate"><span class="pre">!</span></code> denoting negation), and <code class="docutils literal notranslate"><span class="pre">!Xi</span></code> on the diagonal.
+See the paper for further infos.</p>
+<p>[1] <a class="reference external" href="https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization">https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Posiform coefficients (see above)
+float: Constant offset value</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="bit-vectors">
 <h2>Bit Vectors<a class="headerlink" href="#bit-vectors" title="Permalink to this heading">#</a></h2>
 <p>The submodule <code class="docutils literal notranslate"><span class="pre">bitvec</span></code> contains useful methods for working with bit vectors, which in <code class="docutils literal notranslate"><span class="pre">qubolite</span></code> are just NumPy arrays containing the values <code class="docutils literal notranslate"><span class="pre">0.0</span></code> and <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+<span class="target" id="module-qubolite.bitvec"></span><dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.all_bitvectors">
+<span class="sig-name descname"><span class="pre">all_bitvectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#all_bitvectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.all_bitvectors" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate all bit vectors of size <code class="docutils literal notranslate"><span class="pre">n</span></code> in lexicographical order, starting from all zeros.
+The least significant bit is at index 0. Note that always the same array object is yielded,
+so to persist the bit vectors you need to make copies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – Number of bits.</p>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>numpy.ndarray</em> – Array of shape <code class="docutils literal notranslate"><span class="pre">(n,)</span></code> containing a bit vector.</p>
+</dd>
+</dl>
+<dl>
+<dt>Exapmles:</dt><dd><p>This method can be used to obtain all possible energy values for a given QUBO instance:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">qubo</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">all_bitvectors</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">to_string</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="go">000 -&gt; 0.0</span>
+<span class="go">100 -&gt; 0.6294629779101759</span>
+<span class="go">010 -&gt; 0.1566040993504083</span>
+<span class="go">110 -&gt; 0.5098350500036248</span>
+<span class="go">001 -&gt; 1.5430218546339793</span>
+<span class="go">101 -&gt; 3.9359808951564057</span>
+<span class="go">011 -&gt; 2.1052824965032304</span>
+<span class="go">111 -&gt; 4.222009509768697</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.all_bitvectors_array">
+<span class="sig-name descname"><span class="pre">all_bitvectors_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#all_bitvectors_array"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.all_bitvectors_array" title="Permalink to this definition">#</a></dt>
+<dd><p>Create an array containing all bit vectors of size <code class="docutils literal notranslate"><span class="pre">n</span></code> in
+lexicographical order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>n</strong> (<em>int</em>) – Size of bit vectors.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of shape <code class="docutils literal notranslate"><span class="pre">(2**n,</span> <span class="pre">n)</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.from_dict">
+<span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.from_dict" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert a dictionary to a bit vector.
+The dictionary should map indices (int) to binary values (0 or 1).
+If <code class="docutils literal notranslate"><span class="pre">n</span></code> is specified, the vector is padded with zeros to length <code class="docutils literal notranslate"><span class="pre">n</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d</strong> (<em>dict</em>) – Dictionary containing index to bit assignments.</p></li>
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Length of the bit vector. Defaults to None, which uses the highest index in <code class="docutils literal notranslate"><span class="pre">d</span></code> as length.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.from_expression">
+<span class="sig-name descname"><span class="pre">from_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#from_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.from_expression" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate an array of bit vectors from a string
+containing a bit vector expression. Such an expression
+consists of a sequence of these symbols:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>0     a constant 0
+1     a constant 1
+*     all combinations of 0 and 1
+[i]   the same as the bit at index i
+[!i]  the inverse of the bit at index i
+</pre></div>
+</div>
+<p>The last two symbols are called references, and <code class="docutils literal notranslate"><span class="pre">i</span></code> their
+pointing index (counting from 0). A reference can only ever
+point to a constant or <code class="docutils literal notranslate"><span class="pre">*</span></code>, i.e., higher-order references are
+not allowed (and not necessary).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>expr</strong> (<em>str</em>) – Bit vector expression.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of bit vectors matched by the expression.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>This function is useful for generating arrays of bit vectors
+with a prescribed structure. For instance, “all bit vectors
+of length 4 that start with 1 and where the last two bits are
+the same” can be expressed as</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">from_expression</span><span class="p">(</span><span class="s1">&#39;1**[2]&#39;</span><span class="p">)</span>
+<span class="go">array([[1., 0., 0., 0.],</span>
+<span class="go">...    [1., 1., 0., 0.],</span>
+<span class="go">...    [1., 0., 1., 1.],</span>
+<span class="go">...    [1., 1., 1., 1.]])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.from_string">
+<span class="sig-name descname"><span class="pre">from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.from_string" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert a string consisting of <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> to a bit vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – Binary string.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>This method is useful to quickly convert binary strings
+to numpy array:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;100101&#39;</span><span class="p">)</span>
+<span class="go">array([1., 0., 0., 1., 0., 1.])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitvec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.ArrayLike</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.to_dict" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert a bit vector to a dictionary mapping index (int)
+to bit value (0 or 1).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bitvec</strong> (<em>ArrayLike</em>) – Bit vector of shape <code class="docutils literal notranslate"><span class="pre">(n,)</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary representation of the bit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>This function is useful especially when working with
+D-Wave’s Python packages, as they often use this format.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">to_dict</span><span class="p">(</span><span class="n">from_string</span><span class="p">(</span><span class="s1">&#39;10101100&#39;</span><span class="p">))</span>
+<span class="go">{0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bitvec.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bitvec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.ArrayLike</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.to_string" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert a bit vector to a string.
+If an array of bit vectors (shape <code class="docutils literal notranslate"><span class="pre">(m,</span> <span class="pre">n)</span></code>) is passed, a numpy.ndarray
+containing string objects is returned, one for each row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bitvec</strong> (<em>ArrayLike</em>) – Bit vector <code class="docutils literal notranslate"><span class="pre">(n,)</span></code> or array of bit vectors <code class="docutils literal notranslate"><span class="pre">(m,</span> <span class="pre">n)</span></code></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Binary string</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="solving">
 <h2>Solving<a class="headerlink" href="#solving" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">qubolite</span></code> provides the following methods for solving (exactly or approximately) QUBO instances to obtain their minimizing vector and minimal energy.</p>
+<span class="target" id="module-qubolite.solving"></span><dl class="py function">
+<dt class="sig sig-object py" id="qubolite.solving.brute_force">
+<span class="sig-name descname"><span class="pre">brute_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#brute_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.brute_force" title="Permalink to this definition">#</a></dt>
+<dd><p>Solve QUBO instance exactly by brute force.
+Note that this method is infeasible for instances
+with a size beyond around 30.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance to solve.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if the QUBO size is too large to be brute-forced on the present system.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.solving.local_descent">
+<span class="sig-name descname"><span class="pre">local_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#local_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.local_descent" title="Permalink to this definition">#</a></dt>
+<dd><p>Starting from a given bit vector, find improvements in the
+1-neighborhood and follow them until a local optimum is found.
+If no initial vector is specified, a random vector is sampled.
+At each step, the method greedily flips the bit that yields
+greatest energy improvement.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>x</strong> (<em>numpy.ndarray</em><em>, </em><em>optional</em>) – Initial bit vector. Defaults to None.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.solving.random_search">
+<span class="sig-name descname"><span class="pre">random_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#random_search"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.random_search" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform a random search in the space of bit vectors and return
+the lowest-energy solution found.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of steps to perform. Defaults to 100_000.</p></li>
+<li><p><strong>n_parallel</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of random bit vectors to sample at a time.
+This does <em>not</em> increase the number of bit vectors sampled in total
+(specified by <code class="docutils literal notranslate"><span class="pre">steps</span></code>), but makes the procedure faster by using NumPy
+vectorization. Defaults to None, which chooses a value such that the
+resulting bit vector array has about 32k elements.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.solving.simulated_annealing">
+<span class="sig-name descname"><span class="pre">simulated_annealing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'2+'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halftime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_temp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#simulated_annealing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.simulated_annealing" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs simulated annealing to approximate the minimizing
+vector and minimal energy of a given QUBO instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>schedule</strong> (<em>str</em><em>, </em><em>optional</em>) – The annealing schedule to employ.
+Possible values are: <code class="docutils literal notranslate"><span class="pre">2+</span></code> (quadratic additive), <code class="docutils literal notranslate"><span class="pre">2*</span></code> (quadratic multiplicative),
+<code class="docutils literal notranslate"><span class="pre">e+</span></code> (exponential additive) and <code class="docutils literal notranslate"><span class="pre">e*</span></code> (exponential multiplicative).
+See <a class="reference external" href="http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/">here</a>  for further infos. Defaults to ‘2+’.</p></li>
+<li><p><strong>halftime</strong> (<em>float</em><em>, </em><em>optional</em>) – For multiplicative schedules only:
+The percentage of steps after which the temperature is halved. Defaults to 0.25.</p></li>
+<li><p><strong>steps</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of annealing steps to perform. Defaults to 100_000.</p></li>
+<li><p><strong>init_temp</strong> (<em>float</em><em>, </em><em>optional</em>) – Initial temperature. Defaults to None, which estimates an initial temperature.</p></li>
+<li><p><strong>n_parallel</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of random initial solutions to anneal simultaneously. Defaults to 10.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if the specificed schedule is unknown.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> containing the solution bit vectors and their respective energies.
+The shape of <code class="docutils literal notranslate"><span class="pre">x</span></code> is <code class="docutils literal notranslate"><span class="pre">(n_parallel,</span> <span class="pre">n)</span></code>, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is the QUBO size; the shape of <code class="docutils literal notranslate"><span class="pre">y</span></code>
+is <code class="docutils literal notranslate"><span class="pre">(n_parallel,)</span></code>. Bit vector <code class="docutils literal notranslate"><span class="pre">x[i]</span></code> has energy <code class="docutils literal notranslate"><span class="pre">y[i]</span></code> for each <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="embedding">
 <h2>Embedding<a class="headerlink" href="#embedding" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">qubolite</span></code> can create QUBO instances out of other optimization problems by embedding.
 Note that for full functionality, you need the <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> package.
 The following embeddings are available.</p>
+<span class="target" id="module-qubolite.embedding"></span><dl class="py class">
+<dt class="sig sig-object py" id="qubolite.embedding.BinaryClustering">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BinaryClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#BinaryClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.BinaryClustering" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#qubolite.embedding.qubo_embedding" title="qubolite.embedding.qubo_embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a></p>
+<p>Simple Binary Clustering based on Euclidean distance.
+Minimizes distances within and maximizes distances
+between the clusters.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.BinaryClustering.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#qubolite.embedding.BinaryClustering.data" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.BinaryClustering.map_solution">
+<span class="sig-name descname"><span class="pre">map_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#BinaryClustering.map_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.BinaryClustering.map_solution" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.BinaryClustering.qubo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><a class="headerlink" href="#qubolite.embedding.BinaryClustering.qubo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.BinaryClustering.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#BinaryClustering.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.BinaryClustering.random" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qubolite.embedding.Kernel2MeansClustering">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kernel2MeansClustering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unambiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kernel_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Kernel2MeansClustering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Kernel2MeansClustering" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#qubolite.embedding.qubo_embedding" title="qubolite.embedding.qubo_embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a></p>
+<p>Binary clustering based on kernel matrices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy.ndarray</em>) – Data array of shape <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">m)</span></code>.
+The QUBO instance will have size <code class="docutils literal notranslate"><span class="pre">n</span></code> (or <code class="docutils literal notranslate"><span class="pre">n-1</span></code>, if <code class="docutils literal notranslate"><span class="pre">unambiguous=True</span></code>).</p></li>
+<li><p><strong>kernel</strong> (<em>str</em><em>, </em><em>optional</em>) – Kernel function. Defaults to <code class="docutils literal notranslate"><span class="pre">'linear'</span></code>.
+Can be any of <a class="reference external" href="https://github.com/scikit-learn/scikit-learn/blob/7f9bad99d6e0a3e8ddf92a7e5561245224dab102/sklearn/metrics/pairwise.py#L2216">those</a>.</p></li>
+<li><p><strong>centered</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, center the Kernel matrix. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>unambiguous</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, assign the last data point to cluster 0 and exclude it
+from the optimization. Otherwise, the resulting QUBO instance would have two
+symmetrical optimal cluster assignments. Defaults to False.</p></li>
+<li><p><strong>**kernel_params</strong> – Additional keyword arguments for the Kernel function, passed to <code class="docutils literal notranslate"><span class="pre">sklearn.metrics.pairwise_kernels</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.Kernel2MeansClustering.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#qubolite.embedding.Kernel2MeansClustering.data" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.Kernel2MeansClustering.map_solution">
+<span class="sig-name descname"><span class="pre">map_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Kernel2MeansClustering.map_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Kernel2MeansClustering.map_solution" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.Kernel2MeansClustering.qubo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><a class="headerlink" href="#qubolite.embedding.Kernel2MeansClustering.qubo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.Kernel2MeansClustering.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unambiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kernel_params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Kernel2MeansClustering.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Kernel2MeansClustering.random" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qubolite.embedding.Max2Sat">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Max2Sat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clauses</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Max2Sat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Max2Sat" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#qubolite.embedding.qubo_embedding" title="qubolite.embedding.qubo_embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a></p>
+<p>Maximum Satisfyability problem with clauses of size 2.
+The problem is to find a variable assignment that maximizes
+the number of true clauses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clauses</strong> (<em>list</em>) – A list of tuples containing literals,
+representing a logical formula in CNF.
+Each tuple must have exactly two elements.
+The elements must be integers, representing the variable
+indices <strong>counting from 1</strong>. Negative literals have a
+negative sign. For instance, the formula <span class="math notranslate nohighlight">\((x_1\vee \overline{x_2})\wedge(\overline{x_1}\vee x_3)\)</span>
+becomes <code class="docutils literal notranslate"><span class="pre">[(1,-2),</span> <span class="pre">(-1,3)]</span></code>.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em><em>, </em><em>optional</em>) – Penalty value for unsatisfied clauses.
+Must be positive. Defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.Max2Sat.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#qubolite.embedding.Max2Sat.data" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.Max2Sat.map_solution">
+<span class="sig-name descname"><span class="pre">map_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Max2Sat.map_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Max2Sat.map_solution" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.Max2Sat.qubo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><a class="headerlink" href="#qubolite.embedding.Max2Sat.qubo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.Max2Sat.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clauses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#Max2Sat.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.Max2Sat.random" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qubolite.embedding.SubsetSum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SubsetSum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#SubsetSum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.SubsetSum" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#qubolite.embedding.qubo_embedding" title="qubolite.embedding.qubo_embedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a></p>
+<p>Subset Sum problem: Given a list of values, find
+a subset that adds up to a given target value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>numpy.ndarray</em><em> | </em><em>list</em>) – Values of which to find a subset.
+The resulting QUBO instance will have size <code class="docutils literal notranslate"><span class="pre">len(values)</span></code>.</p></li>
+<li><p><strong>target</strong> (<em>int</em><em> | </em><em>float</em>) – Target value which the subset must add up to.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.SubsetSum.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#qubolite.embedding.SubsetSum.data" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.SubsetSum.map_solution">
+<span class="sig-name descname"><span class="pre">map_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#SubsetSum.map_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.SubsetSum.map_solution" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.SubsetSum.qubo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><a class="headerlink" href="#qubolite.embedding.SubsetSum.qubo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.SubsetSum.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#SubsetSum.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.SubsetSum.random" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="qubolite.embedding.qubo_embedding">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo_embedding</span></span><a class="reference internal" href="_modules/qubolite/embedding.html#qubo_embedding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.qubo_embedding" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.qubo_embedding.data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#qubolite.embedding.qubo_embedding.data" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.qubo_embedding.map_solution">
+<span class="sig-name descname"><span class="pre">map_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#qubo_embedding.map_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.qubo_embedding.map_solution" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.embedding.qubo_embedding.qubo">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">qubo</span></span><a class="headerlink" href="#qubolite.embedding.qubo_embedding.qubo" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.embedding.qubo_embedding.random">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/embedding.html#qubo_embedding.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.embedding.qubo_embedding.random" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="bounds">
 <h2>Bounds<a class="headerlink" href="#bounds" title="Permalink to this heading">#</a></h2>
 <p>Solving QUBO problems is NP-hard. For certain applications it is helpful to have upper and lower bounds of the minimal energy, for which the submodule <code class="docutils literal notranslate"><span class="pre">bounds</span></code> provides some methods.
 Functions that return lower bounds are prefixed with <code class="docutils literal notranslate"><span class="pre">lb_</span></code>, and those that return upper bounds with <code class="docutils literal notranslate"><span class="pre">ub_</span></code>.</p>
+<span class="target" id="module-qubolite.bounds"></span><dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bounds.lb_negative_parameters">
+<span class="sig-name descname"><span class="pre">lb_negative_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bounds.html#lb_negative_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bounds.lb_negative_parameters" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute a simple lower bound on the minimal energy
+by summing up all negative parameters. As all QUBO
+energy values are sums of parameter subsets, the
+smallest subset sum is a lower bound for the minimal energy.
+This bound is very fast, but very weak, especially for large
+QUBO sizes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A lower bound on the minimal energy value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bounds.lb_roof_dual">
+<span class="sig-name descname"><span class="pre">lb_roof_dual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bounds.html#lb_roof_dual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bounds.lb_roof_dual" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the Roof Dual bound, as described in <a class="reference external" href="https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization">[1]</a>.
+To this end, the QUBO instance is converted to a
+corresponding flow network, whose maximum flow value
+yields the roof dual lower bound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ImportError</strong> – Raised if the <code class="docutils literal notranslate"><span class="pre">igraph</span></code> package is missing.
+    This package is required for this method.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A lower bound on the minimal energy value.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bounds.ub_local_descent">
+<span class="sig-name descname"><span class="pre">ub_local_descent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">restarts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bounds.html#ub_local_descent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bounds.ub_local_descent" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute an upper bound on the minimal energy by repeatedly
+performing a local optimization heuristic and returning the
+lowest energy value encountered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>restarts</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of local searches with
+random initial bit vectors. Defaults to 10.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An upper bound on the minimal energy value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="qubolite.bounds.ub_sample">
+<span class="sig-name descname"><span class="pre">ub_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bounds.html#ub_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bounds.ub_sample" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute an upper bound on the minimal energy by sampling
+and taking the minimal encountered value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of samples. Defaults to 10_000.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An upper bound on the minimal energy value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="parameter-compression">
 <h2>Parameter Compression<a class="headerlink" href="#parameter-compression" title="Permalink to this heading">#</a></h2>
 <p>The submodule <code class="docutils literal notranslate"><span class="pre">compression</span></code> implements the optimum-preserving parameter compression algorithm by <a class="reference external" href="http://arxiv.org/abs/2307.02195">Mücke et al. (2023)</a>.
 It aims to reduce the parameters’ dynamic range, which positively affects the problem’s solvability on quantum annealers.</p>
+<span class="target" id="module-qubolite.compression"></span><dl class="py function">
+<dt class="sig sig-object py" id="qubolite.compression.compress_parameters">
+<span class="sig-name descname"><span class="pre">compress_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heuristic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'greedy0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'heuristic'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/compression.html#compress_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.compression.compress_parameters" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 
@@ -364,12 +1409,96 @@ It aims to reduce the parameters’ dynamic range, which positively affects the 
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qubo">QUBO</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bit-vectors">Bit Vectors</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bounds">Bounds</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-compression">Parameter Compression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#qubo">QUBO</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo"><code class="docutils literal notranslate"><span class="pre">qubo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.absmax"><code class="docutils literal notranslate"><span class="pre">qubo.absmax()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.as_int"><code class="docutils literal notranslate"><span class="pre">qubo.as_int()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.clamp"><code class="docutils literal notranslate"><span class="pre">qubo.clamp()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.copy"><code class="docutils literal notranslate"><span class="pre">qubo.copy()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.dx"><code class="docutils literal notranslate"><span class="pre">qubo.dx()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.dynamic_range"><code class="docutils literal notranslate"><span class="pre">qubo.dynamic_range()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.from_dict"><code class="docutils literal notranslate"><span class="pre">qubo.from_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load"><code class="docutils literal notranslate"><span class="pre">qubo.load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.probabilities"><code class="docutils literal notranslate"><span class="pre">qubo.probabilities()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.random"><code class="docutils literal notranslate"><span class="pre">qubo.random()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.round"><code class="docutils literal notranslate"><span class="pre">qubo.round()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save"><code class="docutils literal notranslate"><span class="pre">qubo.save()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.scale"><code class="docutils literal notranslate"><span class="pre">qubo.scale()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.spectral_gap"><code class="docutils literal notranslate"><span class="pre">qubo.spectral_gap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_dict"><code class="docutils literal notranslate"><span class="pre">qubo.to_dict()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bit-vectors">Bit Vectors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.all_bitvectors"><code class="docutils literal notranslate"><span class="pre">all_bitvectors()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.all_bitvectors_array"><code class="docutils literal notranslate"><span class="pre">all_bitvectors_array()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_dict"><code class="docutils literal notranslate"><span class="pre">from_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_expression"><code class="docutils literal notranslate"><span class="pre">from_expression()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.from_string"><code class="docutils literal notranslate"><span class="pre">from_string()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bitvec.to_string"><code class="docutils literal notranslate"><span class="pre">to_string()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.brute_force"><code class="docutils literal notranslate"><span class="pre">brute_force()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local_descent"><code class="docutils literal notranslate"><span class="pre">local_descent()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.random_search"><code class="docutils literal notranslate"><span class="pre">random_search()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering"><code class="docutils literal notranslate"><span class="pre">BinaryClustering</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.data"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.map_solution"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.qubo"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.BinaryClustering.random"><code class="docutils literal notranslate"><span class="pre">BinaryClustering.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.data"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.map_solution"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.qubo"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Kernel2MeansClustering.random"><code class="docutils literal notranslate"><span class="pre">Kernel2MeansClustering.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat"><code class="docutils literal notranslate"><span class="pre">Max2Sat</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.data"><code class="docutils literal notranslate"><span class="pre">Max2Sat.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.map_solution"><code class="docutils literal notranslate"><span class="pre">Max2Sat.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.qubo"><code class="docutils literal notranslate"><span class="pre">Max2Sat.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.Max2Sat.random"><code class="docutils literal notranslate"><span class="pre">Max2Sat.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum"><code class="docutils literal notranslate"><span class="pre">SubsetSum</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.data"><code class="docutils literal notranslate"><span class="pre">SubsetSum.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.map_solution"><code class="docutils literal notranslate"><span class="pre">SubsetSum.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.qubo"><code class="docutils literal notranslate"><span class="pre">SubsetSum.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.SubsetSum.random"><code class="docutils literal notranslate"><span class="pre">SubsetSum.random()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding"><code class="docutils literal notranslate"><span class="pre">qubo_embedding</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.data"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.data</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.map_solution"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.map_solution()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.qubo"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.qubo</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.embedding.qubo_embedding.random"><code class="docutils literal notranslate"><span class="pre">qubo_embedding.random()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bounds">Bounds</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.lb_negative_parameters"><code class="docutils literal notranslate"><span class="pre">lb_negative_parameters()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.lb_roof_dual"><code class="docutils literal notranslate"><span class="pre">lb_roof_dual()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.ub_local_descent"><code class="docutils literal notranslate"><span class="pre">ub_local_descent()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.bounds.ub_sample"><code class="docutils literal notranslate"><span class="pre">ub_sample()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-compression">Parameter Compression</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.compression.compress_parameters"><code class="docutils literal notranslate"><span class="pre">compress_parameters()</span></code></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

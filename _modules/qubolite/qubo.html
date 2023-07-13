@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>qubolite.qubo &#8212; qubolite 0.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/qubolite/qubo';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for qubolite.qubo</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.bitvec</span>  <span class="kn">import</span> <span class="n">all_bitvectors</span><span class="p">,</span> <span class="n">all_bitvectors_array</span>
+<span class="kn">from</span> <span class="nn">._misc</span>    <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">is_triu</span><span class="p">,</span> <span class="n">warn_size</span>
+<span class="kn">from</span> <span class="nn">_c_utils</span> <span class="kn">import</span> <span class="n">brute_force</span> <span class="k">as</span> <span class="n">_brute_force_c</span>
+
+<span class="k">def</span> <span class="nf">is_qubo_like</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if given array defines a QUBO instance, i.e.,</span>
+<span class="sd">    if the array is 2-dimensional and square.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        arr (numpy.ndarray): Input array.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: ``True`` iff the input array defines a QUBO instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+        <span class="k">return</span> <span class="n">u</span> <span class="o">==</span> <span class="n">v</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">to_triu_form</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert an array defining a QUBO instance to an</span>
+<span class="sd">    upper triangle matrix, if necessary.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        arr (numpy.ndarray): Input array.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: Upper triangular matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_triu</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># add lower to upper triangle</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">__unwrap_value</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">m</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">obj</span>
+    <span class="k">return</span> <span class="n">v</span>
+
+
+<div class="viewcode-block" id="qubo"><a class="viewcode-back" href="../../api.html#qubolite.qubo">[docs]</a><span class="k">class</span> <span class="nc">qubo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Standard class for QUBO instances.</span>
+<span class="sd">    This is mainly a wrapper around an upper triangular NumPy matrix with</span>
+<span class="sd">    lots of helpful methods. The passed array must be of the shape ``(n, n)``</span>
+<span class="sd">    for any positive ``n``. The linear coefficients lie along the diagonal.</span>
+<span class="sd">    A non-triangular matrix will be converted, i.e., the lower triangle will</span>
+<span class="sd">    be transposed and added to the upper triangle.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        m (np.ndarray): Array containing the QUBO parameters.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        If you have linear and quadratic coefficients in separate arrays,</span>
+<span class="sd">        e.g., ``lin`` with shape ``(n,)`` and ``qua`` with shape ``(n, n)``,</span>
+<span class="sd">        they can be combined to a ``qubo`` instance through ``qubo(np.diag(lin) + qua)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a ``qubo`` instance from a given NumPy array.</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">is_qubo_like</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">to_triu_form</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;qubo&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;array&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the QUBO energy value for a given bit vector.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (numpy.ndarray): Bit vector of shape ``(n,)``, or multiple bit vectors ``(m, n)``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float or numpy.ndarray: QUBO energy value, or array ``(m,)`` of energy values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">+</span> <span class="n">__unwrap_value</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="fm">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">-</span> <span class="n">__unwrap_value</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">*</span> <span class="n">__unwrap_value</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__truediv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">/</span> <span class="n">__unwrap_value</span><span class="p">(</span><span class="n">other</span><span class="p">))</span>
+
+<div class="viewcode-block" id="qubo.copy"><a class="viewcode-back" href="../../api.html#qubolite.qubo.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a copy of this instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: Copy of this QUBO instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="qubo.random"><a class="viewcode-back" href="../../api.html#qubolite.qubo.random">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a QUBO instance with parameters sampled from a random distribution.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n (int): QUBO size</span>
+<span class="sd">            distr (str, optional): Distribution from which the parameters are sampled.</span>
+<span class="sd">                Possible values are &#39;normal&#39;, &#39;uniform&#39; and &#39;triangular&#39;.</span>
+<span class="sd">                Additional keyword arguments will be passed to the corresponding</span>
+<span class="sd">                methods from ``numpy.random``. Defaults to &#39;normal&#39;.</span>
+<span class="sd">            density (float, optional): Expected density of the parameter matrix.</span>
+<span class="sd">                Each parameter is set to 0 with probability ``1-density``.</span>
+<span class="sd">                Defaults to 1.0.</span>
+<span class="sd">            random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Raised if the ``distr`` argument is unknown.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: Random QUBO instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">npr</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">distr</span> <span class="o">==</span> <span class="s1">&#39;normal&#39;</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">npr</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;loc&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">distr</span> <span class="o">==</span> <span class="s1">&#39;uniform&#39;</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">npr</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">distr</span> <span class="o">==</span> <span class="s1">&#39;triangular&#39;</span><span class="p">:</span>
+            <span class="n">arr</span> <span class="o">=</span> <span class="n">npr</span><span class="o">.</span><span class="n">triangular</span><span class="p">(</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+                <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown distribution &quot;</span><span class="si">{</span><span class="n">distr</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">density</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="n">m</span> <span class="o">*=</span> <span class="n">npr</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&lt;</span><span class="n">density</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.save"><a class="viewcode-back" href="../../api.html#qubolite.qubo.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Save the QUBO instance to disk.</span>
+<span class="sd">        If the file exists, it will be overwritten.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): Target file path.</span>
+<span class="sd">            atol (float, optional): Parameters with absolute value below this value will be treated as 0. Defaults to 1e-16.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;4s&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;QUBO&#39;</span><span class="p">))</span> <span class="c1"># magic string</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;&lt;I&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span> <span class="c1"># QUBO size</span>
+        <span class="c1"># determine mode</span>
+        <span class="c1">#  0x00: save flattened parameter array</span>
+        <span class="c1">#  0x01: save index-value pairs</span>
+        <span class="n">n_nonzero</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">index_bytes</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">256</span> <span class="k">else</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="k">else</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">size_mode0</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">size_mode1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index_bytes</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span><span class="n">n_nonzero</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">size_mode0</span> <span class="o">&lt;=</span> <span class="n">size_mode1</span> <span class="k">else</span> <span class="mi">255</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="p">))</span> <span class="c1"># mode indicator</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># save flattened parameter array</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)]</span><span class="o">.</span><span class="n">tobytes</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># save index-value pairs;</span>
+            <span class="c1"># determine index type depending on size</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="s1">&#39;B&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">256</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;H&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">65536</span> <span class="k">else</span> <span class="s1">&#39;I&#39;</span><span class="p">)</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="n">t</span><span class="si">}{</span><span class="n">t</span><span class="si">}</span><span class="s1">d&#39;</span>
+            <span class="c1"># write only non-zero parameters</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">):</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]))</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="qubo.load"><a class="viewcode-back" href="../../api.html#qubolite.qubo.load">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load QUBO instance from disk.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): QUBO file path.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: Raised if the file contains no valid QUBO.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: QUBO instance loaded from disk.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">magic</span><span class="p">,</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&lt;4s&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">magic</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;QUBO&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Invalid QUBO file&#39;</span><span class="p">)</span>
+        <span class="n">n</span><span class="p">,</span> <span class="n">mode</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&lt;IB&#39;</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">m</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="s1">&#39;B&#39;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">256</span> <span class="k">else</span> <span class="p">(</span><span class="s1">&#39;H&#39;</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">65536</span> <span class="k">else</span> <span class="s1">&#39;I&#39;</span><span class="p">)</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="n">t</span><span class="si">}{</span><span class="n">t</span><span class="si">}</span><span class="s1">d&#39;</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">struct</span><span class="o">.</span><span class="n">iter_unpack</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()):</span>
+                <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.to_dict"><a class="viewcode-back" href="../../api.html#qubolite.qubo.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">double_indices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a dictionary mapping variable indices to QUBO parameters.</span>
+<span class="sd">        Contains entries only for non-zero parameters.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            names (dict, optional): Dictionary mapping variables indices</span>
+<span class="sd">                (counting from 0) to names. By default, just the integer</span>
+<span class="sd">                indices are used.</span>
+<span class="sd">            double_indices (bool, optional): If ``True``, use ``(i, i)`` as</span>
+<span class="sd">                the key for diagonal entries, otherwise ``(i,)``. Defaults to True.</span>
+<span class="sd">            atol (float, optional): Parameters with absolute value below</span>
+<span class="sd">                this value will be treated as 0. Defaults to 1e-16.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary containing QUBO parameters.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; Q = qubo.random(4, density=0.25).round(1)</span>
+<span class="sd">            &gt;&gt;&gt; Q</span>
+<span class="sd">            qubo([[ 0.6,  0. ,  0.5,  0. ],</span>
+<span class="sd">                  [ 0. ,  0. , -0.4,  0. ],</span>
+<span class="sd">                  [ 0. ,  0. ,  0. , -0.3],</span>
+<span class="sd">                  [ 0. ,  0. ,  0. ,  0. ]])</span>
+<span class="sd">            &gt;&gt;&gt; Q.to_dict()</span>
+<span class="sd">            {(0, 0): 0.6, (0, 2): 0.5, (1, 2): -0.4, (2, 3): -0.3}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="p">}</span>
+        <span class="n">qubo_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">double_indices</span><span class="p">):</span>
+                    <span class="n">qubo_dict</span><span class="p">[(</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">],)]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">qubo_dict</span><span class="p">[(</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">])]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">qubo_dict</span></div>
+
+<div class="viewcode-block" id="qubo.from_dict"><a class="viewcode-back" href="../../api.html#qubolite.qubo.from_dict">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">qubo_dict</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">relabel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create QUBO instance from a dictionary mapping variable indices</span>
+<span class="sd">        to QUBO parameters. Note that, by default, unused variables are eliminated,</span>
+<span class="sd">        e.g., the dictionary ``{(0,): 2, (100,): -3}`` yields a QUBO instance</span>
+<span class="sd">        of size n=2. If you want to use the dictionary keys as variable indices</span>
+<span class="sd">        as-is, set ``relabel=False``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            qubo_dict (dict): Dictionary mapping indices to QUBO parameters.</span>
+<span class="sd">            n (int, optional): Specifies QUBO size. If None, the size is derived</span>
+<span class="sd">                from the number of variable names.</span>
+<span class="sd">            relabel (bool, optional): Indicate whether the variables should</span>
+<span class="sd">                be used as indices as-is, instead of removing unused variables.</span>
+<span class="sd">                This works only for integer keys.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: QUBO instance with parameters taken from dictionary.</span>
+<span class="sd">            dict: Dictionary mapping the names of the variables used in</span>
+<span class="sd">                the input dictionary to the indices of the QUBO instance.</span>
+<span class="sd">                If ``relabel=False``, this dictionary will be an identity map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">relabel</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">{</span> <span class="n">k</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">qubo_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span> <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="o">*</span><span class="n">qubo_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="p">}</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">names</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="o">+</span><span class="mi">1</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">n</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">qubo_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">k</span>
+                <span class="n">m</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">names</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">v</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="o">=</span> <span class="n">k</span>
+                    <span class="n">m</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">v</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">names</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="p">}</span></div>
+
+<div class="viewcode-block" id="qubo.spectral_gap"><a class="viewcode-back" href="../../api.html#qubolite.qubo.spectral_gap">[docs]</a>    <span class="k">def</span> <span class="nf">spectral_gap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">return_optimum</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the spectral gap of this QUBO instance.</span>
+<span class="sd">        Here, this is defined as the difference between the lowest and second-to lowest QUBO energy value across all bit vectors.</span>
+<span class="sd">        Note that the QUBO instance must be solved for calculating this value, therefore only QUBOs of sizes up to about 30 are feasible in practice.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            return_optimum (bool, optional): If ``True``, returns the minimizing bit vector of this QUBO instance (which is calculated anyway). Defaults to False.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Raised if this QUBO instance is too large to be solved by brute force on the given system.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            sgap (float): Spectral gap.</span>
+<span class="sd">            x (numpy.ndarray, optional): Minimizing bit vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warn_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">_brute_force_c</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;n is too large to brute-force on this system&#39;</span><span class="p">)</span>
+        <span class="n">sgap</span> <span class="o">=</span> <span class="n">v1</span><span class="o">-</span><span class="n">v0</span>
+        <span class="k">if</span> <span class="n">return_optimum</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sgap</span><span class="p">,</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">sgap</span></div>
+
+<div class="viewcode-block" id="qubo.clamp"><a class="viewcode-back" href="../../api.html#qubolite.qubo.clamp">[docs]</a>    <span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">partial_assignment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create QUBO instance equivalent to this but with a subset of parameters fixed (_clamped_) to constant values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            partial_assignment (dict, optional): Dictionary mapping variable indices (counting from 0) to constant values 0 or 1. Defaults to None, which does nothing and returns a copy of this QUBO instance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: Clamped QUBO instance.</span>
+<span class="sd">            const (float): Constant offset value, which must be added to the QUBO energy to obtain the original energy.</span>
+<span class="sd">            free (list): List of indices which the variable indices of the new QUBO instance correspond to (i.e., those indices that were not clamped).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">partial_assignment</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">ones</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">({</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">partial_assignment</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">1</span><span class="p">}))</span>
+        <span class="n">free</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">partial_assignment</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="n">ones</span><span class="p">,</span> <span class="p">:][:,</span> <span class="n">ones</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">free</span><span class="p">:</span>
+            <span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">l</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">if</span> <span class="n">l</span><span class="o">&lt;</span><span class="n">i</span> <span class="k">else</span> <span class="n">R</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">ones</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">free</span><span class="p">,:][:,</span><span class="n">free</span><span class="p">]),</span> <span class="n">const</span><span class="p">,</span> <span class="n">free</span></div>
+
+<div class="viewcode-block" id="qubo.dx"><a class="viewcode-back" href="../../api.html#qubolite.qubo.dx">[docs]</a>    <span class="k">def</span> <span class="nf">dx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discrete derivative w.r.t. ``x``.</span>
+<span class="sd">        The element at index ``i`` gives the QUBO energy change upon flipping the value of ``x[i]``.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            x (np.ndarray): Bit vector w.r.t. which the discrete derivative is calculated. Can be an array of multiple bit vectors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Vector of discrete derivatives of this QUBO instance w.r.t. ``x``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 1st discrete derivatice</span>
+        <span class="n">m_</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">m_</span> <span class="o">+=</span> <span class="n">m_</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">sign</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span>
+        <span class="k">return</span> <span class="n">sign</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">m_</span> <span class="o">@</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.dynamic_range"><a class="viewcode-back" href="../../api.html#qubolite.qubo.dynamic_range">[docs]</a>    <span class="k">def</span> <span class="nf">dynamic_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decibel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the dynamic range (DR) of the QUBO parameters,</span>
+<span class="sd">        i.e., the logarithmic ratio between the largest and the smallest difference between all pairs of unique parameter values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            decibel (bool, optional): If ``True``, outputs the DR in the unit decibels. Defaults to False, which outputs the DR in bits.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Dynamic range value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)],</span> <span class="mi">0</span><span class="p">]))</span>
+        <span class="n">max_diff</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">min_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">params</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">max_diff</span><span class="o">/</span><span class="n">min_diff</span>
+        <span class="k">return</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">if</span> <span class="n">decibel</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.absmax"><a class="viewcode-back" href="../../api.html#qubolite.qubo.absmax">[docs]</a>    <span class="k">def</span> <span class="nf">absmax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the largest parameter by absolute value.</span>
+<span class="sd">        This is equivalent to the infinity norm of the QUBO matrix.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: largest parameter by absolute value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="qubo.round"><a class="viewcode-back" href="../../api.html#qubolite.qubo.round">[docs]</a>    <span class="k">def</span> <span class="nf">round</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rounds the QUBO parameters to the nearest integers.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: QUBO instance with rounded parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="qubo.scale"><a class="viewcode-back" href="../../api.html#qubolite.qubo.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scale the QUBO parameters by a constant factor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            factor (float): Scaling factor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: QUBO instance with scaled parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">factor</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.as_int"><a class="viewcode-back" href="../../api.html#qubolite.qubo.as_int">[docs]</a>    <span class="k">def</span> <span class="nf">as_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bits</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scales and rounds the QUBO parameters to fit a given number of bits.</span>
+<span class="sd">        The number format is assumed to be signed integer, therefore ``b`` bits yields a value range of ``-2**(b-1)`` to ``2**(b-1)-1``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            bits (int, optional): Number of bits to represent the parameters. Defaults to 32.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            qubo: QUBO instance with scaled and rounded parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_min</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_max</span><span class="p">):</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_max</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">bits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">p_min</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">factor</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="qubo.partition_function"><a class="viewcode-back" href="../../api.html#qubolite.qubo.partition_function">[docs]</a>    <span class="k">def</span> <span class="nf">partition_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the partition function of the Ising model induced by this QUBO instance.</span>
+<span class="sd">        That is, return the sum of ``exp(-Q(x)/temp)`` over all bit vectors ``x``.</span>
+<span class="sd">        Note that this is infeasibly slow for QUBO sizes much larger than 20.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            log (bool, optional): Return the natural log of the partition function instead. Defaults to False.</span>
+<span class="sd">            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.</span>
+<span class="sd">            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Value of the partition function, or the log partition function if ``log=True``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probabilities</span><span class="p">(</span><span class="n">temp</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">unnormalized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="n">fast</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span> <span class="k">if</span> <span class="n">log</span> <span class="k">else</span> <span class="n">Z</span></div>
+
+<div class="viewcode-block" id="qubo.probabilities"><a class="viewcode-back" href="../../api.html#qubolite.qubo.probabilities">[docs]</a>    <span class="k">def</span> <span class="nf">probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unnormalized</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the complete vector of probabilities for observing a vector ``x`` under the Gibbs distribution induced by this QUBO instance.</span>
+<span class="sd">        The entries of the resulting array are sorted in lexicographic order by bit vector, e.g. for size 3: ``[000, 100, 010, 110, 001, 101, 011, 111]``.</span>
+<span class="sd">        Note that this method requires memory space exponential in QUBO size, which quickly becomes infeasible, depending on your system.</span>
+<span class="sd">        If ``n`` is the QUBO size, the output will have size ``2**n``.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.</span>
+<span class="sd">            out (numpy.ndarray, optional): Array to write the probabilities to. Defaults to None, which creates a new array.</span>
+<span class="sd">            unnormalized (bool, optional): Return the unnormalized probabilities. Defaults to False.</span>
+<span class="sd">            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Array containing probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,),</span> <span class="sa">f</span><span class="s1">&#39;out array has wrong shape, (</span><span class="si">{</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="si">}</span><span class="s1">,) expected&#39;</span>
+        <span class="k">if</span> <span class="n">fast</span><span class="p">:</span>
+            <span class="c1"># builds the entire (2**n, n)-array of n-bit vectors</span>
+            <span class="n">X</span> <span class="o">=</span> <span class="n">all_bitvectors_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># uses less memory, but much slower</span>
+            <span class="n">warn_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">all_bitvectors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)):</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unnormalized</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span>
+        <span class="k">return</span> <span class="n">out</span><span class="o">/</span><span class="n">out</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="qubo.pairwise_marginals"><a class="viewcode-back" href="../../api.html#qubolite.qubo.pairwise_marginals">[docs]</a>    <span class="k">def</span> <span class="nf">pairwise_marginals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the marginal probabilities for each variable pair to assume the value (1, 1) under the Gibbs distribution induced by this QUBO instance.</span>
+<span class="sd">        Note that this operation&#39;s runtime is exponential in QUBO size.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.</span>
+<span class="sd">            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Upper triangular matrix of probabilities.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">warn_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probabilities</span><span class="p">(</span><span class="n">temp</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">fast</span><span class="o">=</span><span class="n">fast</span><span class="p">)</span>
+        <span class="n">marginals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">all_bitvectors</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">),</span> <span class="n">probs</span><span class="p">):</span>
+            <span class="n">suff_stat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">marginals</span> <span class="o">+=</span> <span class="n">p</span><span class="o">*</span><span class="n">suff_stat</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">marginals</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qubo.to_posiform"><a class="viewcode-back" href="../../api.html#qubolite.qubo.to_posiform">[docs]</a>    <span class="k">def</span> <span class="nf">to_posiform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the unique posiform representation of this QUBO instance,</span>
+<span class="sd">        using the approach described in section 2.1 of [1].</span>
+<span class="sd">        The result is a tuple of an array ``P`` of shape ``(2, n, n)``, where ``n`` is the QUBO size,</span>
+<span class="sd">        and a constant offset value. All entries of the array are positive.</span>
+<span class="sd">        ``P[0]`` contains the coefficients for the literals ``Xi*Xj``, and ``Xi`` on the diagonal, while</span>
+<span class="sd">        ``P[1]`` contains the coefficients for ``Xi*!Xj`` (``!`` denoting negation), and ``!Xi`` on the diagonal.</span>
+<span class="sd">        See the paper for further infos.</span>
+
+<span class="sd">        [1] https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Posiform coefficients (see above)</span>
+<span class="sd">            float: Constant offset value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">posiform</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="c1"># posiform[0] contains terms xi* xj, and  xi on diagonal</span>
+        <span class="c1"># posiform[1] contains terms xi*!xj, and !xi on diagonal</span>
+        <span class="n">lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">qua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">diag_ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag_indices_from</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">qua_neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">qua</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">posiform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">qua</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">posiform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">qua_neg</span>
+        <span class="n">posiform</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">lin</span> <span class="o">+</span> <span class="n">qua_neg</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">lin_</span> <span class="o">=</span> <span class="n">posiform</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># =: c&#39;</span>
+        <span class="n">lin_neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">lin_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">posiform</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">lin_neg</span>
+        <span class="n">posiform</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">lin_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">const</span> <span class="o">=</span> <span class="n">lin_neg</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">posiform</span><span class="p">,</span> <span class="n">const</span></div></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sascha Mücke, Thore Gerlach
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023, Sascha Mücke, Thore Gerlach.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
