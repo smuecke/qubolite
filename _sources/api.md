@@ -69,7 +69,7 @@ Functions that return lower bounds are prefixed with `lb_`, and those that retur
 
 ## Parameter Compression
 
-The submodule `compression` implements the optimum-preserving parameter compression algorithm by [Mücke et al. (2023)](http://arxiv.org/abs/2307.02195>).
+The submodule `compression` implements the optimum-preserving parameter compression algorithm by [Mücke et al. (2023)](http://arxiv.org/abs/2307.02195).
 It aims to reduce the parameters' dynamic range, which positively affects the problem's solvability on quantum annealers.
 
 ```{eval-rst}
