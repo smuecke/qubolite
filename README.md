@@ -80,7 +80,7 @@ Still, for instances with more than 30 variables take a long time to solve this 
 
 ## Documentation
 
-The complete API documentation can be found [here](https://smuecke.github.com/qubolite).
+The complete API documentation can be found [here](https://smuecke.github.io/qubolite/api.html).
 
 ## Version Log
 
