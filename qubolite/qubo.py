@@ -331,10 +331,14 @@ class qubo:
             return sgap
 
     def clamp(self, partial_assignment=None):
-        """Create QUBO instance equivalent to this but with a subset of parameters fixed (_clamped_) to constant values.
+        """Create QUBO instance equivalent to this but with a subset
+        of variables fixed (_clamped_) to constant values.
 
         Args:
-            partial_assignment (dict, optional): Dictionary mapping variable indices (counting from 0) to constant values 0 or 1. Defaults to None, which does nothing and returns a copy of this QUBO instance.
+            partial_assignment (dict, optional): Dictionary mapping
+                variable indices (counting from 0) to constant values
+                0 or 1. Defaults to None, which does nothing and
+                returns a copy of this QUBO instance.
 
         Returns:
             qubo: Clamped QUBO instance.

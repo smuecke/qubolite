@@ -154,13 +154,10 @@ def _expr_normal_form(tokens):
 def from_expression(expr: str):
     """Generate an array of bit vectors from a string
     containing a bit vector expression. Such an expression
-    consists of a sequence of these symbols::
-
-        0     a constant 0
-        1     a constant 1
-        *     all combinations of 0 and 1
-        [i]   the same as the bit at index i
-        [!i]  the inverse of the bit at index i
+    consists of a sequence of these symbols: ``0`` - a constant 0,
+    ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,
+    ``[i]`` - the same as the bit at index i, ``[!i]`` -  the
+    inverse of the bit at index i.
 
     The last two symbols are called references, and ``i`` their
     pointing index (counting from 0). A reference can only ever
@@ -184,7 +181,6 @@ def from_expression(expr: str):
         ...    [1., 1., 0., 0.],
         ...    [1., 0., 1., 1.],
         ...    [1., 1., 1., 1.]])
-    
     """
     tokens = _expr_normal_form(list(_BITVEC_EXPR.findall(expr)))
     n = len(tokens)
