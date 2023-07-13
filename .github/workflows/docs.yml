@@ -19,6 +19,7 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install sphinx-book-theme myst-parser
         docs-folder: "docs/"
+        build-command: "sphinx-build -M html source/ build/ -a -j auto"
     - name: Publish documentation
       run: |
         git clone ${{ github.server_url }}/${{ github.repository }}.git --branch gh-pages --single-branch __gh-pages/
