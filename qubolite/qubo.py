@@ -4,9 +4,14 @@ from functools import reduce
 import numpy as np
 
 from .bitvec  import all_bitvectors, all_bitvectors_array
-from _c_utils import brute_force as _brute_force_c
 from ._misc    import get_random_state, is_triu, warn_size
 
+try:
+    # catch import error, so that sphinx's autodoc works
+    # without compiling C sources.
+    from _c_utils import brute_force as _brute_force_c
+except ImportError as e:
+    _brute_force_c = e
 
 def is_qubo_like(arr):
     """Check if given array defines a QUBO instance, i.e.,

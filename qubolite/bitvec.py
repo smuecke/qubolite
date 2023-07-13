@@ -181,9 +181,10 @@ def from_expression(expr: str):
 
         >>> from_expression('1**[2]')
         array([[1., 0., 0., 0.],
-               [1., 1., 0., 0.],
-               [1., 0., 1., 1.],
-               [1., 1., 1., 1.]])
+        ...    [1., 1., 0., 0.],
+        ...    [1., 0., 1., 1.],
+        ...    [1., 1., 1., 1.]])
+    
     """
     tokens = _expr_normal_form(list(_BITVEC_EXPR.findall(expr)))
     n = len(tokens)

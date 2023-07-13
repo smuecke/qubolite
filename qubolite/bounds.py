@@ -4,6 +4,7 @@ from ._misc   import get_random_state
 from .qubo    import qubo
 from .solving import random_search, local_descent
 
+
 def lb_roof_dual(Q: qubo):
     """Compute the Roof Dual bound, as described in `[1] <https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization>`__.
     To this end, the QUBO instance is converted to a

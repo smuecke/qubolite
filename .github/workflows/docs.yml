@@ -18,7 +18,7 @@ jobs:
         pre-build-command: |
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install sphinx-book-theme
-          sphinx-apidoc --force --output-dir docs/ qubolite
+          sphinx-apidoc --force --output-dir docs/ .
         docs-folder: "docs/"
     - name: Publish documentation
       run: |
