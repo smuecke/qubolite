@@ -2,13 +2,7 @@ import numpy as np
 
 from ._misc import get_random_state, warn_size
 from .qubo import qubo
-
-try:
-    # catch import error, so that sphinx's autodoc works
-    # without compiling C sources.
-    from _c_utils import brute_force as _brute_force_c
-except ImportError as e:
-    _brute_force_c = e
+from _c_utils import brute_force as _brute_force_c
 
 
 def brute_force(Q: qubo):
