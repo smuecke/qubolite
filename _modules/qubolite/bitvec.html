@@ -384,13 +384,10 @@ document.write(`
 <div class="viewcode-block" id="from_expression"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_expression">[docs]</a><span class="k">def</span> <span class="nf">from_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an array of bit vectors from a string</span>
 <span class="sd">    containing a bit vector expression. Such an expression</span>
-<span class="sd">    consists of a sequence of these symbols::</span>
-
-<span class="sd">        0     a constant 0</span>
-<span class="sd">        1     a constant 1</span>
-<span class="sd">        *     all combinations of 0 and 1</span>
-<span class="sd">        [i]   the same as the bit at index i</span>
-<span class="sd">        [!i]  the inverse of the bit at index i</span>
+<span class="sd">    consists of a sequence of these symbols: ``0`` - a constant 0,</span>
+<span class="sd">    ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,</span>
+<span class="sd">    ``[i]`` - the same as the bit at index i, ``[!i]`` -  the</span>
+<span class="sd">    inverse of the bit at index i.</span>
 
 <span class="sd">    The last two symbols are called references, and ``i`` their</span>
 <span class="sd">    pointing index (counting from 0). A reference can only ever</span>
@@ -414,7 +411,6 @@ document.write(`
 <span class="sd">        ...    [1., 1., 0., 0.],</span>
 <span class="sd">        ...    [1., 0., 1., 1.],</span>
 <span class="sd">        ...    [1., 1., 1., 1.]])</span>
-<span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tokens</span> <span class="o">=</span> <span class="n">_expr_normal_form</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">_BITVEC_EXPR</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">expr</span><span class="p">)))</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>

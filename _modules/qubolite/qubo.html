@@ -561,10 +561,14 @@ document.write(`
             <span class="k">return</span> <span class="n">sgap</span></div>
 
 <div class="viewcode-block" id="qubo.clamp"><a class="viewcode-back" href="../../api.html#qubolite.qubo.clamp">[docs]</a>    <span class="k">def</span> <span class="nf">clamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">partial_assignment</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create QUBO instance equivalent to this but with a subset of parameters fixed (_clamped_) to constant values.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create QUBO instance equivalent to this but with a subset</span>
+<span class="sd">        of variables fixed (_clamped_) to constant values.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            partial_assignment (dict, optional): Dictionary mapping variable indices (counting from 0) to constant values 0 or 1. Defaults to None, which does nothing and returns a copy of this QUBO instance.</span>
+<span class="sd">            partial_assignment (dict, optional): Dictionary mapping</span>
+<span class="sd">                variable indices (counting from 0) to constant values</span>
+<span class="sd">                0 or 1. Defaults to None, which does nothing and</span>
+<span class="sd">                returns a copy of this QUBO instance.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            qubo: Clamped QUBO instance.</span>

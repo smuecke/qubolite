@@ -438,10 +438,14 @@ The number format is assumed to be signed integer, therefore <code class="docuti
 <dl class="py method">
 <dt class="sig sig-object py" id="qubolite.qubo.clamp">
 <span class="sig-name descname"><span class="pre">clamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partial_assignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.clamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.clamp" title="Permalink to this definition">#</a></dt>
-<dd><p>Create QUBO instance equivalent to this but with a subset of parameters fixed (_clamped_) to constant values.</p>
+<dd><p>Create QUBO instance equivalent to this but with a subset
+of variables fixed (_clamped_) to constant values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>partial_assignment</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping variable indices (counting from 0) to constant values 0 or 1. Defaults to None, which does nothing and returns a copy of this QUBO instance.</p>
+<dd class="field-odd"><p><strong>partial_assignment</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary mapping
+variable indices (counting from 0) to constant values
+0 or 1. Defaults to None, which does nothing and
+returns a copy of this QUBO instance.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Clamped QUBO instance.
@@ -870,14 +874,10 @@ If <code class="docutils literal notranslate"><span class="pre">n</span></code> 
 <span class="sig-name descname"><span class="pre">from_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/bitvec.html#from_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.bitvec.from_expression" title="Permalink to this definition">#</a></dt>
 <dd><p>Generate an array of bit vectors from a string
 containing a bit vector expression. Such an expression
-consists of a sequence of these symbols:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>0     a constant 0
-1     a constant 1
-*     all combinations of 0 and 1
-[i]   the same as the bit at index i
-[!i]  the inverse of the bit at index i
-</pre></div>
-</div>
+consists of a sequence of these symbols: <code class="docutils literal notranslate"><span class="pre">0</span></code> - a constant 0,
+<code class="docutils literal notranslate"><span class="pre">1</span></code> - a constant 1, <code class="docutils literal notranslate"><span class="pre">*</span></code> - all combinations of 0 and 1,
+<code class="docutils literal notranslate"><span class="pre">[i]</span></code> - the same as the bit at index i, <code class="docutils literal notranslate"><span class="pre">[!i]</span></code> -  the
+inverse of the bit at index i.</p>
 <p>The last two symbols are called references, and <code class="docutils literal notranslate"><span class="pre">i</span></code> their
 pointing index (counting from 0). A reference can only ever
 point to a constant or <code class="docutils literal notranslate"><span class="pre">*</span></code>, i.e., higher-order references are
