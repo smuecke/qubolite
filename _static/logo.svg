@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="50mm"
+   height="50mm"
+   viewBox="0 0 50 50"
+   version="1.1"
+   id="svg21160"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview21162"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="2.5650675"
+     inkscape:cx="74.072125"
+     inkscape:cy="169.19633"
+     inkscape:window-width="1920"
+     inkscape:window-height="1171"
+     inkscape:window-x="1200"
+     inkscape:window-y="619"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs21157" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-53.043304,-57.54208)">
+    <path
+       id="path18937"
+       style="fill:#00749a;fill-opacity:1;stroke:none;stroke-width:10;stroke-dasharray:none;paint-order:markers stroke fill"
+       d="m 77.368964,58.610673 c -8.955503,0.174496 -17.497585,5.826353 -21.12015,14.024929 -4.104179,8.701799 -2.16272,19.758624 4.640132,26.562549 3.72397,3.837139 8.771399,6.362059 14.077668,7.029719 0,-2.6582 0,-5.31641 0,-7.974608 -7.651305,-1.31317 -13.536536,-8.859602 -12.955276,-16.590953 0.284721,-6.958438 5.582947,-13.337501 12.434396,-14.753219 7.313769,-1.85647 15.460521,2.338417 18.321142,9.292106 2.742897,6.121967 1.013169,13.826305 -4.006147,18.255298 -1.004128,1.083848 -2.156715,2.568028 -1.792155,0.326965 0,-6.711242 0,-13.422485 0,-20.133727 -1.996711,-2.261679 -4.875718,-3.730773 -7.88477,-3.98632 0,11.938803 0,23.877607 0,35.816408 7.627603,0 15.255206,0 22.882806,0 0,-2.6276 0,-5.25521 0,-7.882808 -2.020179,0 -4.040357,0 -6.060537,0 5.035187,-5.823183 7.290637,-14.025457 5.414307,-21.546568 C 99.250351,67.659249 90.968018,60.085508 81.433387,58.847122 80.088149,58.656317 78.727144,58.580767 77.368964,58.610673 Z" />
+  </g>
+</svg>
