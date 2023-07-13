@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Welcome to qubolite’s documentation! &#8212; qubolite 0.8 documentation</title>
+    <title>Quickstart &#8212; qubolite 0.8 documentation</title>
   
   
   
@@ -43,6 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Documentation" href="api.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -119,7 +120,11 @@
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
     </div>
 </nav></div>
     </div>
@@ -172,7 +177,7 @@
       
       
       
-      <li><a href="_sources/index.rst" target="_blank"
+      <li><a href="_sources/index.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -182,7 +187,7 @@
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.rst</span>
+<span class="btn__text-container">.md</span>
 </a>
 </li>
       
@@ -254,7 +259,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Welcome to qubolite’s documentation!</h1>
+    <h1>Quickstart</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -264,10 +269,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to qubolite’s documentation!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a></li>
 </ul>
-
+</li>
+</ul>
             </nav>
         </div>
     </div>
@@ -278,18 +286,74 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="welcome-to-qubolite-s-documentation">
-<h1>Welcome to qubolite’s documentation!<a class="headerlink" href="#welcome-to-qubolite-s-documentation" title="Permalink to this heading">#</a></h1>
-<div class="toctree-wrapper compound">
+  <div class="toctree-wrapper compound">
+</div>
+<section id="quickstart">
+<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">#</a></h1>
+<p>This package provides tools for working with <em>Quadratic Unconstrained Binary Optimization</em> (QUBO) problems. These problems are central for Quantum Annealing and have numerous applications in Machine Learning, resource allocation, data analysis and many more.</p>
+<p>The philosophy of this package is to be as light-weight as possible, therefore the core class <code class="docutils literal notranslate"><span class="pre">qubo</span></code> is just a shallow wrapper around a NumPy array containing the QUBO parameters, with many useful methods. Additionally, the package contains methods for <strong>solving</strong> QUBOs, <strong>sampling</strong> from their Gibbs distribution, <strong>bounding</strong> their minimum energy, and <strong>embedding</strong> other problems into QUBO.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<p>This package is available on PyPi and can be installed via</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">qubolite</span>
+</pre></div>
+</div>
+<p>Note that this package contains code in C, which is why you need a working C compiler (GCC on Linux, Visual C/C++ on Windows).</p>
+</section>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Permalink to this heading">#</a></h2>
+<p>The core class is <code class="docutils literal notranslate"><span class="pre">qubo</span></code>, which receives a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of size <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">n)</span></code>.
+Alternatively, a random instance can be created using <code class="docutils literal notranslate"><span class="pre">qubo.random()</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubolite</span> <span class="kn">import</span> <span class="n">qubo</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">qubo</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q2</span> <span class="o">=</span> <span class="n">qubo</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;uniform&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">qubo()</span></code> takes an upper triangle matrix.
+A non-triangular matrix is converted to an upper triangle matrix by adding the lower to the upper triangle.
+QUBO instances can also be created from dictionaries through <code class="docutils literal notranslate"><span class="pre">qubo.from_dict()</span></code>.</p>
+<p>To get the QUBO function value, instances can be called directly with a bit vector.
+The bit vector must be a <code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of size <code class="docutils literal notranslate"><span class="pre">(n,)</span></code> or <code class="docutils literal notranslate"><span class="pre">(m,</span> <span class="pre">n)</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">7.488225478498116</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="c1"># evaluate 5 bit vectors at once</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="go">array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])</span>
+</pre></div>
+</div>
+<section id="solving">
+<h3>Solving<a class="headerlink" href="#solving" title="Permalink to this heading">#</a></h3>
+<p>The submodule <code class="docutils literal notranslate"><span class="pre">solving</span></code> contains several methods to obtain the minimizing bit vector or energy value of a given QUBO instance, both exact and approximative.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubolite.solving</span> <span class="kn">import</span> <span class="n">brute_force</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_min</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">brute_force</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_min</span>
+<span class="go">array([1., 1., 1., 0., 1., 0., 0., 0.])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">value</span>
+<span class="go">-3.394893116198653</span>
+</pre></div>
+</div>
+<p>The method <code class="docutils literal notranslate"><span class="pre">brute_force</span></code> is implemented efficiently in C and parallelized with OpenMP.
+Still, for instances with more than 30 variables take a long time to solve this way.
+Other methods included in this package are Simulated Annealing and some heuristic search methods (local search, random search).</p>
+</section>
+<section id="embedding">
+<h3>Embedding<a class="headerlink" href="#embedding" title="Permalink to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">qubolite</span></code> provides QUBO embeddings for common optimization problems.
+For example, the following code shows how to solve a binary clustering problem:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">qubolite.embedding</span> <span class="kn">import</span> <span class="n">Kernel2MeansClustering</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c1"># sample 2D points</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">[</span><span class="mi">15</span><span class="p">:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span> <span class="c1"># move half of the points apart to create two clusters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">problem</span> <span class="o">=</span> <span class="n">Kernel2MeansClustering</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;rbf&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">brute_force</span><span class="p">(</span><span class="n">problem</span><span class="o">.</span><span class="n">qubo</span><span class="p">)</span>
+<span class="go">(array([1., 1., 1., 1., 1., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 0., 0.,</span>
+<span class="go">       0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]), -44.55740335019274)</span>
+</pre></div>
 </div>
 </section>
-<section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">#</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+</section>
 </section>
 
 
@@ -304,6 +368,15 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="right-next"
+       href="api.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API Documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -322,10 +395,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to qubolite’s documentation!</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#embedding">Embedding</a></li>
 </ul>
-
+</li>
+</ul>
   </nav></div>
 
 </div></div>
