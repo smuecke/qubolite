@@ -7,7 +7,15 @@ api
 
 # Quickstart
 
-This package provides tools for working with *Quadratic Unconstrained Binary Optimization* (QUBO) problems. These problems are central for Quantum Annealing and have numerous applications in Machine Learning, resource allocation, data analysis and many more.
+This package provides tools for working with *Quadratic Unconstrained Binary Optimization* ([QUBO](https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization)) problems. These problems are central for Quantum Annealing and have numerous applications in Machine Learning, resource allocation, data analysis and many more.
+
+Given a real-valued parameter matrix **Q**, the *energy* of a binary vector **x** is defined as
+
+```{math}
+    f_{\boldsymbol Q}(\boldsymbol x)=\sum_{1\leq i\leq j\leq n}Q_{ij}x_ix_j\;.
+```
+
+The task is to find a binary vector that minimizes this energy function.
 
 The philosophy of this package is to be as light-weight as possible, therefore the core class `qubo` is just a shallow wrapper around a NumPy array containing the QUBO parameters, with many useful methods. Additionally, the package contains methods for **solving** QUBOs, **sampling** from their Gibbs distribution, **bounding** their minimum energy, and **embedding** other problems into QUBO.
 

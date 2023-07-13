@@ -40,6 +40,7 @@
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -296,7 +297,11 @@ document.write(`
 </div>
 <section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading">#</a></h1>
-<p>This package provides tools for working with <em>Quadratic Unconstrained Binary Optimization</em> (QUBO) problems. These problems are central for Quantum Annealing and have numerous applications in Machine Learning, resource allocation, data analysis and many more.</p>
+<p>This package provides tools for working with <em>Quadratic Unconstrained Binary Optimization</em> (<a class="reference external" href="https://en.wikipedia.org/wiki/Quadratic_unconstrained_binary_optimization">QUBO</a>) problems. These problems are central for Quantum Annealing and have numerous applications in Machine Learning, resource allocation, data analysis and many more.</p>
+<p>Given a real-valued parameter matrix <strong>Q</strong>, the <em>energy</em> of a binary vector <strong>x</strong> is defined as</p>
+<div class="math notranslate nohighlight">
+\[    f_{\boldsymbol Q}(\boldsymbol x)=\sum_{1\leq i\leq j\leq n}Q_{ij}x_ix_j\;.\]</div>
+<p>The task is to find a binary vector that minimizes this energy function.</p>
 <p>The philosophy of this package is to be as light-weight as possible, therefore the core class <code class="docutils literal notranslate"><span class="pre">qubo</span></code> is just a shallow wrapper around a NumPy array containing the QUBO parameters, with many useful methods. Additionally, the package contains methods for <strong>solving</strong> QUBOs, <strong>sampling</strong> from their Gibbs distribution, <strong>bounding</strong> their minimum energy, and <strong>embedding</strong> other problems into QUBO.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
