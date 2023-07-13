@@ -15,6 +15,8 @@ copyright = '2023, Sascha Mücke, Thore Gerlach'
 author = 'Sascha Mücke, Thore Gerlach'
 release = '0.8'
 
+html_logo = '_static/logo.svg'
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
