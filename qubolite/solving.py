@@ -6,18 +6,19 @@ from _c_utils import brute_force as _brute_force_c
 
 
 def brute_force(Q: qubo):
-    """Solve QUBO instance exactly by brute force.
-    Note that this method is infeasible for instances
-    with a size beyond around 30.
+    """Solve QUBO instance exactly by brute force. Note that this method is
+    infeasible for instances with a size beyond around 30.
 
     Args:
         Q (qubo): QUBO instance to solve.
 
     Raises:
-        ValueError: Raised if the QUBO size is too large to be brute-forced on the present system.
+        ValueError: Raised if the QUBO size is too large to be brute-forced on
+            the present system.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
+            energy (float).
     """
     warn_size(Q.n, limit=30)
     try:
@@ -34,29 +35,37 @@ def simulated_annealing(Q: qubo,
                         init_temp=None,
                         n_parallel=10,
                         random_state=None):
-    """Performs simulated annealing to approximate the minimizing
-    vector and minimal energy of a given QUBO instance.
+    """Performs simulated annealing to approximate the minimizing vector and
+    minimal energy of a given QUBO instance.
 
     Args:
         Q (qubo): QUBO instance.
-        schedule (str, optional): The annealing schedule to employ.
-            Possible values are: ``2+`` (quadratic additive), ``2*`` (quadratic multiplicative),
-            ``e+`` (exponential additive) and ``e*`` (exponential multiplicative).
-            See `here <http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/>`__  for further infos. Defaults to '2+'.
-        halftime (float, optional): For multiplicative schedules only:
-            The percentage of steps after which the temperature is halved. Defaults to 0.25.
-        steps (int, optional): Number of annealing steps to perform. Defaults to 100_000.
-        init_temp (float, optional): Initial temperature. Defaults to None, which estimates an initial temperature.
-        n_parallel (int, optional): Number of random initial solutions to anneal simultaneously. Defaults to 10.
-        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+        schedule (str, optional): The annealing schedule to employ. Possible
+            values are: ``2+`` (quadratic additive), ``2*`` (quadratic
+            multiplicative), ``e+`` (exponential additive) and ``e*``
+            (exponential multiplicative). See
+            `here <http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/>`__ 
+            for further infos. Defaults to '2+'.
+        halftime (float, optional): For multiplicative schedules only: The
+            percentage of steps after which the temperature is halved. Defaults
+            to 0.25.
+        steps (int, optional): Number of annealing steps to perform. Defaults to
+            100_000.
+        init_temp (float, optional): Initial temperature. Defaults to None,
+            which estimates an initial temperature.
+        n_parallel (int, optional): Number of random initial solutions to anneal
+            simultaneously. Defaults to 10.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
 
     Raises:
         ValueError: Raised if the specificed schedule is unknown.
 
     Returns:
-        A tuple ``(x, y)`` containing the solution bit vectors and their respective energies.
-        The shape of ``x`` is ``(n_parallel, n)``, where ``n`` is the QUBO size; the shape of ``y``
-        is ``(n_parallel,)``. Bit vector ``x[i]`` has energy ``y[i]`` for each ``i``.
+        A tuple ``(x, y)`` containing the solution bit vectors and their
+        respective energies. The shape of ``x`` is ``(n_parallel, n)``, where
+        ``n`` is the QUBO size; the shape of ``y`` is ``(n_parallel,)``. Bit
+        vector ``x[i]`` has energy ``y[i]`` for each ``i``.
     """
     npr = get_random_state(random_state)
     if init_temp is None:
@@ -75,14 +84,13 @@ def simulated_annealing(Q: qubo,
 
     # setup cooling schedule
     if schedule == 'e+':
-        temps = init_temp / (
-                    1 + np.exp(2 * np.log(init_temp) * (np.linspace(0, 1, steps + 1) - 0.5)))
+        temps = init_temp/(1+np.exp(2*np.log(init_temp)*(np.linspace(0, 1, steps+1)-0.5)))
     elif schedule == '2+':
-        temps = init_temp * (1 - np.linspace(0, 1, steps + 1)) ** 2
+        temps = init_temp*(1-np.linspace(0, 1, steps+1))**2
     elif schedule == 'e*':
-        temps = init_temp * (0.5 ** (1 / halftime)) ** np.arange(0, 1, steps + 1)
+        temps = init_temp*(0.5**(1/halftime))**np.arange(0, 1, steps+1)
     elif schedule == '2*':
-        temps = init_temp / (1 + (1 / (halftime ** 2)) * np.linspace(0, 1, steps + 1) ** 2)
+        temps = init_temp/(1+(1/(halftime**2))*np.linspace(0, 1, steps+1)**2)
     else:
         raise ValueError('Unknown schedule; must be one of {e*, 2*, e+, 2+}.')
 
@@ -102,19 +110,20 @@ def simulated_annealing(Q: qubo,
 
 
 def local_descent(Q: qubo, x=None, random_state=None):
-    """Starting from a given bit vector, find improvements in the
-    1-neighborhood and follow them until a local optimum is found.
-    If no initial vector is specified, a random vector is sampled.
-    At each step, the method greedily flips the bit that yields
-    greatest energy improvement.
+    """Starting from a given bit vector, find improvements in the 1-neighborhood
+    and follow them until a local optimum is found. If no initial vector is
+    specified, a random vector is sampled. At each step, the method greedily
+    flips the bit that yields greatest energy improvement.
 
     Args:
         Q (qubo): QUBO instance.
         x (numpy.ndarray, optional): Initial bit vector. Defaults to None.
-        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
+        energy (float).
     """
     if x is None:
         rng = get_random_state(random_state)
@@ -131,21 +140,23 @@ def local_descent(Q: qubo, x=None, random_state=None):
 
 
 def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
-    """Perform a random search in the space of bit vectors and return
-    the lowest-energy solution found.
+    """Perform a random search in the space of bit vectors and return the
+    lowest-energy solution found.
 
     Args:
         Q (qubo): QUBO instance.
         steps (int, optional): Number of steps to perform. Defaults to 100_000.
-        n_parallel (int, optional): Number of random bit vectors to sample at a time.
-            This does *not* increase the number of bit vectors sampled in total
-            (specified by ``steps``), but makes the procedure faster by using NumPy
-            vectorization. Defaults to None, which chooses a value such that the
-            resulting bit vector array has about 32k elements.
-        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+        n_parallel (int, optional): Number of random bit vectors to sample at a
+            time. This does *not* increase the number of bit vectors sampled in
+            total (specified by ``steps``), but makes the procedure faster by
+            using NumPy vectorization. Defaults to None, which chooses a value
+            such that the resulting bit vector array has about 32k elements.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
+        energy (float).
     """
     rng = get_random_state(random_state)
     if n_parallel is None:
@@ -165,3 +176,36 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
             y_min = y[i_min]
         remaining -= r
     return x_min, y_min
+
+
+def subspace_search(Q: qubo, steps=1000, random_state=None):
+    """Perform search heuristic where n-log2(n) randomly selected variables are
+    fixed and the remaining log2(n) bits are solved by brute force. The current
+    solution is updated with the optimal sub-vector assignment, and the process
+    is repeated.
+
+    Args:
+        Q (qubo): QUBO instance.
+        steps (int, optional): Number of repetitions. Defaults to 1000.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
+
+    Returns:
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
+        energy (float).
+    """
+    rng = get_random_state(random_state)
+    log_n = int(np.log2(Q.n))
+    variables = np.arange(Q.n).astype(int)
+    # sample random initial solution
+    x = (rng.random(Q.n) < 0.5).astype(np.float64)
+    for _ in range(steps):
+        # fix random subset of n - log(n) variables
+        rng.shuffle(variables)
+        fixed  = variables[:Q.n-log_n]
+        Q_sub, _, free = Q.clamp(dict(zip(fixed, x[fixed])))
+        # find optimum in subspace by brute force
+        x_sub_opt, *_ = _brute_force_c(Q_sub.m)
+        # set variables in current solution to subspace-optimal bits
+        x[free] = x_sub_opt
+    return x, Q(x)

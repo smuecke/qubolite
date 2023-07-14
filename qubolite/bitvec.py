@@ -3,6 +3,8 @@ import re
 import numpy as np
 from numpy.typing import ArrayLike
 
+from ._misc import get_random_state
+
 
 def all_bitvectors(n: int):
     """Generate all bit vectors of size ``n`` in lexicographical order, starting from all zeros.
@@ -49,6 +51,30 @@ def all_bitvectors_array(n: int):
         numpy.ndarray: Array of shape ``(2**n, n)``
     """
     return np.arange(1<<n)[:, np.newaxis] & (1<<np.arange(n)) > 0
+
+
+def random(n: int, size=None, random_state=None):
+    """Create an array containing random bit vectors.
+
+    Args:
+        n (int): Number of bits per bit vector.
+        size (int | tuple, optional): Number of bit vectors to sample, or tuple
+            representing a shape. Defaults to None, which returns a single bit
+            vector (shape ``(n,)``).
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
+
+    Returns:
+        numpy.ndarray: Random bit vector(s).
+    """
+    size = () if size is None else size
+    try:
+        shape = (*size, n)
+    except TypeError:
+        # `size` must be an integer
+        shape = (size, n)
+    rng = get_random_state(random_state)
+    return (rng.random(shape) < 0.5).astype(np.float64)
 
 
 def from_string(string: str):

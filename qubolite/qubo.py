@@ -8,8 +8,8 @@ from ._misc    import get_random_state, is_triu, warn_size
 from _c_utils import brute_force as _brute_force_c
 
 def is_qubo_like(arr):
-    """Check if given array defines a QUBO instance, i.e.,
-    if the array is 2-dimensional and square.
+    """Check if given array defines a QUBO instance, i.e., if the array is
+    2-dimensional and square.
 
     Args:
         arr (numpy.ndarray): Input array.
@@ -25,8 +25,8 @@ def is_qubo_like(arr):
 
 
 def to_triu_form(arr):
-    """Convert an array defining a QUBO instance to an
-    upper triangle matrix, if necessary.
+    """Convert an array defining a QUBO instance to an upper triangle matrix, if
+    necessary.
 
     Args:
         arr (numpy.ndarray): Input array.
@@ -52,19 +52,19 @@ def __unwrap_value(obj):
 class qubo:
     """
     Standard class for QUBO instances.
-    This is mainly a wrapper around an upper triangular NumPy matrix with
-    lots of helpful methods. The passed array must be of the shape ``(n, n)``
-    for any positive ``n``. The linear coefficients lie along the diagonal.
-    A non-triangular matrix will be converted, i.e., the lower triangle will
-    be transposed and added to the upper triangle.
+    This is mainly a wrapper around an upper triangular NumPy matrix with lots
+    of helpful methods. The passed array must be of the shape ``(n, n)`` for any
+    positive ``n``. The linear coefficients lie along the diagonal. A
+    non-triangular matrix will be converted, i.e., the lower triangle will be
+    transposed and added to the upper triangle.
 
     Args:
         m (np.ndarray): Array containing the QUBO parameters.
 
     Examples:
-        If you have linear and quadratic coefficients in separate arrays,
-        e.g., ``lin`` with shape ``(n,)`` and ``qua`` with shape ``(n, n)``,
-        they can be combined to a ``qubo`` instance through ``qubo(np.diag(lin) + qua)``.
+        If you have linear and quadratic coefficients in separate arrays, e.g.,
+        ``lin`` with shape ``(n,)`` and ``qua`` with shape ``(n, n)``, they can
+        be combined to a ``qubo`` instance through ``qubo(np.diag(lin) + qua)``.
     """
 
     def __init__(self, m: np.ndarray):
@@ -83,10 +83,11 @@ class qubo:
         """Calculate the QUBO energy value for a given bit vector.
 
         Args:
-            x (numpy.ndarray): Bit vector of shape ``(n,)``, or multiple bit vectors ``(m, n)``.
+            x (numpy.ndarray): Bit vector of shape ``(n,)``, or multiple bit
+                vectors ``(m, n)``.
 
         Returns:
-            float or numpy.ndarray: QUBO energy value, or array ``(m,)`` of energy values.
+            float or numpy.ndarray of shape ``(m,)`` containing energy values.
         """
         return np.sum(np.dot(x, self.m)*x, axis=-1)
 
@@ -118,19 +119,26 @@ class qubo:
         return qubo(self.m.copy())
 
     @classmethod
-    def random(cls, n: int, distr='normal', density=1.0, random_state=None, **kwargs):
-        """Create a QUBO instance with parameters sampled from a random distribution.
+    def random(cls, n: int,
+               distr='normal',
+               density=1.0,
+               random_state=None,
+               **kwargs):
+        """Create a QUBO instance with parameters sampled from a random
+        distribution.
 
         Args:
             n (int): QUBO size
-            distr (str, optional): Distribution from which the parameters are sampled.
-                Possible values are 'normal', 'uniform' and 'triangular'.
-                Additional keyword arguments will be passed to the corresponding
-                methods from ``numpy.random``. Defaults to 'normal'.
+            distr (str, optional): Distribution from which the parameters are
+                sampled. Possible values are ``'normal'``, ``'uniform'`` and
+                ``'triangular'``. Additional keyword arguments will be passed to
+                the corresponding methods from ``numpy.random``. Defaults to
+                ``'normal'``.
             density (float, optional): Expected density of the parameter matrix.
                 Each parameter is set to 0 with probability ``1-density``.
                 Defaults to 1.0.
-            random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+            random_state (optional): A numerical or lexical seed, or a NumPy
+                random generator. Defaults to None.
 
         Raises:
             ValueError: Raised if the ``distr`` argument is unknown.
@@ -168,7 +176,8 @@ class qubo:
         
         Args:
             path (str): Target file path.
-            atol (float, optional): Parameters with absolute value below this value will be treated as 0. Defaults to 1e-16.
+            atol (float, optional): Parameters with absolute value below this
+                value will be treated as 0. Defaults to 1e-16.
         """
         f = open(path, 'wb')
         f.write(struct.pack('<4s', b'QUBO')) # magic string
@@ -231,12 +240,12 @@ class qubo:
         
         Args:
             names (dict, optional): Dictionary mapping variables indices
-                (counting from 0) to names. By default, just the integer
-                indices are used.
-            double_indices (bool, optional): If ``True``, use ``(i, i)`` as
-                the key for diagonal entries, otherwise ``(i,)``. Defaults to True.
-            atol (float, optional): Parameters with absolute value below
-                this value will be treated as 0. Defaults to 1e-16.
+                (counting from 0) to names. By default, just the integer indices
+                are used.
+            double_indices (bool, optional): If ``True``, use ``(i, i)`` as the
+                key for diagonal entries, otherwise ``(i,)``. Defaults to True.
+            atol (float, optional): Parameters with absolute value below this
+                value will be treated as 0. Defaults to 1e-16.
             
         Returns:
             dict: Dictionary containing QUBO parameters.
@@ -264,28 +273,29 @@ class qubo:
 
     @classmethod
     def from_dict(cls, qubo_dict, n=None, relabel=True):
-        """Create QUBO instance from a dictionary mapping variable indices
-        to QUBO parameters. Note that, by default, unused variables are eliminated,
-        e.g., the dictionary ``{(0,): 2, (100,): -3}`` yields a QUBO instance
-        of size n=2. If you want to use the dictionary keys as variable indices
+        """Create QUBO instance from a dictionary mapping variable indices to
+        QUBO parameters. Note that, by default, unused variables are eliminated,
+        e.g., the dictionary ``{(0,): 2, (100,): -3}`` yields a QUBO instance of
+        size n=2. If you want to use the dictionary keys as variable indices
         as-is, set ``relabel=False``.
 
         Args:
             qubo_dict (dict): Dictionary mapping indices to QUBO parameters.
             n (int, optional): Specifies QUBO size. If None, the size is derived
                 from the number of variable names.
-            relabel (bool, optional): Indicate whether the variables should
-                be used as indices as-is, instead of removing unused variables.
+            relabel (bool, optional): Indicate whether the variables should be
+                used as indices as-is, instead of removing unused variables.
                 This works only for integer keys.
 
         Returns:
             qubo: QUBO instance with parameters taken from dictionary.
-            dict: Dictionary mapping the names of the variables used in
-                the input dictionary to the indices of the QUBO instance.
-                If ``relabel=False``, this dictionary will be an identity map.
+            dict: Dictionary mapping the names of the variables used in the
+                input dictionary to the indices of the QUBO instance. If
+                ``relabel=False``, this dictionary will be an identity map.
         """
         if relabel:
-            names = { k: i for i, k in enumerate(sorted(set().union(*qubo_dict.keys()))) }
+            key_set = set().union(*qubo_dict.keys())
+            names = { k: i for i, k in enumerate(sorted(key_set)) }
         else:
             names = { i: i for i in set().union(*qubo_dict.keys()) }
 
@@ -306,26 +316,53 @@ class qubo:
 
     @classmethod
     def from_ising(cls, linear, quadratic, offset=0.0):
+        """Create QUBO instance from Ising model parameters. In an Ising model,
+        the binary variables :math:`\\boldsymbol x\\in\\lbrace 0,1,\\rbrace` are
+        replaced with *bipolar* variables
+        :math:`\\boldsymbol s\\in\\lbrace -1,+1\\rbrace`. The two models are
+        computationally equivalent and can be converted into each other by
+        variable substitution :math:`\\boldsymbol s\\mapsto 2\\boldsymbol x+1`.
+
+        Args:
+            linear (list | numpy.ndarray): Linear coefficients, often denoted by
+                :math:`\\boldsymbol h`; also called *external field* in physics.
+            quadratic (list | numpy.ndarray): Quadratic coefficients, often
+                denoted by :math:`\\boldsymbol J`; also called *interactions* in
+                physics. If ``linear`` has shape ``(n,)``, this array must have
+                shape ``(n, n)``.
+            offset (float, optional): Constant offset added to the energy value.
+                Defaults to ``0.0``.
+
+        Returns:
+            Tuple containing ``qubo`` instance and a new offset value (float).
+        """
         lin = np.asarray(linear)
         qua = np.asarray(quadratic)
         n, = lin.shape
         assert qua.shape == (n, n), '`linear` and `quadratic` must have shapes (n,) and (n, n)'
-        qua_symm = np.tril(qua, -1).T + np.triu(qua, 1) + qua
-        m  = 2*np.diag(qua.sum(0)+lin)
-        m -= 4*np.triu(qua_symm, 1)
-        return cls(m)
+        qua_symm = qua + qua.T
+        qua_symm[np.diag_indices_from(qua)] = 0
+        m  = 2*np.diag(lin-qua_symm.sum(0))
+        m += 4*np.triu(qua_symm, 1)
+        c = qua.sum()-lin.sum()+offset
+        return cls(m), c
 
 
     def spectral_gap(self, return_optimum=False):
-        """Calculate the spectral gap of this QUBO instance.
-        Here, this is defined as the difference between the lowest and second-to lowest QUBO energy value across all bit vectors.
-        Note that the QUBO instance must be solved for calculating this value, therefore only QUBOs of sizes up to about 30 are feasible in practice.
+        """Calculate the spectral gap of this QUBO instance. Here, this is
+        defined as the difference between the lowest and second-to lowest QUBO
+        energy value across all bit vectors. Note that the QUBO instance must be
+        solved for calculating this value, therefore only QUBOs of sizes up to
+        about 30 are feasible in practice.
         
         Args:
-            return_optimum (bool, optional): If ``True``, returns the minimizing bit vector of this QUBO instance (which is calculated anyway). Defaults to False.
+            return_optimum (bool, optional): If ``True``, returns the minimizing
+            bit vector of this QUBO instance (which is calculated anyway).
+            Defaults to False.
 
         Raises:
-            ValueError: Raised if this QUBO instance is too large to be solved by brute force on the given system.
+            ValueError: Raised if this QUBO instance is too large to be solved
+            by brute force on the given system.
 
         Returns:
             sgap (float): Spectral gap.
@@ -343,19 +380,22 @@ class qubo:
             return sgap
 
     def clamp(self, partial_assignment=None):
-        """Create QUBO instance equivalent to this but with a subset
-        of variables fixed (_clamped_) to constant values.
+        """Create QUBO instance equivalent to this but with a subset of
+        variables fixed (_clamped_) to constant values.
 
         Args:
-            partial_assignment (dict, optional): Dictionary mapping
-                variable indices (counting from 0) to constant values
-                0 or 1. Defaults to None, which does nothing and
-                returns a copy of this QUBO instance.
+            partial_assignment (dict, optional): Dictionary mapping variable
+                indices (counting from 0) to constant values 0 or 1. Defaults to
+                None, which does nothing and returns a copy of this QUBO
+                instance.
 
         Returns:
             qubo: Clamped QUBO instance.
-            const (float): Constant offset value, which must be added to the QUBO energy to obtain the original energy.
-            free (list): List of indices which the variable indices of the new QUBO instance correspond to (i.e., those indices that were not clamped).
+            const (float): Constant offset value, which must be added to the
+                QUBO energy to obtain the original energy.
+            free (list): List of indices which the variable indices of the new
+                QUBO instance correspond to (i.e., those indices that were not
+                clamped).
         """
         if partial_assignment is None:
             return self.copy(), 0, set(range(self.n))
@@ -369,13 +409,16 @@ class qubo:
 
     def dx(self, x: np.ndarray):
         """Discrete derivative w.r.t. ``x``.
-        The element at index ``i`` gives the QUBO energy change upon flipping the value of ``x[i]``.
-        
+        The element at index ``i`` gives the QUBO energy change upon flipping
+        the value of ``x[i]``.
+
         Args:
-            x (np.ndarray): Bit vector w.r.t. which the discrete derivative is calculated. Can be an array of multiple bit vectors.
+            x (np.ndarray): Bit vector w.r.t. which the discrete derivative is
+                calculated. Can be an array of multiple bit vectors.
 
         Returns:
-            numpy.ndarray: Vector of discrete derivatives of this QUBO instance w.r.t. ``x``.
+            numpy.ndarray: Vector of discrete derivatives of this QUBO instance
+                w.r.t. ``x``.
         """
         # 1st discrete derivatice
         m_  = np.triu(self.m, 1)
@@ -384,11 +427,13 @@ class qubo:
         return sign*(np.diag(self.m)+(m_ @ x.T).T)
 
     def dynamic_range(self, decibel=False):
-        """Calculate the dynamic range (DR) of the QUBO parameters,
-        i.e., the logarithmic ratio between the largest and the smallest difference between all pairs of unique parameter values.
+        """Calculate the dynamic range (DR) of the QUBO parameters, i.e., the
+        logarithmic ratio between the largest and the smallest difference
+        between all pairs of unique parameter values.
 
         Args:
-            decibel (bool, optional): If ``True``, outputs the DR in the unit decibels. Defaults to False, which outputs the DR in bits.
+            decibel (bool, optional): If ``True``, outputs the DR in the unit
+                decibels. Defaults to False, which outputs the DR in bits.
 
         Returns:
             float: Dynamic range value.
@@ -429,10 +474,12 @@ class qubo:
 
     def as_int(self, bits=32):
         """Scales and rounds the QUBO parameters to fit a given number of bits.
-        The number format is assumed to be signed integer, therefore ``b`` bits yields a value range of ``-2**(b-1)`` to ``2**(b-1)-1``.
+        The number format is assumed to be signed integer, therefore ``b`` bits
+        yields a value range of ``-2**(b-1)`` to ``2**(b-1)-1``.
 
         Args:
-            bits (int, optional): Number of bits to represent the parameters. Defaults to 32.
+            bits (int, optional): Number of bits to represent the parameters.
+                Defaults to 32.
 
         Returns:
             qubo: QUBO instance with scaled and rounded parameters.
@@ -445,32 +492,46 @@ class qubo:
         return qubo((self.m*factor).round())
 
     def partition_function(self, log=False, temp=1.0, fast=True):
-        """Calculate the partition function of the Ising model induced by this QUBO instance.
-        That is, return the sum of ``exp(-Q(x)/temp)`` over all bit vectors ``x``.
-        Note that this is infeasibly slow for QUBO sizes much larger than 20.
+        """Calculate the partition function of the Ising model induced by this
+        QUBO instance. That is, return the sum of ``exp(-Q(x)/temp)`` over all
+        bit vectors ``x``. Note that this is infeasibly slow for QUBO sizes much
+        larger than 20.
 
         Args:
-            log (bool, optional): Return the natural log of the partition function instead. Defaults to False.
-            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
-            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.
+            log (bool, optional): Return the natural log of the partition
+                function instead. Defaults to False.
+            temp (float, optional): Temperature parameter of the Gibbs
+                distribution. Defaults to 1.0.
+            fast (bool, optional): Internally create array of all bit vectors.
+                This is faster, but requiers memory space exponential in the
+                QUBO size. Defaults to True.
 
         Returns:
-            float: Value of the partition function, or the log partition function if ``log=True``.
+            float: Value of the partition function, or the log partition
+                function if ``log=True``.
         """
         Z = self.probabilities(temp=temp, unnormalized=True, fast=fast).sum()
         return np.log(Z) if log else Z
 
     def probabilities(self, temp=1.0, out=None, unnormalized=False, fast=True):
-        """Compute the complete vector of probabilities for observing a vector ``x`` under the Gibbs distribution induced by this QUBO instance.
-        The entries of the resulting array are sorted in lexicographic order by bit vector, e.g. for size 3: ``[000, 100, 010, 110, 001, 101, 011, 111]``.
-        Note that this method requires memory space exponential in QUBO size, which quickly becomes infeasible, depending on your system.
-        If ``n`` is the QUBO size, the output will have size ``2**n``.
+        """Compute the complete vector of probabilities for observing a vector
+        ``x`` under the Gibbs distribution induced by this QUBO instance. The
+        entries of the resulting array are sorted in lexicographic order by bit
+        vector, e.g. for size 3: ``[000, 100, 010, 110, 001, 101, 011, 111]``.
+        Note that this method requires memory space exponential in QUBO size,
+        which quickly becomes infeasible, depending on your system. If ``n`` is
+        the QUBO size, the output will have size ``2**n``.
         
         Args:
-            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
-            out (numpy.ndarray, optional): Array to write the probabilities to. Defaults to None, which creates a new array.
-            unnormalized (bool, optional): Return the unnormalized probabilities. Defaults to False.
-            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.
+            temp (float, optional): Temperature parameter of the Gibbs
+                distribution. Defaults to 1.0.
+            out (numpy.ndarray, optional): Array to write the probabilities to.
+                Defaults to None, which creates a new array.
+            unnormalized (bool, optional): Return the unnormalized
+                probabilities. Defaults to False.
+            fast (bool, optional): Internally create array of all bit vectors.
+                This is faster, but requiers memory space exponential in the
+                QUBO size. Defaults to True.
 
         Returns:
             numpy.ndarray: Array containing probabilities.
@@ -493,12 +554,17 @@ class qubo:
         return out/out.sum()
 
     def pairwise_marginals(self, temp=1.0, fast=True):
-        """Compute the marginal probabilities for each variable pair to assume the value (1, 1) under the Gibbs distribution induced by this QUBO instance.
-        Note that this operation's runtime is exponential in QUBO size.
+        """Compute the marginal probabilities for each variable pair to assume
+        the value (1, 1) under the Gibbs distribution induced by this QUBO
+        instance. Note that this operation's runtime is exponential in QUBO
+        size.
 
         Args:
-            temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
-            fast (bool, optional): Internally create array of all bit vectors. This is faster, but requiers memory space exponential in the QUBO size. Defaults to True.
+            temp (float, optional): Temperature parameter of the Gibbs
+                distribution. Defaults to 1.0.
+            fast (bool, optional): Internally create array of all bit vectors.
+                This is faster, but requiers memory space exponential in the
+                QUBO size. Defaults to True.
 
         Returns:
             numpy.ndarray: Upper triangular matrix of probabilities.
@@ -513,14 +579,13 @@ class qubo:
 
     def to_posiform(self):
         """Compute the unique posiform representation of this QUBO instance,
-        using the approach described in section 2.1 of [1].
-        The result is a tuple of an array ``P`` of shape ``(2, n, n)``, where ``n`` is the QUBO size,
-        and a constant offset value. All entries of the array are positive.
-        ``P[0]`` contains the coefficients for the literals ``Xi*Xj``, and ``Xi`` on the diagonal, while
-        ``P[1]`` contains the coefficients for ``Xi*!Xj`` (``!`` denoting negation), and ``!Xi`` on the diagonal.
-        See the paper for further infos.
-
-        [1] https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization
+        using the approach described in section 2.1 of `[1] <https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization>`__. The result is a
+        tuple of an array ``P`` of shape ``(2, n, n)``, where ``n`` is the QUBO
+        size, and a constant offset value. All entries of the array are
+        positive. ``P[0]`` contains the coefficients for the literals ``Xi*Xj``,
+        and ``Xi`` on the diagonal, while ``P[1]`` contains the coefficients for
+        ``Xi*!Xj`` (``!`` denoting negation), and ``!Xi`` on the diagonal. See
+        the paper for further infos.
 
         Returns:
             numpy.ndarray: Posiform coefficients (see above)
@@ -543,5 +608,42 @@ class qubo:
         const = lin_neg.sum()
         return posiform, const
 
-    def to_ising(self):
-        return NotImplemented
+    def to_ising(self, offset=0.0):
+        """Convert this QUBO instance to an Ising model with variables
+        :math:`\\boldsymbol s\\in\\lbrace -1,+1\\rbrace` instead of
+        :math:`\\boldsymbol x\\in\\lbrace 0,1\\rbrace`.
+
+        Args:
+            offset (float, optional): Constant offset value added to the energy.
+                Defaults to 0.0.
+
+        Returns:
+            Tuple containing
+
+            - linear coefficients (*external field*) with shape ``(n,)``
+            - quadratic coefficients (*interactions*) with shape ``(n, n)``
+            - new offset (float)
+        """
+        m_ = self.m + self.m.T
+        lin = 0.25*m_.sum(0)
+        qua = 0.25*np.triu(self.m, 1)
+        c = 0.25*(self.m.sum()+np.diag(self.m).sum())+offset
+        return lin, qua, c
+    
+
+def ordering_distance(Q1, Q2, X=None):
+    try:
+        from scipy.stats import kendalltau
+    except ImportError as e:
+        raise ImportError(
+            "scipy needs to be installed prior to running qubolite.ordering_distance(). You "
+            "can install scipy with:\n'pip install scipy'"
+        ) from e
+    assert Q1.n == Q2.n, 'QUBO instances must have the same dimension'
+    warn_size(Q1.n, limit=22)
+    if X is None:
+        X = all_bitvectors_array(Q1.n)
+    rnk1 = np.argsort(np.argsort(Q1(X)))
+    rnk2 = np.argsort(np.argsort(Q2(X)))
+    tau, _ = kendalltau(rnk1, rnk2)
+    return (1-tau)/2
