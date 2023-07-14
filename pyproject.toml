@@ -14,7 +14,6 @@ authors = [
 ]
 description = "Toolbox for quadratic binary optimization"
 readme = "README.md"
-homepage = 
 repository = "https://github.com/smuecke/qubolite"
 documentation = "https://smuecke.github.io/qubolite/api.html"
 requires-python = ">=3.8"
