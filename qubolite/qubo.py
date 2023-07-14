@@ -304,6 +304,18 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m), { i: k for k, i in names.items() }
 
+    @classmethod
+    def from_ising(cls, linear, quadratic, offset=0.0):
+        lin = np.asarray(linear)
+        qua = np.asarray(quadratic)
+        n, = lin.shape
+        assert qua.shape == (n, n), '`linear` and `quadratic` must have shapes (n,) and (n, n)'
+        qua_symm = np.tril(qua, -1).T + np.triu(qua, 1) + qua
+        m  = 2*np.diag(qua.sum(0)+lin)
+        m -= 4*np.triu(qua_symm, 1)
+        return cls(m)
+
+
     def spectral_gap(self, return_optimum=False):
         """Calculate the spectral gap of this QUBO instance.
         Here, this is defined as the difference between the lowest and second-to lowest QUBO energy value across all bit vectors.
@@ -530,3 +542,6 @@ class qubo:
         posiform[0][diag_ix] = np.maximum(lin_, 0)
         const = lin_neg.sum()
         return posiform, const
+
+    def to_ising(self):
+        return NotImplemented
