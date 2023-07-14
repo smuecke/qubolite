@@ -7,15 +7,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qubolite"
-version = "0.8"
+version = "0.8.1"
 authors = [
     { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" },
     { name = "Thore Gerlach", email="thore.gerlach@iais.fraunhofer.de" }
 ]
 description = "Toolbox for quadratic binary optimization"
 readme = "README.md"
-repository = "https://github.com/smuecke/qubolite"
-documentation = "https://smuecke.github.io/qubolite/api.html"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3"
@@ -26,6 +24,7 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://github.com/smuecke/qubolite"
+"Documentation" = "https://smuecke.github.io/qubolite"
 
 [project.optional-dependencies]
 roof_dual = [
