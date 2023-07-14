@@ -137,7 +137,8 @@ class SubsetSum(qubo_embedding):
     """
     def __init__(self, values, target):
         self.__values = np.asarray(values)
-        self.__Q = self.__from_data(self.__values, target)
+        self.__target = target
+        self.__Q = self.__from_data(values, target)
 
     @property
     def qubo(self):
@@ -159,10 +160,13 @@ class SubsetSum(qubo_embedding):
         return self.__values[x.astype(bool)]
 
     @classmethod
-    def random(cls, n: int, low=0, high=10, summands=None, random_state=None):
+    def random(cls, n: int, low=-100, high=100,
+               summands=None, random_state=None):
         npr = get_random_state(random_state)
-        values = npr.uniform(low, high, size=n)
-        k = np.arange(2, n + 1) if summands is None else summands
+        values = np.zeros(n)
+        while np.any(np.isclose(values, 0)):
+            values = npr.uniform(low, high, size=n).round(2)
+        k = round(npr.triangular(0.1*n, 0.5*n, 0.9*n)) if summands is None else summands
         subset = npr.permutation(n) < k
         target = values[subset].sum()
         return cls(values, target)
