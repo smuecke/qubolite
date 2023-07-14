@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qubolite"
-version = "0.8"
+version = "0.8.1"
 authors = [
     { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" },
     { name = "Thore Gerlach", email="thore.gerlach@iais.fraunhofer.de" }
