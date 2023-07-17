@@ -1,3 +1,5 @@
+from itertools import cycle
+
 import numpy as np
 
 from ._misc import get_random_state, warn_size
@@ -139,6 +141,40 @@ def local_descent(Q: qubo, x=None, random_state=None):
     return x_, Q(x_)
 
 
+def local_descent_search(Q: qubo, steps=1000, random_state=None):
+    """Perform local descent in a multistart fashion and return the lowest
+    observed bit vector.
+
+    Args:
+        Q (qubo): QUBO instance.
+        steps (int, optional): Number of multistarts. Defaults to 1000.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
+
+    Returns:
+        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
+        energy (float).
+    """
+    rng = get_random_state(random_state)
+    x_min = np.empty(Q.n)
+    y_min = np.infty
+    x = np.empty(Q.n)
+    for _ in range(steps):
+        x[:] = rng.random(Q.n) < 0.5
+        while True:
+            Δx = Q.dx(x)
+            am = np.argmin(Δx, axis=-1)
+            if Δx[am] < 0:
+                x[am] = 1 - x[am]
+            else:
+                break
+        y = Q(x)
+        if y <= y_min:
+            x_min[:] = x
+            y_min = y
+    return x_min, y_min
+
+
 def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
     """Perform a random search in the space of bit vectors and return the
     lowest-energy solution found.
@@ -202,7 +238,7 @@ def subspace_search(Q: qubo, steps=1000, random_state=None):
     for _ in range(steps):
         # fix random subset of n - log(n) variables
         rng.shuffle(variables)
-        fixed  = variables[:Q.n-log_n]
+        fixed = variables[:Q.n-log_n]
         Q_sub, _, free = Q.clamp(dict(zip(fixed, x[fixed])))
         # find optimum in subspace by brute force
         x_sub_opt, *_ = _brute_force_c(Q_sub.m)
