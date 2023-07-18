@@ -226,3 +226,42 @@ def from_expression(expr: str):
             else:
                 x[:,i] = x[:,ix]
     return x
+
+
+# Manipulate Bit Vectors
+# ======================
+
+def flip_index(x, index, in_place=False):
+    """Flips the values of a given bit vector at the specified index or indices.
+
+    Args:
+        x (numpy.ndarray): Bit vector(s).
+        index (int | list | numpy.ndarray): Index or list of indices where to
+            flip the binary values.
+        in_place (bool, optional): If ``True``, modify the bit vector in place.
+            The return value will be a reference to the input array. Defaults to
+            False.
+
+    Returns:
+        numpy.ndarray: Bit vector(s) with the indices flipped at the specified
+            positions. If ``in_place=True``, this will be a reference to the
+            input array, otherwise a copy.
+
+    Examples:
+        The following inverts the first and last bits of all given bitvectors:
+
+        >>> x = from_expression('**10')
+        >>> x
+        array([[0., 0., 1., 0.],
+               [1., 0., 1., 0.],
+               [0., 1., 1., 0.],
+               [1., 1., 1., 0.]])
+        >>> flip_index(x, [0, -1])
+        array([[1., 0., 1., 1.],
+               [0., 0., 1., 1.],
+               [1., 1., 1., 1.],
+               [0., 1., 1., 1.]])
+    """
+    x_ = x if in_place else x.copy()
+    x_[..., index] = 1-x_[..., index]
+    return x_

@@ -408,9 +408,8 @@ class qubo:
         return qubo(R[free,:][:,free]), const, free
 
     def dx(self, x: np.ndarray):
-        """Discrete derivative w.r.t. ``x``.
-        The element at index ``i`` gives the QUBO energy change upon flipping
-        the value of ``x[i]``.
+        """Discrete derivative w.r.t. ``x``: The element at index ``i`` gives
+        the QUBO energy change upon flipping the value of ``x[i]``.
 
         Args:
             x (np.ndarray): Bit vector w.r.t. which the discrete derivative is
@@ -420,11 +419,35 @@ class qubo:
             numpy.ndarray: Vector of discrete derivatives of this QUBO instance
                 w.r.t. ``x``.
         """
-        # 1st discrete derivatice
         m_  = np.triu(self.m, 1)
         m_ += m_.T
         sign = 1-2*x
         return sign*(np.diag(self.m)+(m_ @ x.T).T)
+        
+
+    def dx2(self, x: np.ndarray):
+        """2nd discrete derivative w.r.t. ``x``: Returns a matrix where the
+        element at index ``(i, j)`` gives the QUBO energy change upon flipping
+        both ``x[i]`` and ``x[j]`` simultaneously. The 1st discrete derivative
+        is along the diagonal.
+
+        Args:
+            x (np.ndarray): Bit vector w.r.t. which the discrete derivative is
+                calculated. Must have shape ``(n,)``.
+
+        Returns:
+            numpy.ndarray: Array of shape ``(n, n)`` containing the 2nd discrete
+                derivatives of this QUBO instance w.r.t. ``x``.
+
+        Examples:
+            Let ``Δ = Q.dx2(x)``, then ``Δ[i, j]`` is the same as
+            ``Q(flip_index(x, [i, j])) - Q(x)`` (see :func:`qubolite.bitvec.flip_index`).
+        """
+        dx = self.dx(x)
+        s = 2*x-1
+        m = s*s[:, np.newaxis]*self.m+(dx+dx[:, np.newaxis])
+        return np.triu(m, 1)+np.diag(dx)
+        # TODO: Vectorize this
 
     def dynamic_range(self, decibel=False):
         """Calculate the dynamic range (DR) of the QUBO parameters, i.e., the
