@@ -226,7 +226,7 @@ def local2_descent_search(Q: qubo, steps=1000, random_state=None):
     for _ in range(steps):
         x[:] = rng.random(Q.n) < 0.5
         while True:
-            Δx = Q.dx(x) # (n, n) matrix
+            Δx = Q.dx2(x) # (n, n) matrix
             i, j = np.unravel_index(np.argmin(Δx), Δx.shape)
             if Δx[i, j] >= 0:
                 break
