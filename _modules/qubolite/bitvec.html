@@ -233,6 +233,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
+<span class="kn">from</span> <span class="nn">._misc</span> <span class="kn">import</span> <span class="n">get_random_state</span>
+
 
 <div class="viewcode-block" id="all_bitvectors"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.all_bitvectors">[docs]</a><span class="k">def</span> <span class="nf">all_bitvectors</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate all bit vectors of size ``n`` in lexicographical order, starting from all zeros.</span>
@@ -279,6 +281,30 @@ document.write(`
 <span class="sd">        numpy.ndarray: Array of shape ``(2**n, n)``</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="random"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.random">[docs]</a><span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an array containing random bit vectors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        n (int): Number of bits per bit vector.</span>
+<span class="sd">        size (int | tuple, optional): Number of bit vectors to sample, or tuple</span>
+<span class="sd">            representing a shape. Defaults to None, which returns a single bit</span>
+<span class="sd">            vector (shape ``(n,)``).</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: Random bit vector(s).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="p">()</span> <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">size</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="c1"># `size` must be an integer</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="from_string"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_string">[docs]</a><span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -430,6 +456,45 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">x</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span><span class="n">ix</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">x</span></div>
+
+
+<span class="c1"># Manipulate Bit Vectors</span>
+<span class="c1"># ======================</span>
+
+<div class="viewcode-block" id="flip_index"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.flip_index">[docs]</a><span class="k">def</span> <span class="nf">flip_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Flips the values of a given bit vector at the specified index or indices.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        x (numpy.ndarray): Bit vector(s).</span>
+<span class="sd">        index (int | list | numpy.ndarray): Index or list of indices where to</span>
+<span class="sd">            flip the binary values.</span>
+<span class="sd">        in_place (bool, optional): If ``True``, modify the bit vector in place.</span>
+<span class="sd">            The return value will be a reference to the input array. Defaults to</span>
+<span class="sd">            False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        numpy.ndarray: Bit vector(s) with the indices flipped at the specified</span>
+<span class="sd">            positions. If ``in_place=True``, this will be a reference to the</span>
+<span class="sd">            input array, otherwise a copy.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        The following inverts the first and last bits of all given bitvectors:</span>
+
+<span class="sd">        &gt;&gt;&gt; x = from_expression(&#39;**10&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; x</span>
+<span class="sd">        array([[0., 0., 1., 0.],</span>
+<span class="sd">               [1., 0., 1., 0.],</span>
+<span class="sd">               [0., 1., 1., 0.],</span>
+<span class="sd">               [1., 1., 1., 0.]])</span>
+<span class="sd">        &gt;&gt;&gt; flip_index(x, [0, -1])</span>
+<span class="sd">        array([[1., 0., 1., 1.],</span>
+<span class="sd">               [0., 0., 1., 1.],</span>
+<span class="sd">               [1., 1., 1., 1.],</span>
+<span class="sd">               [0., 1., 1., 1.]])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_</span> <span class="o">=</span> <span class="n">x</span> <span class="k">if</span> <span class="n">in_place</span> <span class="k">else</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">x_</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">x_</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">index</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x_</span></div>
 </pre></div>
 
                 </article>

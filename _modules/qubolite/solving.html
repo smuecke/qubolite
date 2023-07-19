@@ -230,24 +230,26 @@ document.write(`
   <h1>Source code for qubolite.solving</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">._misc</span> <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">warn_size</span>
-<span class="kn">from</span> <span class="nn">.qubo</span> <span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span> <span class="nn">._misc</span>   <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">warn_size</span>
+<span class="kn">from</span> <span class="nn">.bitvec</span>  <span class="kn">import</span> <span class="n">flip_index</span>
+<span class="kn">from</span> <span class="nn">.qubo</span>    <span class="kn">import</span> <span class="n">qubo</span>
 <span class="kn">from</span> <span class="nn">_c_utils</span> <span class="kn">import</span> <span class="n">brute_force</span> <span class="k">as</span> <span class="n">_brute_force_c</span>
 
 
 <div class="viewcode-block" id="brute_force"><a class="viewcode-back" href="../../api.html#qubolite.solving.brute_force">[docs]</a><span class="k">def</span> <span class="nf">brute_force</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve QUBO instance exactly by brute force.</span>
-<span class="sd">    Note that this method is infeasible for instances</span>
-<span class="sd">    with a size beyond around 30.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve QUBO instance exactly by brute force. Note that this method is</span>
+<span class="sd">    infeasible for instances with a size beyond around 30.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        Q (qubo): QUBO instance to solve.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ValueError: Raised if the QUBO size is too large to be brute-forced on the present system.</span>
+<span class="sd">        ValueError: Raised if the QUBO size is too large to be brute-forced on</span>
+<span class="sd">            the present system.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</span>
+<span class="sd">        A tuple containing the minimizing vector (numpy.ndarray) and the minimal</span>
+<span class="sd">        energy (float).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">warn_size</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
@@ -264,29 +266,37 @@ document.write(`
                         <span class="n">init_temp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">n_parallel</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                         <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs simulated annealing to approximate the minimizing</span>
-<span class="sd">    vector and minimal energy of a given QUBO instance.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs simulated annealing to approximate the minimizing vector and</span>
+<span class="sd">    minimal energy of a given QUBO instance.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        Q (qubo): QUBO instance.</span>
-<span class="sd">        schedule (str, optional): The annealing schedule to employ.</span>
-<span class="sd">            Possible values are: ``2+`` (quadratic additive), ``2*`` (quadratic multiplicative),</span>
-<span class="sd">            ``e+`` (exponential additive) and ``e*`` (exponential multiplicative).</span>
-<span class="sd">            See `here &lt;http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/&gt;`__  for further infos. Defaults to &#39;2+&#39;.</span>
-<span class="sd">        halftime (float, optional): For multiplicative schedules only:</span>
-<span class="sd">            The percentage of steps after which the temperature is halved. Defaults to 0.25.</span>
-<span class="sd">        steps (int, optional): Number of annealing steps to perform. Defaults to 100_000.</span>
-<span class="sd">        init_temp (float, optional): Initial temperature. Defaults to None, which estimates an initial temperature.</span>
-<span class="sd">        n_parallel (int, optional): Number of random initial solutions to anneal simultaneously. Defaults to 10.</span>
-<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.</span>
+<span class="sd">        schedule (str, optional): The annealing schedule to employ. Possible</span>
+<span class="sd">            values are: ``2+`` (quadratic additive), ``2*`` (quadratic</span>
+<span class="sd">            multiplicative), ``e+`` (exponential additive) and ``e*``</span>
+<span class="sd">            (exponential multiplicative). See</span>
+<span class="sd">            `here &lt;http://what-when-how.com/artificial-intelligence/a-comparison-of-cooling-schedules-for-simulated-annealing-artificial-intelligence/&gt;`__ </span>
+<span class="sd">            for further infos. Defaults to &#39;2+&#39;.</span>
+<span class="sd">        halftime (float, optional): For multiplicative schedules only: The</span>
+<span class="sd">            percentage of steps after which the temperature is halved. Defaults</span>
+<span class="sd">            to 0.25.</span>
+<span class="sd">        steps (int, optional): Number of annealing steps to perform. Defaults to</span>
+<span class="sd">            100_000.</span>
+<span class="sd">        init_temp (float, optional): Initial temperature. Defaults to None,</span>
+<span class="sd">            which estimates an initial temperature.</span>
+<span class="sd">        n_parallel (int, optional): Number of random initial solutions to anneal</span>
+<span class="sd">            simultaneously. Defaults to 10.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: Raised if the specificed schedule is unknown.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple ``(x, y)`` containing the solution bit vectors and their respective energies.</span>
-<span class="sd">        The shape of ``x`` is ``(n_parallel, n)``, where ``n`` is the QUBO size; the shape of ``y``</span>
-<span class="sd">        is ``(n_parallel,)``. Bit vector ``x[i]`` has energy ``y[i]`` for each ``i``.</span>
+<span class="sd">        A tuple ``(x, y)`` containing the solution bit vectors and their</span>
+<span class="sd">        respective energies. The shape of ``x`` is ``(n_parallel, n)``, where</span>
+<span class="sd">        ``n`` is the QUBO size; the shape of ``y`` is ``(n_parallel,)``. Bit</span>
+<span class="sd">        vector ``x[i]`` has energy ``y[i]`` for each ``i``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">npr</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">init_temp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -305,14 +315,13 @@ document.write(`
 
     <span class="c1"># setup cooling schedule</span>
     <span class="k">if</span> <span class="n">schedule</span> <span class="o">==</span> <span class="s1">&#39;e+&#39;</span><span class="p">:</span>
-        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span> <span class="o">/</span> <span class="p">(</span>
-                    <span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">init_temp</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)))</span>
+        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">init_temp</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)))</span>
     <span class="k">elif</span> <span class="n">schedule</span> <span class="o">==</span> <span class="s1">&#39;2+&#39;</span><span class="p">:</span>
-        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
     <span class="k">elif</span> <span class="n">schedule</span> <span class="o">==</span> <span class="s1">&#39;e*&#39;</span><span class="p">:</span>
-        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">halftime</span><span class="p">))</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span><span class="o">*</span><span class="p">(</span><span class="mf">0.5</span><span class="o">**</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">halftime</span><span class="p">))</span><span class="o">**</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">schedule</span> <span class="o">==</span> <span class="s1">&#39;2*&#39;</span><span class="p">:</span>
-        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">halftime</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">temps</span> <span class="o">=</span> <span class="n">init_temp</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">halftime</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">steps</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown schedule; must be one of {e*, 2*, e+, 2+}.&#39;</span><span class="p">)</span>
 
@@ -332,50 +341,151 @@ document.write(`
 
 
 <div class="viewcode-block" id="local_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent">[docs]</a><span class="k">def</span> <span class="nf">local_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Starting from a given bit vector, find improvements in the</span>
-<span class="sd">    1-neighborhood and follow them until a local optimum is found.</span>
-<span class="sd">    If no initial vector is specified, a random vector is sampled.</span>
-<span class="sd">    At each step, the method greedily flips the bit that yields</span>
-<span class="sd">    greatest energy improvement.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Starting from a given bit vector, find improvements in the 1-neighborhood</span>
+<span class="sd">    and follow them until a local optimum is found. If no initial vector is</span>
+<span class="sd">    specified, a random vector is sampled. At each step, the method greedily</span>
+<span class="sd">    flips the bit that yields the greatest energy improvement.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        Q (qubo): QUBO instance.</span>
 <span class="sd">        x (numpy.ndarray, optional): Initial bit vector. Defaults to None.</span>
-<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</span>
+<span class="sd">        A tuple containing the bit vector (numpy.ndarray) with lowest energy</span>
+<span class="sd">        found, and its energy (float).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
         <span class="n">x_</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">x_</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span>
-    <span class="n">am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">)</span>
-    <span class="k">while</span> <span class="n">Δx</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">x_</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x_</span><span class="p">[</span><span class="n">am</span><span class="p">]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span>
         <span class="n">am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Δx</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">x_</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x_</span><span class="p">[</span><span class="n">am</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">x_</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="local2_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent">[docs]</a><span class="k">def</span> <span class="nf">local2_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Starting from a given bit vector, find improvements in the 2-neighborhood</span>
+<span class="sd">    and follow them until a local optimum is found. If no initial vector is</span>
+<span class="sd">    specified, a random vector is sampled. At each step, the method greedily</span>
+<span class="sd">    flips up to two bits that yield the greatest energy improvement.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubo): QUBO instance.</span>
+<span class="sd">        x (numpy.ndarray, optional): Initial bit vector. Defaults to None.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing the bit vector (numpy.ndarray) with lowest energy</span>
+<span class="sd">        found, and its energy (float).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="n">x_</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x_</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx2</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span> <span class="c1"># (n, n) matrix</span>
+    <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">),</span> <span class="n">Δx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx2</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">),</span> <span class="n">Δx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Δx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">flip_index</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x_</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="local_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent_search">[docs]</a><span class="k">def</span> <span class="nf">local_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform local descent in a multistart fashion and return the lowest</span>
+<span class="sd">    observed bit vector. Use the 1-neighborhood as search radius.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubo): QUBO instance.</span>
+<span class="sd">        steps (int, optional): Number of multistarts. Defaults to 1000.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing the bit vector (numpy.ndarray) with lowest energy</span>
+<span class="sd">        found, and its energy (float).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">infty</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (n,) vector</span>
+            <span class="n">am</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Δx</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">am</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">am</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">y_min</span><span class="p">:</span>
+            <span class="n">x_min</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">y_min</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span></div>
+
+
+<div class="viewcode-block" id="local2_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent_search">[docs]</a><span class="k">def</span> <span class="nf">local2_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform local descent in a multistart fashion and return the lowest</span>
+<span class="sd">    observed bit vector. Use the 2-neighborhood as search radius.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubo): QUBO instance.</span>
+<span class="sd">        steps (int, optional): Number of multistarts. Defaults to 1000.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing the bit vector (numpy.ndarray) with lowest energy</span>
+<span class="sd">        found, and its energy (float).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">infty</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">Δx</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">dx2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (n, n) matrix</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">Δx</span><span class="p">),</span> <span class="n">Δx</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">Δx</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">flip_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">y_min</span><span class="p">:</span>
+            <span class="n">x_min</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">y_min</span> <span class="o">=</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span></div>
+
+
 <div class="viewcode-block" id="random_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.random_search">[docs]</a><span class="k">def</span> <span class="nf">random_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100_000</span><span class="p">,</span> <span class="n">n_parallel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform a random search in the space of bit vectors and return</span>
-<span class="sd">    the lowest-energy solution found.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform a random search in the space of bit vectors and return the</span>
+<span class="sd">    lowest-energy solution found.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        Q (qubo): QUBO instance.</span>
 <span class="sd">        steps (int, optional): Number of steps to perform. Defaults to 100_000.</span>
-<span class="sd">        n_parallel (int, optional): Number of random bit vectors to sample at a time.</span>
-<span class="sd">            This does *not* increase the number of bit vectors sampled in total</span>
-<span class="sd">            (specified by ``steps``), but makes the procedure faster by using NumPy</span>
-<span class="sd">            vectorization. Defaults to None, which chooses a value such that the</span>
-<span class="sd">            resulting bit vector array has about 32k elements.</span>
-<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.</span>
+<span class="sd">        n_parallel (int, optional): Number of random bit vectors to sample at a</span>
+<span class="sd">            time. This does *not* increase the number of bit vectors sampled in</span>
+<span class="sd">            total (specified by ``steps``), but makes the procedure faster by</span>
+<span class="sd">            using NumPy vectorization. Defaults to None, which chooses a value</span>
+<span class="sd">            such that the resulting bit vector array has about 32k elements.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A tuple containing the minimizing vector (numpy.ndarray) and the minimal energy (float).</span>
+<span class="sd">        A tuple containing the bit vector (numpy.ndarray) with lowest energy</span>
+<span class="sd">        found, and its energy (float).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">n_parallel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -395,6 +505,39 @@ document.write(`
             <span class="n">y_min</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i_min</span><span class="p">]</span>
         <span class="n">remaining</span> <span class="o">-=</span> <span class="n">r</span>
     <span class="k">return</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span></div>
+
+
+<div class="viewcode-block" id="subspace_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.subspace_search">[docs]</a><span class="k">def</span> <span class="nf">subspace_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform search heuristic where :math:`n-\\log_2(n)` randomly selected</span>
+<span class="sd">    variables are fixed and the remaining :math:`\\log_2(n)` bits are solved by</span>
+<span class="sd">    brute force. The current solution is updated with the optimal sub-vector</span>
+<span class="sd">    assignment, and the process is repeated.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubo): QUBO instance.</span>
+<span class="sd">        steps (int, optional): Number of repetitions. Defaults to 1000.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random</span>
+<span class="sd">            generator. Defaults to None.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A tuple containing the minimizing vector (numpy.ndarray) and the minimal</span>
+<span class="sd">        energy (float).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">log_n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="c1"># sample random initial solution</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+        <span class="c1"># fix random subset of n - log(n) variables</span>
+        <span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+        <span class="n">fixed</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[:</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="o">-</span><span class="n">log_n</span><span class="p">]</span>
+        <span class="n">Q_sub</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">free</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">fixed</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">fixed</span><span class="p">])))</span>
+        <span class="c1"># find optimum in subspace by brute force</span>
+        <span class="n">x_sub_opt</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">_brute_force_c</span><span class="p">(</span><span class="n">Q_sub</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="c1"># set variables in current solution to subspace-optimal bits</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">free</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_sub_opt</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>
