@@ -1,9 +1,8 @@
-from itertools import cycle
-
 import numpy as np
 
-from ._misc import get_random_state, warn_size
-from .qubo import qubo
+from ._misc   import get_random_state, warn_size
+from .bitvec  import flip_index
+from .qubo    import qubo
 from _c_utils import brute_force as _brute_force_c
 
 
@@ -20,7 +19,7 @@ def brute_force(Q: qubo):
 
     Returns:
         A tuple containing the minimizing vector (numpy.ndarray) and the minimal
-            energy (float).
+        energy (float).
     """
     warn_size(Q.n, limit=30)
     try:
@@ -115,7 +114,7 @@ def local_descent(Q: qubo, x=None, random_state=None):
     """Starting from a given bit vector, find improvements in the 1-neighborhood
     and follow them until a local optimum is found. If no initial vector is
     specified, a random vector is sampled. At each step, the method greedily
-    flips the bit that yields greatest energy improvement.
+    flips the bit that yields the greatest energy improvement.
 
     Args:
         Q (qubo): QUBO instance.
@@ -124,26 +123,58 @@ def local_descent(Q: qubo, x=None, random_state=None):
             generator. Defaults to None.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
-        energy (float).
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
     """
     if x is None:
         rng = get_random_state(random_state)
         x_ = rng.random(Q.n) < 0.5
     else:
         x_ = x.copy()
-    Δx = Q.dx(x_)
-    am = np.argmin(Δx)
-    while Δx[am] < 0:
-        x_[am] = 1 - x_[am]
+    while True:
         Δx = Q.dx(x_)
         am = np.argmin(Δx)
+        if Δx[am] >= 0:
+            break
+        x_[am] = 1 - x_[am]
+    return x_, Q(x_)
+
+
+def local2_descent(Q: qubo, x=None, random_state=None):
+    """Starting from a given bit vector, find improvements in the 2-neighborhood
+    and follow them until a local optimum is found. If no initial vector is
+    specified, a random vector is sampled. At each step, the method greedily
+    flips up to two bits that yield the greatest energy improvement.
+
+    Args:
+        Q (qubo): QUBO instance.
+        x (numpy.ndarray, optional): Initial bit vector. Defaults to None.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
+
+    Returns:
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
+    """
+    if x is None:
+        rng = get_random_state(random_state)
+        x_ = rng.random(Q.n) < 0.5
+    else:
+        x_ = x.copy()
+    Δx = Q.dx2(x_) # (n, n) matrix
+    i, j = np.unravel_index(np.argmin(Δx), Δx.shape)
+    while True:
+        Δx = Q.dx2(x_)
+        i, j = np.unravel_index(np.argmin(Δx), Δx.shape)
+        if Δx[i, j] >= 0:
+            break
+        flip_index(x_, [i, j], in_place=True)
     return x_, Q(x_)
 
 
 def local_descent_search(Q: qubo, steps=1000, random_state=None):
     """Perform local descent in a multistart fashion and return the lowest
-    observed bit vector.
+    observed bit vector. Use the 1-neighborhood as search radius.
 
     Args:
         Q (qubo): QUBO instance.
@@ -152,8 +183,8 @@ def local_descent_search(Q: qubo, steps=1000, random_state=None):
             generator. Defaults to None.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
-        energy (float).
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
     """
     rng = get_random_state(random_state)
     x_min = np.empty(Q.n)
@@ -162,12 +193,44 @@ def local_descent_search(Q: qubo, steps=1000, random_state=None):
     for _ in range(steps):
         x[:] = rng.random(Q.n) < 0.5
         while True:
-            Δx = Q.dx(x)
+            Δx = Q.dx(x) # (n,) vector
             am = np.argmin(Δx, axis=-1)
-            if Δx[am] < 0:
-                x[am] = 1 - x[am]
-            else:
+            if Δx[am] >= 0:
                 break
+            x[am] = 1 - x[am]
+        y = Q(x)
+        if y <= y_min:
+            x_min[:] = x
+            y_min = y
+    return x_min, y_min
+
+
+def local2_descent_search(Q: qubo, steps=1000, random_state=None):
+    """Perform local descent in a multistart fashion and return the lowest
+    observed bit vector. Use the 2-neighborhood as search radius.
+
+    Args:
+        Q (qubo): QUBO instance.
+        steps (int, optional): Number of multistarts. Defaults to 1000.
+        random_state (optional): A numerical or lexical seed, or a NumPy random
+            generator. Defaults to None.
+
+    Returns:
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
+    """
+    rng = get_random_state(random_state)
+    x_min = np.empty(Q.n)
+    y_min = np.infty
+    x = np.empty(Q.n)
+    for _ in range(steps):
+        x[:] = rng.random(Q.n) < 0.5
+        while True:
+            Δx = Q.dx(x) # (n, n) matrix
+            i, j = np.unravel_index(np.argmin(Δx), Δx.shape)
+            if Δx[i, j] >= 0:
+                break
+            flip_index(x, [i, j], in_place=True)
         y = Q(x)
         if y <= y_min:
             x_min[:] = x
@@ -191,8 +254,8 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
             generator. Defaults to None.
 
     Returns:
-        A tuple containing the minimizing vector (numpy.ndarray) and the minimal
-        energy (float).
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
     """
     rng = get_random_state(random_state)
     if n_parallel is None:
@@ -215,10 +278,10 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
 
 
 def subspace_search(Q: qubo, steps=1000, random_state=None):
-    """Perform search heuristic where n-log2(n) randomly selected variables are
-    fixed and the remaining log2(n) bits are solved by brute force. The current
-    solution is updated with the optimal sub-vector assignment, and the process
-    is repeated.
+    """Perform search heuristic where :math:`n-\\log_2(n)` randomly selected
+    variables are fixed and the remaining :math:`\\log_2(n)` bits are solved by
+    brute force. The current solution is updated with the optimal sub-vector
+    assignment, and the process is repeated.
 
     Args:
         Q (qubo): QUBO instance.

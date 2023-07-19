@@ -4,8 +4,8 @@ from functools   import cached_property
 
 import numpy as np
 
+from ._misc  import get_random_state, set_suffix
 from .bitvec import all_bitvectors_array, from_string, to_string
-from ._misc   import get_random_state, set_suffix
 
 
 class BinarySample:

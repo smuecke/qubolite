@@ -103,6 +103,7 @@ The complete API documentation can be found [here](https://smuecke.github.io/qub
 * **0.7** Added more efficient brute-force implementation using C extension; added optional dependencies for calculating bounds and ordering distance
 * **0.8** New embeddings, new solving methods; switched to NumPy random generators from `RandomState`; added parameter compression for dynamic range reduction; Added documentation
     * **0.8.1** some fixes to documentation
+    * **0.8.2** implemented `qubo.dx2()`; added several new solving heuristics
 
 ## License
 
