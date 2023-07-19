@@ -110,14 +110,14 @@ class BinarySample:
         return np.triu(X.T @ X)
 
     def hellinger_distance(self, other):
-        """`Hellinger distance <https://en.wikipedia.org/wiki/Hellinger_distance#Discrete_distributions>`__ between this sample and another.
-        The Hellinger distance between two discrete probability
-        distributions :math:`p` and :math:`q` is defined as
+        """`Hellinger distance <https://en.wikipedia.org/wiki/Hellinger_distance#Discrete_distributions>`__
+        between this sample and another. The Hellinger distance between two
+        discrete probability distributions :math:`p` and :math:`q` is defined as
         
         :math:`\\frac{1}{\\sqrt{2}}\\sqrt{\\sum_{x\\in\\lbrace 0,1\\rbrace^n}(\\sqrt{p(x)}-\\sqrt{q(x)})^2}`.
         
-        In contrast to KL divergence, Hellinger distance is an
-        actual distance, in that it is symmetrical.
+        In contrast to KL divergence, Hellinger distance is an actual distance,
+        in that it is symmetrical.
 
         Args:
             other (BinarySample): Binary sample to compare against.

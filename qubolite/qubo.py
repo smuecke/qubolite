@@ -1,7 +1,7 @@
 import struct
-from functools import reduce
 
 import numpy as np
+from numpy import newaxis as na
 
 from .bitvec  import all_bitvectors, all_bitvectors_array
 from ._misc    import get_random_state, is_triu, warn_size
@@ -314,6 +314,28 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m), { i: k for k, i in names.items() }
 
+    def to_ising(self, offset=0.0):
+        """Convert this QUBO instance to an Ising model with variables
+        :math:`\\boldsymbol s\\in\\lbrace -1,+1\\rbrace` instead of
+        :math:`\\boldsymbol x\\in\\lbrace 0,1\\rbrace`.
+
+        Args:
+            offset (float, optional): Constant offset value added to the energy.
+                Defaults to 0.0.
+
+        Returns:
+            Tuple containing
+
+            - linear coefficients (*external field*) with shape ``(n,)``
+            - quadratic coefficients (*interactions*) with shape ``(n, n)``
+            - new offset (float)
+        """
+        m_ = self.m + self.m.T
+        lin = 0.25*m_.sum(0)
+        qua = 0.25*np.triu(self.m, 1)
+        c = 0.25*(self.m.sum()+np.diag(self.m).sum())+offset
+        return lin, qua, c
+
     @classmethod
     def from_ising(cls, linear, quadratic, offset=0.0):
         """Create QUBO instance from Ising model parameters. In an Ising model,
@@ -347,6 +369,15 @@ class qubo:
         c = qua.sum()-lin.sum()+offset
         return cls(m), c
 
+    def unique_parameters(self):
+        """Return the unique parameter values of this QUBO instance.
+
+        Returns:
+            numpy.ndarray: Array containing the unique parameter values, sorted
+                in ascending order.
+        """
+        mask = np.triu_indices_from(self.m)
+        return np.unique(self.m[mask])
 
     def spectral_gap(self, return_optimum=False):
         """Calculate the spectral gap of this QUBO instance. Here, this is
@@ -443,11 +474,11 @@ class qubo:
             Let ``Δ = Q.dx2(x)``, then ``Δ[i, j]`` is the same as
             ``Q(flip_index(x, [i, j])) - Q(x)`` (see :func:`qubolite.bitvec.flip_index`).
         """
-        dx = self.dx(x)
-        s = 2*x-1
-        m = s*s[:, np.newaxis]*self.m+(dx+dx[:, np.newaxis])
-        return np.triu(m, 1)+np.diag(dx)
-        # TODO: Vectorize this
+        dx = self.dx(x) # (m, n)
+        s = 2*x-1       # (m, n)
+        S = s[..., na] * s[..., na, :] * self.m
+        D = dx[..., na] + dx[..., na, :]
+        return np.triu(D+S, 1) + dx[..., na] * np.eye(self.n)
 
     def dynamic_range(self, decibel=False):
         """Calculate the dynamic range (DR) of the QUBO parameters, i.e., the
@@ -461,7 +492,7 @@ class qubo:
         Returns:
             float: Dynamic range value.
         """
-        params = np.sort(np.unique(np.r_[self.m[np.triu_indices_from(self.m)], 0]))
+        params = np.unique(self.m) # <- doing this includes 0; result is sorted
         max_diff = params[-1]-params[0]
         min_diff = np.min(params[1:]-params[:-1])
         r = max_diff/min_diff
@@ -474,7 +505,7 @@ class qubo:
         Returns:
             float: largest parameter by absolute value.
         """
-        return np.max(np.abs(self.m))
+        return np.max(np.abs(self.unique_parameters()))
 
     def round(self, *args):
         """Rounds the QUBO parameters to the nearest integers.
@@ -564,7 +595,7 @@ class qubo:
         else:
             assert out.shape == (1<<self.n,), f'out array has wrong shape, ({1<<self.n},) expected'
         if fast:
-            # builds the entire (2**n, n)-array of n-bit vectors
+            # builds the entire (2**n, n) array of n-bit vectors
             X = all_bitvectors_array(self.n)
             out[...] = np.exp(-self(X)/temp)
         else:
@@ -602,13 +633,14 @@ class qubo:
 
     def to_posiform(self):
         """Compute the unique posiform representation of this QUBO instance,
-        using the approach described in section 2.1 of `[1] <https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization>`__. The result is a
-        tuple of an array ``P`` of shape ``(2, n, n)``, where ``n`` is the QUBO
-        size, and a constant offset value. All entries of the array are
-        positive. ``P[0]`` contains the coefficients for the literals ``Xi*Xj``,
-        and ``Xi`` on the diagonal, while ``P[1]`` contains the coefficients for
-        ``Xi*!Xj`` (``!`` denoting negation), and ``!Xi`` on the diagonal. See
-        the paper for further infos.
+        using the approach described in section 2.1 of
+        `[1] <https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization>`__.
+        The result is a tuple of an array ``P`` of shape ``(2, n, n)``, where
+        ``n`` is the QUBO size, and a constant offset value. All entries of the
+        array are positive. ``P[0]`` contains the coefficients for the literals
+        ``Xi*Xj``, and ``Xi`` on the diagonal, while ``P[1]`` contains the
+        coefficients for ``Xi*!Xj`` (``!`` denoting negation), and ``!Xi`` on
+        the diagonal. See the paper for further infos.
 
         Returns:
             numpy.ndarray: Posiform coefficients (see above)
@@ -630,28 +662,6 @@ class qubo:
         posiform[0][diag_ix] = np.maximum(lin_, 0)
         const = lin_neg.sum()
         return posiform, const
-
-    def to_ising(self, offset=0.0):
-        """Convert this QUBO instance to an Ising model with variables
-        :math:`\\boldsymbol s\\in\\lbrace -1,+1\\rbrace` instead of
-        :math:`\\boldsymbol x\\in\\lbrace 0,1\\rbrace`.
-
-        Args:
-            offset (float, optional): Constant offset value added to the energy.
-                Defaults to 0.0.
-
-        Returns:
-            Tuple containing
-
-            - linear coefficients (*external field*) with shape ``(n,)``
-            - quadratic coefficients (*interactions*) with shape ``(n, n)``
-            - new offset (float)
-        """
-        m_ = self.m + self.m.T
-        lin = 0.25*m_.sum(0)
-        qua = 0.25*np.triu(self.m, 1)
-        c = 0.25*(self.m.sum()+np.diag(self.m).sum())+offset
-        return lin, qua, c
     
 
 def ordering_distance(Q1, Q2, X=None):
