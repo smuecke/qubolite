@@ -116,7 +116,7 @@ class KMedoids(qubo_embedding):
         self.__distance_matrix = distance_matrix
         self.__k = k
         if alpha is None:
-            alpha = 1.0 / self.__k
+            alpha = 0.5 / self.__k
         self.__alpha = alpha
         if beta is None:
             beta = 1.0 / self.__n
