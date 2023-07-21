@@ -107,13 +107,16 @@ class KMedoids(qubo_embedding):
         gamma: (float, optional): Parameter controlling the enforcement of exactly k
             representatives. Defaults to 2.
     """
-    def __init__(self, data_set, distance_matrix=None, k=2, alpha=None, beta=None, gamma=2):
-        self.__data_set = np.asarray(data_set)
-        if distance_matrix is None:
+    def __init__(self, data_set=None, distance_matrix=None, k=2, alpha=None, beta=None, gamma=2):
+        if data_set is None and distance_matrix is None:
+            raise Exception('data_set or distance_matrix have to be given!')
+        elif distance_matrix is None:
             distance_matrix = 1 - np.exp(- 0.5 * pairwise_distances(X=data_set,
                                                                     metric='sqeuclidean'))
-        self.__n = self.__data_set.shape[0]
-        self.__distance_matrix = distance_matrix
+        self.__data_set = data_set
+        # map distance matrix to [0, 1]
+        self.__distance_matrix = distance_matrix / distance_matrix.max()
+        self.__n = self.__distance_matrix.shape[0]
         self.__k = k
         if alpha is None:
             alpha = 0.5 / self.__k
