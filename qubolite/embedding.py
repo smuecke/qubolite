@@ -1,7 +1,7 @@
 from functools import partial
 
 import numpy as np
-from sklearn.metrics import pairwise_kernels
+from sklearn.metrics import pairwise_kernels, pairwise_distances
 from sklearn.preprocessing import KernelCenterer
 
 from ._misc import get_random_state
@@ -23,43 +23,6 @@ class qubo_embedding:
     @classmethod
     def random(cls, n: int, random_state=None):
         return NotImplemented
-
-
-class BinaryClustering(qubo_embedding):
-    """Simple Binary Clustering based on Euclidean distance.
-    Minimizes distances within and maximizes distances
-    between the clusters.
-    """
-    def __init__(self, data):
-        self.__data = data
-        self.__Q = self.__from_data(data)
-
-    @property
-    def qubo(self):
-        return self.__Q
-
-    @property
-    def data(self):
-        return dict(points=self.__data)
-
-    def __from_data(self, data):
-        # calculate euclidean distance matrix
-        d = np.sqrt(((data[:, None] - data) ** 2).sum(-1))
-        q = np.triu(3 * d, 1)
-        q[np.diag_indices_from(q)] = -d.sum(1)
-        return qubo(q)
-
-    def map_solution(self, x):
-        # return cluster assignments (-1, +1)
-        return 2 * x - 1
-
-    @classmethod
-    def random(cls, n: int, dim=2, dist=2.0, random_state=None):
-        npr = get_random_state(random_state)
-        data = npr.normal(size=(n, dim))
-        mask = npr.permutation(n) < n // 2
-        data[mask, :] += dist / np.sqrt(dim)
-        return cls(data)
 
 
 class Kernel2MeansClustering(qubo_embedding):
@@ -124,6 +87,66 @@ class Kernel2MeansClustering(qubo_embedding):
         data -= data.mean(0)
         return data, cls(data, kernel=kernel, centered=centered, unambiguous=unambiguous,
                          **kernel_params)
+
+
+class KMedoids(qubo_embedding):
+    """
+    K-medoids vector quantization problem: Given a dataset, find k representatives.
+    For the derivation see:
+    Christian Bauckhage et al., "A QUBO Formulation of the k-Medoids Problem.”, LWDA, 2019.
+
+    Args:
+        data_set (numpy.ndarray): Data points.
+        distance_matrix (numpy.ndarray, optional): Pairwise distances between data points.
+            Defaults to ``Welsh``-distance.
+        k (int, optional): Number of representative points. Defaults to 2.
+        alpha: (float, optional): Parameter controlling far apartness of k
+            representatives. Defaults to 1 / k.
+        beta: (float, optional): Parameter controlling far centrality of k
+            representatives. Defaults to 1 / n.
+        gamma: (float, optional): Parameter controlling the enforcement of exactly k
+            representatives. Defaults to 2.
+    """
+    def __init__(self, data_set, distance_matrix=None, k=2, alpha=None, beta=None, gamma=2):
+        self.__data_set = np.asarray(data_set)
+        if distance_matrix is None:
+            distance_matrix = 1 - np.exp(- 0.5 * pairwise_distances(X=data_set,
+                                                                    metric='sqeuclidean'))
+        self.__n = self.__data_set.shape[0]
+        self.__distance_matrix = distance_matrix
+        self.__k = k
+        if alpha is None:
+            alpha = 1.0 / self.__k
+        self.__alpha = alpha
+        if beta is None:
+            beta = 1.0 / self.__n
+        self.__beta = beta
+        self.__gamma = gamma
+        self.__Q = self.__from_data()
+
+    @property
+    def qubo(self):
+        return self.__Q
+
+    @property
+    def data(self):
+        return dict(points=self.__data_set,
+                    distance_matrix=self.__distance_matrix)
+
+    def __from_data(self):
+        # Identification of far apart data points
+        far_apart_matrix = - self.__alpha * self.__distance_matrix
+        # Identification of central data points
+        ones_vector = np.ones(self.__n)
+        central_vector = self.__beta * self.__distance_matrix @ ones_vector
+        # Ensuring k representatives
+        ensuring_matrix = self.__gamma * np.ones((self.__n, self.__n))
+        ensuring_vector = - 2 * self.__gamma * self.__k * ones_vector
+        np.fill_diagonal(ensuring_matrix, np.diag(ensuring_matrix) + ensuring_vector)
+        # Putting different objectives together
+        matrix = far_apart_matrix + ensuring_matrix
+        np.fill_diagonal(matrix, np.diag(matrix) + central_vector)
+        return qubo(matrix)
 
 
 class SubsetSum(qubo_embedding):
