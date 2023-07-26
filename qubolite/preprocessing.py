@@ -4,9 +4,6 @@ from qubolite import qubo
 from tqdm import tqdm
 
 
-# In[2]:
-
-
 def calculate_Dplus_and_Dminus(Q: np.array) -> list:
     """
     Calculates a bound for each variable of the possible impact of the variable
@@ -128,9 +125,6 @@ def reduceQ2_5(Q: np.array, assignment: tuple, D_list: np.array, indices: list)-
     indices.remove(h)
 
     return Q, D_list, indices
-
-
-# In[7]:
 
 
 def reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> (np.array, np.array, list):
