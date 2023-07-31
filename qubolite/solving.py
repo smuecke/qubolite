@@ -6,12 +6,14 @@ from .qubo    import qubo
 from _c_utils import brute_force as _brute_force_c
 
 
-def brute_force(Q: qubo):
+def brute_force(Q: qubo, max_threads=256):
     """Solve QUBO instance exactly by brute force. Note that this method is
     infeasible for instances with a size beyond around 30.
 
     Args:
         Q (qubo): QUBO instance to solve.
+        max_threads (int): Upper limit for the number of threads. Defaults to
+            256.
 
     Raises:
         ValueError: Raised if the QUBO size is too large to be brute-forced on
@@ -23,7 +25,7 @@ def brute_force(Q: qubo):
     """
     warn_size(Q.n, limit=30)
     try:
-        x, v, _ = _brute_force_c(Q.m)
+        x, v, _ = _brute_force_c(Q.m, max_threads)
     except TypeError:
         raise ValueError(f'n is too large to brute-force on this system')
     return x, v
@@ -277,7 +279,7 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
     return x_min, y_min
 
 
-def subspace_search(Q: qubo, steps=1000, random_state=None):
+def subspace_search(Q: qubo, steps=1000, random_state=None, max_threads=256):
     """Perform search heuristic where :math:`n-\\log_2(n)` randomly selected
     variables are fixed and the remaining :math:`\\log_2(n)` bits are solved by
     brute force. The current solution is updated with the optimal sub-vector
@@ -288,6 +290,8 @@ def subspace_search(Q: qubo, steps=1000, random_state=None):
         steps (int, optional): Number of repetitions. Defaults to 1000.
         random_state (optional): A numerical or lexical seed, or a NumPy random
             generator. Defaults to None.
+        max_threads (int): Upper limit for the number of threads created by the
+            brute-force solver. Defaults to 256.
 
     Returns:
         A tuple containing the minimizing vector (numpy.ndarray) and the minimal
@@ -304,7 +308,7 @@ def subspace_search(Q: qubo, steps=1000, random_state=None):
         fixed = variables[:Q.n-log_n]
         Q_sub, _, free = Q.clamp(dict(zip(fixed, x[fixed])))
         # find optimum in subspace by brute force
-        x_sub_opt, *_ = _brute_force_c(Q_sub.m)
+        x_sub_opt, *_ = _brute_force_c(Q_sub.m, max_threads)
         # set variables in current solution to subspace-optimal bits
         x[free] = x_sub_opt
     return x, Q(x)
