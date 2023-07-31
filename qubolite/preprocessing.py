@@ -38,10 +38,8 @@ def reduceQ(Q: np.array, assignment: tuple, D_list: np.array, indices: list) -> 
     i = assignment[0]
     value = assignment[1]
 
-    d_ij = Q[indices, i] + Q[i, indices]
-
     if value == 1:
-        Q[indices, indices] += d_ij
+        Q[indices, indices] += Q[indices, i] + Q[i, indices]
 
     D_list = D_list_remove(Q, D_list, i)
 
@@ -150,7 +148,7 @@ def reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> 
     D_list = D_list_remove(Q, D_list, h)
 
     #calculate new x_i values as d_ij + d_hj
-    new_i_row_column = new_i_row_column = (Q[:, i] + Q[i, :]) + (Q[:, h] + Q[h, :])
+    new_i_row_column = (Q[:, i] + Q[i, :]) + (Q[:, h] + Q[h, :])
     Q[:i, i] = new_i_row_column[:i]
     Q[i, i+1:] = new_i_row_column[i+1:]
     Q[i,i] = c_i + c_h + d_hi
