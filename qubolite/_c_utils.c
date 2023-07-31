@@ -35,7 +35,10 @@ struct _brute_force_result {
     double min_val1;
 } typedef brute_force_result;
 
-brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bits) {
+brute_force_result _brute_force(
+        double **qubo,
+        const size_t n,
+        size_t n_fixed_bits) {
     bit* x = (bit*)malloc(n*sizeof(bit)); // bit vector
     memset(x, 0, n);
 
@@ -87,8 +90,10 @@ brute_force_result _brute_force(double **qubo, const size_t n, size_t n_fixed_bi
 }
 
 PyObject *py_brute_force(PyObject *self, PyObject *args) {
+    const size_t MAX_THREADS = omp_get_max_threads();
     PyArrayObject *arr;
-    PyArg_ParseTuple(args, "O", &arr);
+    size_t max_threads = MAX_THREADS;
+    PyArg_ParseTuple(args, "O|k", &arr, &max_threads);
     if (PyErr_Occurred() || !PyArray_Check(arr))
 	    return NULL;
 
@@ -99,12 +104,11 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         PyArray_DescrFromType(NPY_DOUBLE));
     if (PyErr_Occurred())
         return NULL;
-
-    const size_t MAX_THREADS = omp_get_max_threads();
+    
 #ifdef _MSC_VER
-    size_t m = 63-__lzcnt64(MAX_THREADS); // floor(log2(MAX_THREADS))
+    size_t m = 63-__lzcnt64(max_threads); // floor(log2(MAX_THREADS))
 #else
-    size_t m = 63-__builtin_clzll(MAX_THREADS); // floor(log2(MAX_THREADS))
+    size_t m = 63-__builtin_clzll(max_threads); // floor(log2(MAX_THREADS))
 #endif
 
     // ensure that the number of bits to optimize is positive

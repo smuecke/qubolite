@@ -314,6 +314,58 @@ class qubo:
         m = np.triu(m + np.tril(m, -1).T)
         return cls(m), { i: k for k, i in names.items() }
 
+    def save_qbsolv(self, path: str, atol=1e-16):
+        """Save this QUBO instance using the ``.qubo`` file format used by
+        D-Wave's ``qbsolv`` package.
+
+        Args:
+            path (str): Target file path.
+            atol (float, optional): Parameters with absolute value below this
+                value will be treated as 0. Defaults to 1e-16.
+        """
+        with open(path, 'w') as f:
+            f.write(
+                'c this is a qbsolv-style .qubo file\n'
+                'c saved with qubolite (c) Sascha Muecke\n'
+               f'p qubo 0 {self.n} {self.n} {self.num_couplings}\n'
+                'c ' + '-'*30 + '\n')
+            for i in range(self.n):
+                if not np.isclose(self.m[i, i], 0, atol=atol):
+                    f.write(f'{i} {i} {self.m[i, i]}\n')
+            f.write('c ' + '-'*30 + '\n')
+            for i, j in zip(*np.where(~np.isclose(np.triu(self.m, 1), 0, atol=atol))):
+                f.write(f'{i} {j} {self.m[i,j]}\n')
+
+    @classmethod
+    def load_qbsolv(cls, path: str):
+        """Load a QUBO instance from a file saved in the ``.qubo`` file format
+        used by D-Wave's ``qbsolv`` package.
+
+        Args:
+            path (str): QUBO file path.
+
+        Raises:
+            RuntimeError: Raised if an invalid line is encountered
+
+        Returns:
+            qubo: QUBO instance loaded from disk.
+        """
+        with open(path, 'r') as f:
+            for line_number, line in enumerate(f):
+                if line[0].isdigit():
+                    i, j, w = line.split()
+                    i, j = sorted([int(i), int(j)])
+                    m[i, j] = np.float64(w)
+                elif line.startswith('p'):
+                    *_, n, _ = line.split()
+                    n = int(n)
+                    m = np.zeros((n, n))
+                elif line.startswith('c'):
+                    continue # ignore comment
+                else:
+                    raise RuntimeError(f'Invalid format at line {line_number}')
+        return cls(m)
+
     def to_ising(self, offset=0.0):
         """Convert this QUBO instance to an Ising model with variables
         :math:`\\boldsymbol s\\in\\lbrace -1,+1\\rbrace` instead of
@@ -369,6 +421,16 @@ class qubo:
         c = qua.sum()-lin.sum()+offset
         return cls(m), c
 
+    @property
+    def num_couplings(self):
+        """Return the number of non-zero quadratic coefficients of this QUBO
+        instance.
+
+        Returns:
+            int: Number of non-zero quadratic coefficients.
+        """
+        return int(self.n**2 - np.isclose(np.triu(self.m, 1), 0).sum())
+
     def unique_parameters(self):
         """Return the unique parameter values of this QUBO instance.
 
@@ -379,7 +441,7 @@ class qubo:
         mask = np.triu_indices_from(self.m)
         return np.unique(self.m[mask])
 
-    def spectral_gap(self, return_optimum=False):
+    def spectral_gap(self, return_optimum=False, max_threads=256):
         """Calculate the spectral gap of this QUBO instance. Here, this is
         defined as the difference between the lowest and second-to lowest QUBO
         energy value across all bit vectors. Note that the QUBO instance must be
@@ -388,8 +450,10 @@ class qubo:
         
         Args:
             return_optimum (bool, optional): If ``True``, returns the minimizing
-            bit vector of this QUBO instance (which is calculated anyway).
-            Defaults to False.
+                bit vector of this QUBO instance (which is calculated anyway).
+                Defaults to False.
+            max_threads (int): Upper limit for the number of threads created by
+                the brute-force solver. Defaults to 256.
 
         Raises:
             ValueError: Raised if this QUBO instance is too large to be solved
@@ -401,7 +465,7 @@ class qubo:
         """
         warn_size(self.n, limit=25)
         try:
-            x, v0, v1 = _brute_force_c(self.m)
+            x, v0, v1 = _brute_force_c(self.m, max_threads)
         except TypeError:
             raise ValueError('n is too large to brute-force on this system')
         sgap = v1-v0
