@@ -149,7 +149,7 @@ def _reduceQ2_5(Q: np.array, assignment: tuple, D_list: np.array, indices: list)
     return Q, D_list, indices
 
 
-def _reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> (np.array, np.array, list):
+def _reduceQ2_6(Q: np.array, assignment: tuple, D_list: np.array, indices:list)-> (np.array, np.array, list):
     """
     Implements updates according to rule 2.6, i.e. assumes x_h = x_i and updates QUOB accordingly
 
@@ -239,16 +239,16 @@ def _apply_rule2_6(Qmatrix: np.array, D_list: np.array,
     return Qmatrix, D_list, indices, assignments, last_assignment
 
 
-def qupro_preprocessing(Q: qubo) -> (qubo, dict):
+def qupro_preprocessing(Q: qubo) -> (qubo, dict, int, list):
     """
     Implements the routine applying rules and reducing the QUBO as much as possible.
     It is assumed that QUBO is to be minimized.
 
     Args:
-        Q (np.array): containing the QUBO
+        Q (qubo): containing the QUBO
 
     Returns:
-        np.array: updated QUBO
+        qubo: updated QUBO
         dict: containing all assignments made
         int: offset of energies of original QUBO
         list: indices of variables that have not been assigned
