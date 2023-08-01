@@ -188,6 +188,7 @@ def _expr_normal_form(tokens):
             # circular reference that can be resolved was found and handled
             continue
         # j now points to non-reference
+        # TODO: Eliminate references to constants!
         if j > i:
             if polarities[-1]:
                 tokens[i] = '[!' + str(i) + ']'
