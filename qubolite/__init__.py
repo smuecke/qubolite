@@ -7,8 +7,8 @@ from .qubo import (
 from . import (
     bitvec,
     bounds,
-    compression,
     embedding,
+    preprocessing,
     sampling,
     solving
 )
