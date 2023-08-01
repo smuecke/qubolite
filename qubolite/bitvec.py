@@ -202,18 +202,20 @@ def _expr_normal_form(tokens):
         i += 1
     return tokens
 
-def from_expression(expr: str):
-    """Generate an array of bit vectors from a string
-    containing a bit vector expression. Such an expression
-    consists of a sequence of these symbols: ``0`` - a constant 0,
-    ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,
-    ``[i]`` - the same as the bit at index i, ``[!i]`` -  the
-    inverse of the bit at index i.
+def resolve_expression(expr: str) -> str:
+    return ''.join(_expr_normal_form(list(_BITVEC_EXPR.findall(expr))))
 
-    The last two symbols are called references, and ``i`` their
-    pointing index (counting from 0), where ``i`` refers to the i-th symbol of
-    the bit vector expression itself. Note that a ``RuntimeError`` is raised if
-    there is a circular reference chain.
+def from_expression(expr: str):
+    """Generate an array of bit vectors from a string containing a bit vector
+    expression. Such an expression consists of a sequence of these tokens: ``0``
+    - a constant 0, ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,
+    ``[i]`` - the same as the bit at index i, ``[!i]`` - the inverse of the bit
+    at index i.
+
+    The last two tokens are called references, with ``i`` being their pointing
+    index (counting from 0), where ``i`` refers to the i-th token of the
+    bitvector expression itself. Note that a ``RuntimeError`` is raised if there
+    is a circular reference chain.
 
     Args:
         expr (str): Bit vector expression.
@@ -253,8 +255,27 @@ def from_expression(expr: str):
     return x
 
 def fill_expression(expr: str, x: np.ndarray):
+    """Fill ``*`` symbols of a bit vector expression with constant bit values
+    and resolve references. For a description of bit vector expressions see
+    method ``from_expression``. The ``*`` tokens are filled with the constant
+    values from argument ``x`` from left to right.
+
+    Args:
+        expr (str): Bit vector expression.
+        x (np.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``
+            where ``m`` is the number of ``*`` tokens in ``expr``.
+
+    Returns:
+        np.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the
+            number of tokens in ``expr``.
+    """
     tokens = _expr_normal_form(list(_BITVEC_EXPR.findall(expr)))
     n, n_free = len(tokens), expr.count('*')
+    if tokens.count('*') > n_free:
+        raise ValueError(
+            'Bit vector expression contains unresolved cycles that increase the'
+            ' number of free variables. Only use fully resolved bitvector '
+            'expressions as input to this function.')
     *r, k = x.shape
     assert k == n_free, 'Dimension of `x` does not match free variables in expression'
     z = np.empty((*r, n))
