@@ -201,7 +201,7 @@ def reduce_dynamic_range(
         random_state=None,
         decision='heuristic',
         callback=None,
-        **bound_params):
+        **kwargs):
     """Iterative procedure for reducing the dynammic range of a given QUBO, while preserving an
     optimum. For this, at every step we choose a specific QUBO weight and change it according to
     some heuristic.
@@ -218,19 +218,19 @@ def reduce_dynamic_range(
         callback (optional): Callback function which obtains the following inputs after each step:
             i (int), j (int) , change (float), current matrix order (MatrixOrder), current
             iteration (int). Defaults to None.
-        bound_params (dict, optional): Parameters for determining the upper and lower bound computations
-            of the optimal QUBO value. The following params can be specified:
-            change_diff (float), distance to optimum for avoiding numerical madness. Defaults to
-                1e-8.
-            upper_bound (str), method for upper bound, possibilities are 'local_descent' and
-                'sample'. Defaults to 'local_descent'.
-            lower_bound (str), method for lower bound, possibilities are 'roof_dual' and 'min_sum'.
-                Defaults to 'roof_dual'.
-            upper_bound_kwargs (dict), additional parameters for upper bound.
-            lower_bound_kwargs (dict), additional parameters for lower bound.
+        **kwargs (optional): Keyword arguments for determining the upper and lower bound
+            computations of the optimal QUBO value.
+    Keyword Args:
+        change_diff (float): Distance to optimum for avoiding numerical madness. Defaults to 1e-8.
+        upper_bound (str): Method for upper bound, possibilities are 'local_descent' and 'sample'.
+            Defaults to 'local_descent'.
+        lower_bound (str): Method for lower bound, possibilities are 'roof_dual' and 'min_sum'.
+            Defaults to 'roof_dual'.
+        upper_bound_kwargs (dict): Additional keyword arguments for upper bound method.
+        lower_bound_kwargs (dict): Additional keyword arguments for lower bound method.
     Returns:
         qubolite.qubo: Compressed QUBO with reduced dynamic range.
-        """
+    """
     try:
         heuristic = HEURISTICS[heuristic]
     except KeyError:
@@ -243,7 +243,7 @@ def reduce_dynamic_range(
     for it in range(iterations):
         if not stop_update:
             i, j, change = _compute_change(matrix_order, heuristic=heuristic, npr=npr,
-                                           decision=decision, **bound_params)
+                                           decision=decision, **kwargs)
             stop_update = matrix_order.update_entry(i, j, change)
             if callback is not None:
                 callback(i, j, change, matrix_order, it)
