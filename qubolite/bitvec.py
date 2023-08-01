@@ -163,17 +163,26 @@ def _expr_normal_form(tokens):
             i += 1
             continue
         j = int(tokens[i].strip('[!]'))
-        if tokens[j].startswith('['):
-            raise RuntimeError('No references to references allowed!')
+        polarity = '!' in tokens[i]
+        # resolve chained references
+        seen = [i]
+        while tokens[j].startswith('['):
+            if j in seen:
+                raise RuntimeError(f'Circular reference found: {"->".join(map(str, seen[seen.index(j):]))}->{j}')
+            seen.append(j)
+            polarity ^= '!' in tokens[j]
+            j = int(tokens[j].strip('[!]'))
+        # j now points to non-reference
         if j > i:
-            if tokens[i].startswith('[!'):
+            if polarity:
                 tokens[i] = '[!' + str(i) + ']'
                 tokens[j] = '10*'['01*'.index(tokens[j])]
             else:
                 tokens[i] = '[' + str(i) + ']'
             # swap tokens
             tokens[i], tokens[j] = tokens[j], tokens[i]
-            # check if constant needs to be inverted
+        else:
+            tokens[i] = f'[!{j}]' if polarity else f'[{j}]'
         i += 1
     return tokens
 
@@ -186,9 +195,9 @@ def from_expression(expr: str):
     inverse of the bit at index i.
 
     The last two symbols are called references, and ``i`` their
-    pointing index (counting from 0). A reference can only ever
-    point to a constant or ``*``, i.e., higher-order references are
-    not allowed (and not necessary).
+    pointing index (counting from 0), where ``i`` refers to the i-th symbol of
+    the bit vector expression itself. Note that a ``RuntimeError`` is raised if
+    there is a circular reference chain.
 
     Args:
         expr (str): Bit vector expression.
@@ -226,6 +235,27 @@ def from_expression(expr: str):
             else:
                 x[:,i] = x[:,ix]
     return x
+
+def fill_expression(expr: str, x: np.ndarray):
+    tokens = _expr_normal_form(list(_BITVEC_EXPR.findall(expr)))
+    n, n_free = len(tokens), expr.count('*')
+    *r, k = x.shape
+    assert k == n_free, 'Dimension of `x` does not match free variables in expression'
+    z = np.empty((*r, n))
+    ix = 0
+    for i, token in enumerate(tokens):
+        if token in '01':
+            z[..., i] = float(token)
+        elif token.startswith('[!'):
+            j = int(token[2:-1])
+            z[..., i] = 1-z[..., j]
+        elif token.startswith('['):
+            j = int(token[1:-1])
+            z[..., i] = z[..., j]
+        else:
+            z[..., i] = x[..., ix]
+            ix += 1
+    return z
 
 
 # Manipulate Bit Vectors
