@@ -163,18 +163,33 @@ def _expr_normal_form(tokens):
             i += 1
             continue
         j = int(tokens[i].strip('[!]'))
-        polarity = '!' in tokens[i]
         # resolve chained references
-        seen = [i]
+        seen, polarities = [i], ['!' in tokens[i]]
+        do_continue = True
         while tokens[j].startswith('['):
+            new_polarity = polarities[-1] ^ ('!' in tokens[j])
             if j in seen:
-                raise RuntimeError(f'Circular reference found: {"->".join(map(str, seen[seen.index(j):]))}->{j}')
+                if polarities[seen.index(j)] != new_polarity:
+                    # polarity mismatch: cycle is not satisfyable!
+                    raise RuntimeError(
+                        'Unsatisfyable circular reference found: '
+                       f'{"->".join(map(str, seen[seen.index(j):]))}->{j}')
+                else:
+                    tokens[j] = '*'
+                    i += 1
+                    break
             seen.append(j)
-            polarity ^= '!' in tokens[j]
+            polarities.append(new_polarity)
             j = int(tokens[j].strip('[!]'))
+        else:
+            # cursed, but this executes only if the loop exits without "break"
+            do_continue = False
+        if do_continue:
+            # circular reference that can be resolved was found and handled
+            continue
         # j now points to non-reference
         if j > i:
-            if polarity:
+            if polarities[-1]:
                 tokens[i] = '[!' + str(i) + ']'
                 tokens[j] = '10*'['01*'.index(tokens[j])]
             else:
@@ -182,7 +197,7 @@ def _expr_normal_form(tokens):
             # swap tokens
             tokens[i], tokens[j] = tokens[j], tokens[i]
         else:
-            tokens[i] = f'[!{j}]' if polarity else f'[{j}]'
+            tokens[i] = f'[!{j}]' if polarities[-1] else f'[{j}]'
         i += 1
     return tokens
 
