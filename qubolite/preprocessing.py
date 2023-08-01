@@ -21,24 +21,26 @@ subqubo_t = namedtuple('subqubo', ['qubo', 'assignment', 'remaining', 'offset'],
 # Dynamic Range Compression                                                    #
 ################################################################################
 
-def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
-                          npr=None, **kwargs):
+
+def _get_random_index_pair(matrix_order, npr):
+    row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
+    try:
+        random_index = npr.integers(row_indices.shape[0])
+        i, j = row_indices[random_index], column_indices[random_index]
+    except ValueError:
+        i, j = 0, 0
+    return i, j
+
+def _compute_change(matrix_order, npr, heuristic=None, decision='heuristic', **bound_params):
     if decision == 'random':
-        row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
-        try:
-            random_index = npr.integers(row_indices.shape[0])
-            i, j = row_indices[random_index], column_indices[random_index]
-        except ValueError:
-            i, j = 0, 0
-        change = _compute_index_change(matrix_order, i, j,
-                                       heuristic=heuristic,
-                                                  ** kwargs)
+        i, j = _get_random_index_pair(matrix_order, npr)
+        change = _compute_index_change(matrix_order, i, j, heuristic=heuristic, **bound_params)
     elif decision == 'heuristic':
         order_indices = matrix_order.dynamic_range_impact()
         indices = matrix_order.to_matrix_indices(order_indices, matrix_order.matrix.shape[0])
         changes = [_compute_index_change(matrix_order, x[0], x[1],
                                          heuristic=heuristic,
-                                         **kwargs) for x in indices]
+                                         **bound_params) for x in indices]
         drs = [_dynamic_range_change(x[0], x[1], changes[index],
                                      matrix_order) for index, x in enumerate(indices)]
         if np.any(drs):
@@ -46,15 +48,10 @@ def _compute_final_change(matrix_order, heuristic=None, decision='heuristic',
             i, j = indices[index]
             change = changes[index]
         else:
-            row_indices, column_indices = np.where(np.invert(np.isclose(matrix_order.matrix, 0)))
-            try:
-                random_index = npr.integers(row_indices.shape[0])
-                i, j = row_indices[random_index], column_indices[random_index]
-            except ValueError:
-                i, j = 0, 0
+            i, j = _get_random_index_pair(matrix_order, npr)
             change = _compute_index_change(matrix_order, i, j,
                                            heuristic=heuristic,
-                                           **kwargs)
+                                           **bound_params)
     else:
         raise NotImplementedError
     return i, j, change
@@ -200,11 +197,40 @@ def _compute_index_change(matrix_order, i, j, heuristic=None, **kwargs):
 def reduce_dynamic_range(
         Q: qubo,
         iterations=100,
-        callback=None,
         heuristic='greedy0',
         random_state=None,
         decision='heuristic',
-        **kwargs):
+        callback=None,
+        **bound_params):
+    """Iterative procedure for reducing the dynammic range of a given QUBO, while preserving an
+    optimum. For this, at every step we choose a specific QUBO weight and change it according to
+    some heuristic.
+
+    Args:
+        Q (qubolite.qubo): QUBO
+        iterations (int, optional): Number of iterations. Defaults to 100.
+        heuristic (str, optional): Used heuristic for computing weight change. Possible heuristics
+            are 'greedy0', 'greedy' and 'order'. Defaults to 'greedy0'.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator.
+            Defaults to None.
+        decision (str, optional): Method for deciding which QUBO weight to change next.
+            Possibilities are 'random' and 'heuristic'. Defaults to 'heuristic'.
+        callback (optional): Callback function which obtains the following inputs after each step:
+            i (int), j (int) , change (float), current matrix order (MatrixOrder), current
+            iteration (int). Defaults to None.
+        bound_params (dict, optional): Parameters for determining the upper and lower bound computations
+            of the optimal QUBO value. The following params can be specified:
+            change_diff (float), distance to optimum for avoiding numerical madness. Defaults to
+                1e-8.
+            upper_bound (str), method for upper bound, possibilities are 'local_descent' and
+                'sample'. Defaults to 'local_descent'.
+            lower_bound (str), method for lower bound, possibilities are 'roof_dual' and 'min_sum'.
+                Defaults to 'roof_dual'.
+            upper_bound_kwargs (dict), additional parameters for upper bound.
+            lower_bound_kwargs (dict), additional parameters for lower bound.
+    Returns:
+        qubolite.qubo: Compressed QUBO with reduced dynamic range.
+        """
     try:
         heuristic = HEURISTICS[heuristic]
     except KeyError:
@@ -216,8 +242,8 @@ def reduce_dynamic_range(
     matrix_order.matrix = np.round(matrix_order.matrix, decimals=8)
     for it in range(iterations):
         if not stop_update:
-            i, j, change = _compute_final_change(matrix_order, heuristic=heuristic, npr=npr,
-                                                 decision=decision, **kwargs)
+            i, j, change = _compute_change(matrix_order, heuristic=heuristic, npr=npr,
+                                           decision=decision, **bound_params)
             stop_update = matrix_order.update_entry(i, j, change)
             if callback is not None:
                 callback(i, j, change, matrix_order, it)
@@ -237,9 +263,9 @@ def _calculate_Dplus_and_Dminus(Q: np.ndarray):
         Q (np.ndarray): Array that contains the QUBO
 
     Returns:
-        np.ndarray: A 2d array, where the first column contains the positive bounds and the second colum the negative bounds
+        np.ndarray: A 2d array, where the first column contains the positive bounds and the second
+            column the negative bounds
     """
-    n = Q.shape[0]
     Q_plus = np.multiply(Q, Q > 0)
     np.fill_diagonal(Q_plus, 0)
     row_sums_plus = np.sum(Q_plus, axis = 0)
@@ -258,7 +284,8 @@ def _reduceQ(Q: np.ndarray, assignment: tuple, D_list: np.ndarray, indices: list
 
     Args:
         Q (np.ndarray): containing the QUBO
-        assignment (tuple): first element is the variabe index, second elment is the assignment, i.e. 0 or 1
+        assignment (tuple): first element is the variabe index, second elment is the assignment,
+            i.e. 0 or 1
         D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus
 
     Returns:
@@ -326,7 +353,8 @@ def _D_list_correct_i(
 
 def _reduceQ2_5(Q: np.ndarray, assignment: tuple, D_list: np.ndarray, indices: list):
     """
-    Implements updates according to rule 2.5, i.e. assumes x_h = 1 - x_i and updates QUOB accordingly
+    Implements updates according to rule 2.5, i.e. assumes x_h = 1 - x_i and updates QUBO
+    accordingly
 
     Args:
         Q (np.ndarray): containing the QUBO
@@ -365,7 +393,7 @@ def _reduceQ2_6(
         D_list: np.ndarray,
         indices:list):
     """
-    Implements updates according to rule 2.6, i.e. assumes x_h = x_i and updates QUOB accordingly
+    Implements updates according to rule 2.6, i.e. assumes x_h = x_i and updates QUBO accordingly
 
     Args;
         Q (np.ndarray): containing the QUBO
