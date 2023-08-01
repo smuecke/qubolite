@@ -4,11 +4,15 @@ from qubolite import qubo
 from tqdm import tqdm
 
 
-def calculate_Dplus_and_Dminus(Q: np.array) -> list:
+def _calculate_Dplus_and_Dminus(Q: np.array) -> np.array:
     """
     Calculates a bound for each variable of the possible impact of the variable
-    :param Q: np.array that contains the QUBO
-    :return: A 2d array, where the first column contains the positive bounds and the second colum the negative bounds
+
+    Args:
+        Q (np.array): np.array that contains the QUBO
+
+    Returns:
+        np.array: A 2d array, where the first column contains the positive bounds and the second colum the negative bounds
     """
     n = Q.shape[0]
     Q_plus = np.multiply(Q, Q > 0)
@@ -25,13 +29,19 @@ def calculate_Dplus_and_Dminus(Q: np.array) -> list:
 
     return np.vstack((d_minus, d_plus))
 
-def reduceQ(Q: np.array, assignment: tuple, D_list: np.array, indices: list) -> (np.array, np.array, list):
+def _reduceQ(Q: np.array, assignment: tuple, D_list: np.array, indices: list) -> (np.array, np.array, list):
     """
     Given an assignment, updates the Q matrix so that the QUBO stays equivalent but the assigned variable can be removed
-    :param Q: np.array containing the QUBO
-    :param assignment: tuple, first element is the variabe index, second elment is the assignment, i.e. 0 or 1
-    :param D_list: np.array containing bounds as calculated by calculate_Dplus_and_Dminus
-    :return: updated Q, updated D_list bounds, updated indices
+
+    Args:
+        Q (np.array): containing the QUBO
+        assignment (tuple): first element is the variabe index, second elment is the assignment, i.e. 0 or 1
+        D_list (np.array): containing bounds as calculated by calculate_Dplus_and_Dminus
+
+    Returns:
+        np.array: updated Q
+        np.array: updated D_list
+        list: updated indices
     """
     #does change input D_list
     #value is assumed to be either 0 or 1
@@ -49,13 +59,17 @@ def reduceQ(Q: np.array, assignment: tuple, D_list: np.array, indices: list) -> 
     return Q, D_list, indices
 
 
-def D_list_remove(Q: np.array, D_list: np.array, i: int) -> np.array:
+def _D_list_remove(Q: np.array, D_list: np.array, i: int) -> np.array:
     """
     Removes influence of variable i in D_list. Used in reduceQ2_5 and reduceQ2_6
-    :param Q: np.array containing the QUBO
-    :param D_list: np.array containing bounds as calculated by calculate_Dplus_and_Dminus
-    :param i: variable whose values are to be removed
-    :returns: updated D_list
+
+    Args:
+        Q (np.array): containing the QUBO
+        D_list (np.array): containing bounds as calculated by calculate_Dplus_and_Dminus
+        i (int): variable whose values are to be removed
+
+    Returns:
+        np.array: updated D_list
     """
     d_ij = Q[:, i] + Q[i, :]
     d_plus = d_ij > 0
@@ -66,15 +80,19 @@ def D_list_remove(Q: np.array, D_list: np.array, i: int) -> np.array:
     return D_list
 
 
-def D_list_correct_i(new_i_row_column: np.array, D_list: np.array, i: int, h:int, indices: list) -> np.array:
+def _D_list_correct_i(new_i_row_column: np.array, D_list: np.array, i: int, h:int, indices: list) -> np.array:
     """
     Correctes the entry of the i-th variable in D_list in reduceQ2_5 and reduceQ2_6
-    :param new_i_row_column: np.array containing the updated row and column of variable i
-    :param D_list: np.array containing bounds as calculated by calculate_Dplus_and_Dminus
-    :param i: variable whose value is corrected
-    :param h: variable that is removed by 2.5 or 2.6
-    :param indices: list of variables that have not been assigned yet
-    :returns: updated D_list
+
+    Args:
+        new_i_row_column (np.array): containing the updated row and column of variable i
+        D_list (np.array): containing bounds as calculated by calculate_Dplus_and_Dminus
+        i (int): variable whose value is corrected
+        h (int): variable that is removed by 2.5 or 2.6
+        indices (list): of variables that have not been assigned yet
+
+    Returns:
+        np.array: updated D_list
     """
     #add new elements d_hj
     new_i_row_column[i] = 0
@@ -91,14 +109,20 @@ def D_list_correct_i(new_i_row_column: np.array, D_list: np.array, i: int, h:int
     return D_list
 
 
-def reduceQ2_5(Q: np.array, assignment: tuple, D_list: np.array, indices: list)-> (np.array, np.array, list):
+def _reduceQ2_5(Q: np.array, assignment: tuple, D_list: np.array, indices: list)-> (np.array, np.array, list):
     """
     Implements updates according to rule 2.5, i.e. assumes x_h = 1 - x_i and updates QUOB accordingly
-    :param Q: np.array containing the QUBO
-    :param assignment: tuple, first element is the variabe h, second elment is the variable h
-    :param D_list: np.array containing bounds as calculated by calculate_Dplus_and_Dminus
-    :param indices: list of variables that have not been assigned yet
-    :return: updated Q, updated D_list bounds, updated indices
+
+    Args:
+        Q (np.array): containing the QUBO
+        assignment (tuple): first element is the variabe h, second elment is the variable h
+        D_list (np.array): containing bounds as calculated by calculate_Dplus_and_Dminus
+        indices (list): of variables that have not been assigned yet
+
+    Returns:
+        np.array: updated Q
+        np.array: updated D_list
+        list: updated indices
     """
     #x_h = 1 - x_i
     i = assignment[1]
@@ -125,14 +149,20 @@ def reduceQ2_5(Q: np.array, assignment: tuple, D_list: np.array, indices: list)-
     return Q, D_list, indices
 
 
-def reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> (np.array, np.array, list):
+def _reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> (np.array, np.array, list):
     """
     Implements updates according to rule 2.6, i.e. assumes x_h = x_i and updates QUOB accordingly
-    :param Q: np.array containing the QUBO
-    :param assignment: tuple, first element is the variabe h, second elment is the variable h
-    :param D_list: np.array containing bounds as calculated by calculate_Dplus_and_Dminus
-    :param indices: list of variables that have not been assigned yet
-    :return: updated Q, updated D_list bounds, updated indices
+
+    Args;
+        Q (np.array): containing the QUBO
+        assignment (tuple): first element is the variabe h, second elment is the variable h
+        D_list (np.array): containing bounds as calculated by calculate_Dplus_and_Dminus
+        indices (list): variables that have not been assigned yet
+
+    Returns:
+        np.array: updated Q
+        np.array: updated D_list
+        np.array: updated indices
     """
     #x_h = x_i
     i = assignment[1]
@@ -163,7 +193,7 @@ def reduceQ2_6(Q:np.array, assignment: tuple, D_list: np.array, indices:list)-> 
     return Q, D_list, indices
 
 
-def assign_1(Qmatrix: np.array, D_list: np.array,
+def _assign_1(Qmatrix: np.array, D_list: np.array,
                 indices: list, assignments: dict,
                 last_assignment: int, c_0: int,
                 i: int, c_i: int) ->(np.array, np.array, list, dict, int, int):
@@ -174,7 +204,7 @@ def assign_1(Qmatrix: np.array, D_list: np.array,
     return Qmatrix, D_list, indices, assignments, last_assignment, c_0
 
 
-def assign_0(Qmatrix: np.array, D_list: np.array,
+def _assign_0(Qmatrix: np.array, D_list: np.array,
                 indices: list, assignments: dict,
                 last_assignment: int, i: int) ->(np.array, np.array, list, dict, int, int):
 
@@ -185,7 +215,7 @@ def assign_0(Qmatrix: np.array, D_list: np.array,
     return Qmatrix, D_list, indices, assignments, last_assignment
 
 
-def apply_rule2_5(Qmatrix: np.array, D_list: np.array,
+def _apply_rule2_5(Qmatrix: np.array, D_list: np.array,
                 indices: list, assignments: dict,
                 last_assignment: int, c_0: int,
                 i: int, h: int, c_h: int) ->(np.array, np.array, list, dict, int, int):
@@ -197,7 +227,7 @@ def apply_rule2_5(Qmatrix: np.array, D_list: np.array,
     return Qmatrix, D_list, indices, assignments, last_assignment, c_0
 
 
-def apply_rule2_6(Qmatrix: np.array, D_list: np.array,
+def _apply_rule2_6(Qmatrix: np.array, D_list: np.array,
                 indices: list, assignments: dict,
                 last_assignment: int,
                 i: int, h: int) ->(np.array, np.array, list, dict, int, int):
@@ -209,11 +239,23 @@ def apply_rule2_6(Qmatrix: np.array, D_list: np.array,
     return Qmatrix, D_list, indices, assignments, last_assignment
 
 
-def reduce_QUBO(Q: qubo) -> (qubo, dict):
+def qupro_preprocessing(Q: qubo) -> (qubo, dict):
     """
-    Implements the routine applying rules and reducing the QUBO as much as possible
-    :param Q: np.array containing the QUBO
-    :return: updated QUBO, a dictionary containing all assignments made, indices of variables that have not been assigned
+    Implements the routine applying rules and reducing the QUBO as much as possible.
+    It is assumed that QUBO is to be minimized.
+
+    Args:
+        Q (np.array): containing the QUBO
+
+    Returns:
+        np.array: updated QUBO
+        dict: containing all assignments made
+        int: offset of energies of original QUBO
+        list: indices of variables that have not been assigned
+
+    Example:
+        >>> Q = qubo.random(10, density=0.1)
+        >>> Q_reduced, assignments, energyoffset, indices = qupro_preprocessing(Q)
     """
     #assumes QUBO to be upper triangluar
     #paper assumes maximazation hence we need to flip the sign for minimization
