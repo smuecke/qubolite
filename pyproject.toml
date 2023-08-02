@@ -42,7 +42,7 @@ kendall_tau = [
 embedding = [
     "scikit-learn>=1.2.2"
 ]
-compression = [
+preprocessing = [
     "portion>=2.4.0"
 ]
 all = [
