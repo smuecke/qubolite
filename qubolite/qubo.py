@@ -4,7 +4,7 @@ import numpy as np
 from numpy import newaxis as na
 
 from .bitvec  import all_bitvectors, all_bitvectors_array
-from ._misc   import get_random_state, is_triu, warn_size
+from ._misc   import get_random_state, is_triu, make_upper_triangle, warn_size
 from _c_utils import brute_force as _brute_force_c
 
 def is_qubo_like(arr):
@@ -38,7 +38,7 @@ def to_triu_form(arr):
         return arr.copy()
     else:
         # add lower to upper triangle
-        return np.triu(arr + np.tril(arr, -1).T)
+        return make_upper_triangle(arr)
 
 
 def __unwrap_value(obj):
