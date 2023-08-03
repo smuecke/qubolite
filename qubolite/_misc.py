@@ -20,6 +20,10 @@ def is_symmetrical(arr, rtol=1e-05, atol=1e-08):
     return np.allclose(arr, arr.T, rtol=rtol, atol=atol)
 
 
+def make_upper_triangle(arr):
+    return np.triu(arr) + np.tril(arr, -1).T
+
+
 def is_triu(arr):
     return np.all(np.isclose(arr, np.triu(arr)))
 
