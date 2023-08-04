@@ -29,7 +29,8 @@ class partial_assignment:
         # check if `graph` is a valid PAG (=Partial Assignment Graph)
         assert all(self.__NODE_NAME_PATTERN.match(u) is not None for u in graph.nodes), \
             '`graph` contains invalid node names'
-        self.__PAG = graph
+        self.__PAG = self.__normalize_graph(graph)
+        self.__dirty = False
 
     def __normalize_graph(self, G: nx.DiGraph):
         for nodes in nx.simple_cycles(G):
@@ -87,7 +88,7 @@ class partial_assignment:
             for u, _, data in self.__PAG.in_edges(v, data=True):
                 (us_neg if data['inverse'] else us_pos).append(u)
             if us_pos: s += ', '.join(us_pos) + ' = '   + v + ';\n'
-            if us_neg: s += ', '.join(us_neg) + ' = 1-' + v + ';\n'
+            if us_neg: s += ', '.join(us_neg) + ' != ' + v + ';\n'
         return s[:-1] # remove trailing newline
 
     @property
@@ -153,6 +154,10 @@ class partial_assignment:
             left, right = assignment.split('=')
             # TODO
             raise NotImplementedError()
+
+    @classmethod
+    def infer(cls, x: np.ndarray):
+        raise NotImplementedError() # <- Nico
 
     @classmethod
     def simplify_expression(cls, expr: str):
