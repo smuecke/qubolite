@@ -156,8 +156,32 @@ class partial_assignment:
             raise NotImplementedError()
 
     @classmethod
-    def infer(cls, x: np.ndarray):
-        raise NotImplementedError() # <- Nico
+    def infer(cls, X: np.ndarray):
+        N, n = X.shape
+        S = ['*'] * n
+
+        uniques_per_col = np.apply_along_axis(lambda x: len(np.unique(x)), axis=0, arr=X)
+
+        for i in range(n):
+            S[i] = str(X[0][i]) if uniques_per_col[i] == 1 else '*'
+
+        for i in range(n):
+            for j in range(i+1,n):
+                inverse = True
+                same = True
+                for k in range(N):
+                    if X[k][i] == X[k][j]:
+                        inverse = False
+                    if X[k][i] != X[k][j]:
+                        same = False
+                    if not inverse and not same:
+                        break
+                if same:
+                    S[i] = '['+str(j)+']'
+                elif inverse:
+                    S[i] = '[!'+str(j)+']'
+
+        return partial_assignment.from_expression(''.join(S))
 
     @classmethod
     def simplify_expression(cls, expr: str):
