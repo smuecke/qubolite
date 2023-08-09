@@ -1,4 +1,5 @@
 import warnings
+from functools import wraps
 from hashlib   import md5
 from importlib import import_module
 from sys       import stderr
@@ -14,6 +15,19 @@ warnings.showwarning = _custom_showwarning
 
 def warn(*args, **kwargs):
     warnings.warn(*args, **kwargs)
+
+
+def deprecated(func):
+    """This is a decorator which can be used to mark functions
+    as deprecated. It will result in a warning being emitted
+    when the function is used."""
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        warnings.warn(f'{func.__name__} is deprecated',
+                      category=DeprecationWarning,
+                      stacklevel=2)
+        return func(*args, **kwargs)
+    return new_func
 
 
 def is_symmetrical(arr, rtol=1e-05, atol=1e-08):
@@ -35,6 +49,14 @@ def min_max(it):
         if x < min_: min_ = x
         if x > max_: max_ = x
     return min_, max_
+
+
+def to_shape(size_or_shape):
+    if isinstance(size_or_shape, int):
+        if size_or_shape == 1:
+            return ()
+        return (size_or_shape,)
+    return (*size_or_shape,)
 
 
 def warn_size(n: int, limit: int=30):

@@ -4,8 +4,11 @@ import numpy as np
 from numpy import newaxis as na
 
 from .bitvec  import all_bitvectors, all_bitvectors_array
-from ._misc   import get_random_state, is_triu, make_upper_triangle, warn_size
+from ._misc   import (
+    deprecated, get_random_state, is_triu,
+    make_upper_triangle, warn_size)
 from _c_utils import brute_force as _brute_force_c
+
 
 def is_qubo_like(arr):
     """Check if given array defines a QUBO instance, i.e., if the array is
@@ -474,9 +477,12 @@ class qubo:
         else:
             return sgap
 
-    def clamp(self, partial_assignment=None):
+    @deprecated
+    def clamp(self, partial_assignment: dict):
         """Create QUBO instance equivalent to this but with a subset of
         variables fixed (_clamped_) to constant values.
+        **Warning:** This method is deprecated. Use 
+        :meth:`assignment.partial_assignment.apply` instead!
 
         Args:
             partial_assignment (dict, optional): Dictionary mapping variable

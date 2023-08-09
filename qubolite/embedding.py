@@ -262,3 +262,31 @@ class Max2Sat(qubo_embedding):
             clauses = int(1.5 * n)
         # TODO
         return NotImplemented
+
+
+class KernelSVM(qubo_embedding):
+
+    def __init__(self, X, y, C=1.0, kernel=None, **kernel_params):
+        self.__X = X
+        self.__y = y
+        self.__C = C
+        self.__kernel = kernel
+        self.__kernel_params = kernel_params
+
+    @property
+    def data(self):
+        return dict(X=self.__X, y=self.__y)
+    
+    @property
+    def qubo(self):
+        K = pairwise_kernels(
+            X=self.X,
+            metric=self.__kernel,
+            **self.__kernel_params)
+        m = 0.5*(self.__C**2)*K
+        m += m.tril(m, -1).T
+        m -= self.__C*np.diag(K.shape[0])
+        return qubo(np.triu(m))
+    
+    def map_solution(self, x):
+        return np.where(x)[0]
