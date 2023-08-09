@@ -1,6 +1,7 @@
 import re
 from functools import reduce
-from operator  import methodcaller, xor
+from itertools import combinations
+from operator  import xor
 
 import networkx as nx
 import numpy    as np
@@ -80,16 +81,16 @@ class partial_assignment:
         const_zero, const_one = [], []
         for u, _, data in self.__PAG.in_edges('1', data=True):
             (const_zero if data['inverse'] else const_one).append(u)
-        if const_zero: s += ', '.join(const_zero) + ' = 0;\n'
-        if const_one:  s += ', '.join(const_one)  + ' = 1;\n'
+        if const_zero: s += ', '.join(const_zero) + ' = 0; '
+        if const_one:  s += ', '.join(const_one)  + ' = 1; '
         for v in self.__PAG.nodes():
             if v == '1': continue
             us_pos, us_neg = [], []
             for u, _, data in self.__PAG.in_edges(v, data=True):
                 (us_neg if data['inverse'] else us_pos).append(u)
-            if us_pos: s += ', '.join(us_pos) + ' = '   + v + ';\n'
-            if us_neg: s += ', '.join(us_neg) + ' != ' + v + ';\n'
-        return s[:-1] # remove trailing newline
+            if us_pos: s += ', '.join(us_pos) + ' = '   + v + '; '
+            if us_neg: s += ', '.join(us_neg) + ' != ' + v + '; '
+        return s[:-2] # remove trailing separator
 
     @property
     def size(self):
@@ -157,31 +158,24 @@ class partial_assignment:
 
     @classmethod
     def infer(cls, X: np.ndarray):
+        X_ = X.reshape(-1, X.shape[-1])
         N, n = X.shape
+        assert N > 0, 'At least one example is required!'
         S = ['*'] * n
-
-        uniques_per_col = np.apply_along_axis(lambda x: len(np.unique(x)), axis=0, arr=X)
-
-        for i in range(n):
-            S[i] = str(X[0][i]) if uniques_per_col[i] == 1 else '*'
-
-        for i in range(n):
-            for j in range(i+1,n):
-                inverse = True
-                same = True
-                for k in range(N):
-                    if X[k][i] == X[k][j]:
-                        inverse = False
-                    if X[k][i] != X[k][j]:
-                        same = False
-                    if not inverse and not same:
-                        break
-                if same:
-                    S[i] = '['+str(j)+']'
-                elif inverse:
-                    S[i] = '[!'+str(j)+']'
-
-        return partial_assignment.from_expression(''.join(S))
+        # find constants
+        col_sum = np.sum(X, axis=0)
+        for i, s in enumerate(col_sum):
+            if   s == 0: S[i] = '0'
+            elif s == N: S[i] = '1'
+        # find correspondences
+        free = np.asarray([i for i in range(n-1, -1, -1) if S[i]=='*'], dtype=int)
+        col_eq = (X_[:,np.newaxis,:]==X_[...,np.newaxis]).sum(0)
+        for i, j in combinations(free, r=2):
+            if col_eq[i, j] == 0:
+                S[i] = f'[!{j}]'
+            elif col_eq[i, j] == N:
+                S[i] = f'[{j}]'
+        return cls.from_expression(''.join(S))
 
     @classmethod
     def simplify_expression(cls, expr: str):
