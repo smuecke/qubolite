@@ -27,12 +27,19 @@ class partial_assignment:
     tied to the value of another bit (or its inverse). The bits that are not
     fixed or tied are called *free variables*.
 
-    The preferred way to instantiate a partial assignment is either through a
-    bit vector expression (see :meth:`assignment.partial_assignment.from_expression`) or
-    through an explicit list of assignments (see :meth:`assignment.partial_assignment.from_string`).
+    The preferred way to instantiate a partial assignment is through the str
+    argument or through a bit vector expression (see :meth:`assignment.partial_assignment.from_expression`).
+    However, you can specify a partial assignment graph using the ``graph`` argument.
 
     Args:
-        graph (networkx.DiGraph): Directed graph representing a partial variable
+        s (str, optional): String representation of a partial assignment; see 
+            examples below for the format.
+        n (int, optional): The minimum number of bits of the bit vector; e.g.,
+            if only ``x2 = 1`` is specified, by setting ``n=5``, the partial 
+            assignment will have 5 bits (i.e., ``**1**``). If None (default), 
+            use the highest bit index to determine the size. If the highest 
+            index is greater than ``n``, then it will be used instead of ``n``.
+        graph (networkx.DiGraph, optional): Directed graph representing a partial variable
             assignment. The nodes must be labeled ``"x0"``, ``"x1"``, etc., up to
             some ``n-1`` for all bit variables. Additionally, there must be a
             node labeled ``"1"``. An edge from ``"x3"`` to ``"1"`` means that
@@ -42,18 +49,46 @@ class partial_assignment:
             an edge from ``"x3"`` to ``"x4"`` with ``inverse=True`` means that
             bit 3 is always the opposite of bit 4. The preferred way to create
             instances is through ``from_expression`` or ``from_string``. Only
-            use the constructor if you know what you are doing.
+            use the constructor if you know what you are doing. If specified,
+            ``s`` and ``n`` will be ignored.
+
+    Examples:
+        The string representation of a partial assignment consists of a list of 
+        bit assignments separated by semicola (``;``). A bit assignment consists 
+        of a variable or a comma-separated list of bit variables followed by ``=`` 
+        or ``!=`` and then a single bit variable or ``0`` or ``1``. A bit 
+        variable consists of the letter ``x`` followed by a non-negative integer 
+        denoting the bit index. Additionally you can specify ranges of 
+        consecutive bit variables like ``x{<i>-<j>}``, where ``<i>`` and ``<j>``
+        are the start and stop index (inclusive) respectively.
+        The following lines are all valid strings:
+
+            x0 = 1
+            x2, x3, x5 != x8; x6 = 0
+            x4=x3;x10=1
+            x{2-6}, x8 = x0; x7 != x0
+
+        The partial assignment can then be instantiated like this:
+
+        >>> PA = partial_assignment('x4!=x5; x1=0', n=10)
+        >>> PA
+        x1 = 0; x5 != x4
+        >>> PA.to_expression()
+        *0***[!4]****
     """
 
     __BITVEC_EXPR = re.compile(r'[01*]|\[!?\d+\]|\{\d+\}')
     __NODE_NAME_PATTERN = re.compile(r'(x(0$|([1-9]\d*)))|1$')
 
-    def __init__(self, graph: nx.DiGraph):
-        # check if `graph` is a valid PAG (=Partial Assignment Graph)
-        assert all(self.__NODE_NAME_PATTERN.match(u) is not None for u in graph.nodes), \
-            '`graph` contains invalid node names'
-        self.__PAG = self.__normalize_graph(graph)
-        self.__dirty = False
+    def __init__(self, s: str=None, n: int=None, *, graph: nx.DiGraph=None):
+        if graph is not None:
+            # check if `graph` is a valid PAG (=Partial Assignment Graph)
+            assert all(self.__NODE_NAME_PATTERN.match(u) is not None for u in graph.nodes), \
+                '`graph` contains invalid node names'
+            self.__PAG = graph
+        else:
+            self.__PAG = self.__from_string(s, n)
+        self.__dirty = True
         self.grouping_limit = 10
 
     def __normalize_graph(self, G: nx.DiGraph):
@@ -115,6 +150,43 @@ class partial_assignment:
             if us_neg: s += ', '.join(us_neg) + ' != ' + v + '; '
         return s[:-2] # remove trailing separator
 
+    def __from_string(self, s: str, n: int=None):
+        def unpack_ranges(nodes):
+            # handle expressions like 'x{1-5}'
+            for node in nodes:
+                if '{' in node:
+                    start, stop = node[2:-1].split('-')
+                    yield from [f'x{i}' for i in range(int(start), int(stop)+1)]
+                else:
+                    yield node
+        PAG = nx.DiGraph()
+        PAG.add_node('1')
+        assignments = s.split(';')
+        for assignment in assignments:
+            try:
+                left, right = assignment.split('!=')
+                inv = True
+            except ValueError:
+                if assignment.strip() == '':
+                        continue
+                left, right = assignment.split('=')
+                inv = False
+            nodes_left = map(methodcaller('strip'), left.split(','))
+            node_right = right.strip()
+            if node_right == '0':
+                v = '1'
+                inv = True
+            else:
+                v = node_right
+            PAG.add_edges_from([(u, v, {'inverse': inv})
+                                for u in unpack_ranges(nodes_left)])
+        # add potentially missing nodes
+        n_ = 1 + int(max([u for u in PAG.nodes() if u!='1'],
+                         key=lambda x: int(x[1:]))[1:])
+        n = n_ if n is None else max(n, n_)
+        PAG.add_nodes_from([f'x{i}' for i in range(n)])
+        return PAG
+
     @property
     def size(self):
         """Total number of bits described by the partial assignment, including
@@ -127,9 +199,27 @@ class partial_assignment:
 
     @property
     @__assert_normalized
+    def free(self):
+        free_nodes = set(range(self.size)).difference([int(u[1:]) for u, _ in self.__PAG.edges])
+        return np.fromiter(sorted(free_nodes), dtype=int)
+
+    @property
+    @__assert_normalized
     def num_free(self):
         nodes_with_out_edges = { u for u, _ in self.__PAG.edges }
         return self.__PAG.number_of_nodes()-len(nodes_with_out_edges)-1
+
+    @property
+    @__assert_normalized
+    def fixed(self):
+        nodes_with_out_edges = { int(u[1:]) for u, _ in self.__PAG.edges }
+        return np.fromiter(sorted(nodes_with_out_edges), dtype=int)
+    
+    @property
+    @__assert_normalized
+    def num_fixed(self):
+        nodes_with_out_edges = { u for u, _ in self.__PAG.edges }
+        return len(nodes_with_out_edges)
 
     @__dirty
     def assign_constant(self, u: int, const):
@@ -248,34 +338,7 @@ class partial_assignment:
                 G.add_edge(xi, '1', inverse=False); continue
             xj = 'x' + token.strip('[!]')
             G.add_edge(xi, xj, inverse='!' in token)
-        return cls(G)
-
-    @classmethod
-    def from_string(cls, s: str, n: int=None):
-        PAG = nx.DiGraph()
-        PAG.add_node('1')
-        assignments = s.split(';')
-        for assignment in assignments:
-            try:
-                left, right = assignment.split('!=')
-                inv = True
-            except ValueError:
-                left, right = assignment.split('=')
-                inv = False
-            nodes_left = map(methodcaller('strip'), left.split(','))
-            node_right = right.strip()
-            if node_right == '0':
-                v = '1'
-                inv = True
-            else:
-                v = node_right
-            PAG.add_edges_from([(u, v, {'inverse': inv}) for u in nodes_left])
-        # add potentially missing nodes
-        n_ = 1 + int(max([u for u in PAG.nodes() if u!='1'],
-                         key=lambda x: int(x[1:]))[1:])
-        n = n_ if n is None else max(n, n_)
-        PAG.add_nodes_from([f'x{i}' for i in range(n)])
-        return cls(PAG)
+        return cls(graph=G)
 
     @classmethod
     def infer(cls, X: np.ndarray):

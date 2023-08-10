@@ -10,12 +10,10 @@ from .bounds import (
     lb_negative_parameters,
     ub_local_descent,
     ub_sample)
+
 from ._heuristics import MatrixOrder, HEURISTICS
-from ._misc import get_random_state
-
-
-# type class for partially assigned QUBO instances
-subqubo_t = namedtuple('subqubo', ['qubo', 'assignment', 'remaining', 'offset'], defaults=[0])
+from ._misc       import get_random_state
+from .assignment  import partial_assignment
 
 ################################################################################
 # Dynamic Range Compression                                                    #
@@ -597,10 +595,6 @@ def qpro_plus(Q: qubo):
             if last_assignment != i: # this means x_i could not be assigned
                 hList.append(i)
 
-    # return assignment pattern using bit vector expression syntax
     assignment_pattern = ''.join([str(assignments.get(f'x_{i}', '*')) for i in range(Q.n)])
-    return subqubo_t(
-        qubo=qubo(-m[np.ix_(indices, indices)]),
-        assignment=assignment_pattern,
-        remaining=np.asarray(indices, dtype=int),
-        offset=-c_0) # because sign of Q is flipped at the beginning we have to reverse that here
+    return partial_assignment.from_expression(assignment_pattern), -c_0
+    # reduced qubo: qubo(-m[np.ix_(indices, indices)])
