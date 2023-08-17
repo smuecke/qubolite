@@ -487,17 +487,27 @@ def qpro_plus(Q: qubo):
     for reducing the QUBO size by applying logical implications.
 
     Args:
-        Q (qubo): containing the QUBO
+        Q (qubo): QUBO instance to be reduced.
 
     Returns:
-        qubo: updated QUBO
-        dict: containing all assignments made
-        int: offset of energies of original QUBO
-        list: indices of variables that have not been assigned
+        Instance of :class:`assignment.partial_assignment` representing the
+        reduction. See example.
 
     Example:
-        >>> Q = qubo.random(10, density=0.1)
-        >>> Q_reduced, assignments, energyoffset, indices = qupro_preprocessing(Q)
+        >>> import qubolite as ql
+        >>> Q = ql.qubo.random(32, density=0.2, random_state='example')
+        >>> PA = ql.preprocessing.qpro_plus(Q)
+        >>> print(f'{PA.num_fixed} variables were eliminated!')
+        9 variables were eliminated!
+        >>> Q_reduced, offset = PA.apply(Q)
+        >>> Q_reduced.n
+        23
+        >>> x = ql.bitvec.from_string('10011101011011110001011')
+        >>> Q_reduced(x)+offset
+        -0.5215481745331401
+        >>> Q(PA.expand(x))
+        -0.5215481745331385
+
     """
     #assumes QUBO to be upper triangluar
     #paper assumes maximazation hence we need to flip the sign for minimization
@@ -596,5 +606,6 @@ def qpro_plus(Q: qubo):
                 hList.append(i)
 
     assignment_pattern = ''.join([str(assignments.get(f'x_{i}', '*')) for i in range(Q.n)])
-    return partial_assignment.from_expression(assignment_pattern), -c_0
+    return partial_assignment.from_expression(assignment_pattern)
     # reduced qubo: qubo(-m[np.ix_(indices, indices)])
+    # offset: -c_0
