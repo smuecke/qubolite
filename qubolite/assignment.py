@@ -487,7 +487,7 @@ class partial_assignment:
         out_shape = x.shape[:-1] if x.ndim > 1 else (1,)
         out = np.ones(out_shape, dtype=bool)
         if x.shape[-1] != self.size:
-            return out & False if x.ndum > 1 else False
+            return out & False if x.ndim > 1 else False
         for i, token in enumerate(self._ungrouped_tokens(self.to_expression())):
             if token == '0':
                 out &= x[..., i] == 0
