@@ -461,9 +461,42 @@ class partial_assignment:
         return self.expand(rand)
     
     def all(self):
+        """Generate all vectors matching this given partial assignment.
+
+        Returns:
+            numpy.ndarray: Array containing all bit vectors that match this
+                partial assignment. If ``n`` is the size of this assignment and
+                ``m`` the number of free variables, the resulting shape will be
+                ``(2**m, n)``.
+        """
         m = self.num_free
         all_ = np.arange(1<<m)[:, np.newaxis] & (1<<np.arange(m)) > 0
         return self.expand(all_)
     
     def match(self, x: np.ndarray):
-        raise NotImplementedError()
+        """Check if a given bit vector or array of bit vectors matches this
+        partial assignment, i.e., if it represents a valid realization.
+
+        Args:
+            x (np.ndarray): Bit vector or array of bit vectors of shape ``(m?, n)``.
+
+        Returns:
+            Boolean ``np.ndarray`` of shape ``(m?,)`` or single Boolean value
+            indicating if the bit vectors match this partial assignment.
+        """
+        out_shape = x.shape[:-1] if x.ndim > 1 else (1,)
+        out = np.ones(out_shape, dtype=bool)
+        if x.shape[-1] != self.size:
+            return out & False if x.ndum > 1 else False
+        for i, token in enumerate(self._ungrouped_tokens(self.to_expression())):
+            if token == '0':
+                out &= x[..., i] == 0
+            elif token == '1':
+                out &= x[..., i] == 1
+            elif token != '*':
+                j = int(token.strip('[!]'))
+                if '!' in token: # inverse
+                    out &= x[..., i] != x[..., j]
+                else:
+                    out &= x[..., i] == x[..., j]
+        return out if x.ndim > 1 else out[0]
