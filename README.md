@@ -104,6 +104,7 @@ The complete API documentation can be found [here](https://smuecke.github.io/qub
 * **0.8** New embeddings, new solving methods; switched to NumPy random generators from `RandomState`; added parameter compression for dynamic range reduction; Added documentation
     * **0.8.1** some fixes to documentation
     * **0.8.2** implemented `qubo.dx2()`; added several new solving heuristics
+    * **0.8.3** added submodule `preprocessing` and moved DR reduction there; added `partial_assignment` class as replacement of `qubo.clamp()`, which is now deprecated
 
 ## License
 
