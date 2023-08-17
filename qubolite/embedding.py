@@ -265,6 +265,20 @@ class Max2Sat(qubo_embedding):
 
 
 class KernelSVM(qubo_embedding):
+    """Kernel Support Vector Machine learning: Given labeled numerical data,
+    and a kernel, determines the support vectors, which is a subset of the 
+    data that lie on the margin of a separating hyperplane in the feature space 
+    determined by the kernel.
+
+    Args:
+        X (numpy.ndarray): Input data (row-wise) of shape ``(N, d)``.
+        y (numpy.ndarray): Binary labels (-1 or 1) of shape ``(N,)``
+        C (float, optional): Hyperparameter controlling the penalization of
+            misclassified data points. Defaults to 1.
+        kernel (str, optional): Kernel function. Defaults to ``'linear'``.
+            Can be any of `those <https://github.com/scikit-learn/scikit-learn/blob/7f9bad99d6e0a3e8ddf92a7e5561245224dab102/sklearn/metrics/pairwise.py#L2216>`__.
+        **kernel_params: Additional keyword arguments for the Kernel function, passed to ``sklearn.metrics.pairwise_kernels``.
+    """
 
     def __init__(self, X, y, C=1.0, kernel=None, **kernel_params):
         self.__X = X
@@ -283,7 +297,7 @@ class KernelSVM(qubo_embedding):
             X=self.X,
             metric=self.__kernel,
             **self.__kernel_params)
-        m = 0.5*(self.__C**2)*K
+        m = 0.5*(self.__C**2)*K*np.outer(self.__y, self.__y)
         m += m.tril(m, -1).T
         m -= self.__C*np.diag(K.shape[0])
         return qubo(np.triu(m))
