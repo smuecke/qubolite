@@ -268,7 +268,8 @@ class KernelSVM(qubo_embedding):
     """Kernel Support Vector Machine learning: Given labeled numerical data,
     and a kernel, determines the support vectors, which is a subset of the 
     data that lie on the margin of a separating hyperplane in the feature space 
-    determined by the kernel.
+    determined by the kernel. Note that this method makes some simplifying
+    assumptions detailed in `this paper <https://ceur-ws.org/Vol-2454/paper_51.pdf>`__.
 
     Args:
         X (numpy.ndarray): Input data (row-wise) of shape ``(N, d)``.
@@ -280,7 +281,7 @@ class KernelSVM(qubo_embedding):
         **kernel_params: Additional keyword arguments for the Kernel function, passed to ``sklearn.metrics.pairwise_kernels``.
     """
 
-    def __init__(self, X, y, C=1.0, kernel=None, **kernel_params):
+    def __init__(self, X, y, C=1.0, kernel='linear', **kernel_params):
         self.__X = X
         self.__y = y
         self.__C = C
@@ -294,12 +295,12 @@ class KernelSVM(qubo_embedding):
     @property
     def qubo(self):
         K = pairwise_kernels(
-            X=self.X,
+            X=self.__X,
             metric=self.__kernel,
             **self.__kernel_params)
         m = 0.5*(self.__C**2)*K*np.outer(self.__y, self.__y)
-        m += m.tril(m, -1).T
-        m -= self.__C*np.diag(K.shape[0])
+        m += np.tril(m, -1).T
+        m -= self.__C*np.eye(K.shape[0])
         return qubo(np.triu(m))
     
     def map_solution(self, x):
