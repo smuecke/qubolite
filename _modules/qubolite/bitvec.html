@@ -127,6 +127,7 @@
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/smuecke/qubolite">Source Code</a></li>
 </ul>
 
     </div>
@@ -380,82 +381,6 @@ document.write(`
 <span class="sd">        {0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 1, 6: 0, 7: 0}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bitvec</span><span class="p">)</span> <span class="p">}</span></div>
-
-
-<span class="n">_BITVEC_EXPR</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[01*]|\[!?\d+\]&#39;</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">_expr_normal_form</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-    <span class="c1"># re-arrange tokens so that all references</span>
-    <span class="c1"># point to previous indices</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">continue</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[!]&#39;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No references to references allowed!&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[!&#39;</span><span class="p">):</span>
-                <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[!&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
-                <span class="n">tokens</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;10*&#39;</span><span class="p">[</span><span class="s1">&#39;01*&#39;</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tokens</span><span class="p">[</span><span class="n">j</span><span class="p">])]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span>
-            <span class="c1"># swap tokens</span>
-            <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tokens</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tokens</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="c1"># check if constant needs to be inverted</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">tokens</span>
-
-<div class="viewcode-block" id="from_expression"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_expression">[docs]</a><span class="k">def</span> <span class="nf">from_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate an array of bit vectors from a string</span>
-<span class="sd">    containing a bit vector expression. Such an expression</span>
-<span class="sd">    consists of a sequence of these symbols: ``0`` - a constant 0,</span>
-<span class="sd">    ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,</span>
-<span class="sd">    ``[i]`` - the same as the bit at index i, ``[!i]`` -  the</span>
-<span class="sd">    inverse of the bit at index i.</span>
-
-<span class="sd">    The last two symbols are called references, and ``i`` their</span>
-<span class="sd">    pointing index (counting from 0). A reference can only ever</span>
-<span class="sd">    point to a constant or ``*``, i.e., higher-order references are</span>
-<span class="sd">    not allowed (and not necessary).</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        expr (str): Bit vector expression.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        numpy.ndarray: Array of bit vectors matched by the expression.</span>
-
-<span class="sd">    Examples:</span>
-<span class="sd">        This function is useful for generating arrays of bit vectors</span>
-<span class="sd">        with a prescribed structure. For instance, &quot;all bit vectors</span>
-<span class="sd">        of length 4 that start with 1 and where the last two bits are</span>
-<span class="sd">        the same&quot; can be expressed as</span>
-
-<span class="sd">        &gt;&gt;&gt; from_expression(&#39;1**[2]&#39;)</span>
-<span class="sd">        array([[1., 0., 0., 0.],</span>
-<span class="sd">        ...    [1., 1., 0., 0.],</span>
-<span class="sd">        ...    [1., 0., 1., 1.],</span>
-<span class="sd">        ...    [1., 1., 1., 1.]])</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tokens</span> <span class="o">=</span> <span class="n">_expr_normal_form</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">_BITVEC_EXPR</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">expr</span><span class="p">)))</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
-    <span class="n">n_free</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n_free</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
-    <span class="n">power</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">]:</span>
-            <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
-            <span class="n">x</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n_free</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">power</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
-            <span class="n">power</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[!]&#39;</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">token</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;!&#39;</span><span class="p">:</span> <span class="c1"># inverse reference</span>
-                <span class="n">x</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">x</span><span class="p">[:,</span><span class="n">ix</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">x</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span><span class="n">ix</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">x</span></div>
 
 
 <span class="c1"># Manipulate Bit Vectors</span>

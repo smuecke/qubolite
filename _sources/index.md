@@ -3,6 +3,7 @@
 
 self
 api
+Source Code <https://github.com/smuecke/qubolite>
 ```
 
 # Quickstart
@@ -19,6 +20,7 @@ The task is to find a binary vector that minimizes this energy function.
 
 The philosophy of this package is to be as light-weight as possible, therefore the core class `qubo` is just a shallow wrapper around a NumPy array containing the QUBO parameters, with many useful methods. Additionally, the package contains methods for **solving** QUBOs, **sampling** from their Gibbs distribution, **bounding** their minimum energy, and **embedding** other problems into QUBO.
 
+
 ## Installation
 
 This package is available on PyPi and can be installed via
@@ -29,9 +31,12 @@ pip install qubolite
 
 Note that this package contains code in C, which is why you need a working C compiler (GCC on Linux, Visual C/C++ on Windows).
 
+
 ## Documentation
 
-The full API documentation can be found by clicking the link on the left, or [here](https://smuecke.github.io/qubolite/api.html).
+The full **API documentation** can be found by clicking the link on the left, or [here](https://smuecke.github.io/qubolite/api.html).
+
+The **source code** is publicly available on [GitHub](https://github.com/smuecke/qubolite).
 
 
 ## Usage Examples
@@ -62,6 +67,7 @@ The bit vector must be a `numpy.ndarray` of size `(n,)` or `(m, n)`.
 >>> Q(xs)
 array([5.81642745, 4.41380893, 11.3391062, 4.34253921, 6.07799747])
 ```
+
 
 ### Solving
 
@@ -95,6 +101,7 @@ For example, the following code shows how to solve a binary clustering problem:
 (array([1., 1., 1., 1., 1., 0., 1., 1., 1., 1., 1., 1., 1., 1., 1., 0., 0.,
        0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]), -44.55740335019274)
 ```
+
 
 ## License
 
