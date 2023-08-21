@@ -1,0 +1,805 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>qubolite.assignment &#8212; qubolite 0.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/qubolite/assignment';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/smuecke/qubolite">Source Code</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for qubolite.assignment</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span><span class="p">,</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">repeat</span>
+<span class="kn">from</span> <span class="nn">operator</span>  <span class="kn">import</span> <span class="n">methodcaller</span><span class="p">,</span> <span class="n">xor</span>
+
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span>    <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.</span>       <span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span> <span class="nn">._misc</span>  <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">make_upper_triangle</span><span class="p">,</span> <span class="n">to_shape</span>
+
+
+<span class="k">def</span> <span class="nf">_follow_edges</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+    <span class="n">v</span><span class="p">,</span> <span class="n">inv</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+            <span class="n">inv</span> <span class="o">^=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">inv</span>
+
+
+<div class="viewcode-block" id="partial_assignment"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment">[docs]</a><span class="k">class</span> <span class="nc">partial_assignment</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents bit vectors of a fixed size ``n`` where a number of</span>
+<span class="sd">    bits at certain positions are either fixed to a constant value (0 or 1), or </span>
+<span class="sd">    tied to the value of another bit (or its inverse). The bits that are not</span>
+<span class="sd">    fixed or tied are called *free variables*.</span>
+
+<span class="sd">    The preferred way to instantiate a partial assignment is through the str</span>
+<span class="sd">    argument or through a bit vector expression (see :meth:`assignment.partial_assignment.from_expression`).</span>
+<span class="sd">    However, you can specify a partial assignment graph using the ``graph`` argument.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str, optional): String representation of a partial assignment; see </span>
+<span class="sd">            examples below for the format.</span>
+<span class="sd">        n (int, optional): The minimum number of bits of the bit vector; e.g.,</span>
+<span class="sd">            if only ``x2 = 1`` is specified, by setting ``n=5``, the partial </span>
+<span class="sd">            assignment will have 5 bits (i.e., ``**1**``). If None (default), </span>
+<span class="sd">            use the highest bit index to determine the size. If the highest </span>
+<span class="sd">            index is greater than ``n``, then it will be used instead of ``n``.</span>
+<span class="sd">        graph (networkx.DiGraph, optional): Directed graph representing a partial variable</span>
+<span class="sd">            assignment. The nodes must be labeled ``&quot;x0&quot;``, ``&quot;x1&quot;``, etc., up to</span>
+<span class="sd">            some ``n-1`` for all bit variables. Additionally, there must be a</span>
+<span class="sd">            node labeled ``&quot;1&quot;``. An edge from ``&quot;x3&quot;`` to ``&quot;1&quot;`` means that</span>
+<span class="sd">            bit 3 is fixed to 1, and an edge from ``&quot;x5&quot;`` to ``&quot;x4&quot;`` means that</span>
+<span class="sd">            bit 5 is tied to bit 4. Every edge must have a boolean attribute</span>
+<span class="sd">            ``inverse`` which indicates if the relation holds inversely, i.e.,</span>
+<span class="sd">            an edge from ``&quot;x3&quot;`` to ``&quot;x4&quot;`` with ``inverse=True`` means that</span>
+<span class="sd">            bit 3 is always the opposite of bit 4. The preferred way to create</span>
+<span class="sd">            instances is through ``from_expression`` or ``from_string``. Only</span>
+<span class="sd">            use the constructor if you know what you are doing. If specified,</span>
+<span class="sd">            ``s`` and ``n`` will be ignored.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        The string representation of a partial assignment consists of a list of </span>
+<span class="sd">        bit assignments separated by semicola (``;``). A bit assignment consists </span>
+<span class="sd">        of a variable or a comma-separated list of bit variables followed by ``=`` </span>
+<span class="sd">        or ``!=`` and then a single bit variable or ``0`` or ``1``. A bit </span>
+<span class="sd">        variable consists of the letter ``x`` followed by a non-negative integer </span>
+<span class="sd">        denoting the bit index. Additionally you can specify ranges of </span>
+<span class="sd">        consecutive bit variables like ``x{&lt;i&gt;-&lt;j&gt;}``, where ``&lt;i&gt;`` and ``&lt;j&gt;``</span>
+<span class="sd">        are the start and stop index (inclusive) respectively.</span>
+<span class="sd">        The following lines are all valid strings:</span>
+
+<span class="sd">            x0 = 1</span>
+<span class="sd">            x2, x3, x5 != x8; x6 = 0</span>
+<span class="sd">            x4=x3;x10=1</span>
+<span class="sd">            x{2-6}, x8 = x0; x7 != x0</span>
+
+<span class="sd">        The partial assignment can then be instantiated like this:</span>
+
+<span class="sd">        &gt;&gt;&gt; PA = partial_assignment(&#39;x4!=x5; x1=0&#39;, n=10)</span>
+<span class="sd">        &gt;&gt;&gt; PA</span>
+<span class="sd">        x1 = 0; x5 != x4</span>
+<span class="sd">        &gt;&gt;&gt; PA.to_expression()</span>
+<span class="sd">        *0***[!4]****</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">__BITVEC_EXPR</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[01*]|\[!?\d+\]|\{\d+\}&#39;</span><span class="p">)</span>
+    <span class="n">__NODE_NAME_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(x(0$|([1-9]\d*)))|1$&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># check if `graph` is a valid PAG (=Partial Assignment Graph)</span>
+            <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__NODE_NAME_PATTERN</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> \
+                <span class="s1">&#39;`graph` contains invalid node names&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span> <span class="o">=</span> <span class="n">graph</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__from_string</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dirty</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grouping_limit</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">def</span> <span class="nf">__normalize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">simple_cycles</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
+            <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="p">[</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span>
+            <span class="n">conflict</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">xor</span><span class="p">,</span> <span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="o">*</span><span class="n">e</span><span class="p">)[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">conflict</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Partial Assignment Graph contains conflicting cycle!&#39;</span><span class="p">)</span>
+            <span class="c1"># resolve cycle by deleting an edge</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="o">*</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="c1"># resolve chained references as far as possible</span>
+        <span class="c1"># TODO: This could be more efficient…</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">G</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">inv</span> <span class="o">=</span> <span class="n">_follow_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">node</span><span class="p">:</span>
+                <span class="n">v</span><span class="p">,</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                <span class="c1"># ensure that higher indices always point to lower indices</span>
+                <span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="s1">&#39;1&#39;</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">&lt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+                    <span class="c1"># reverse edge</span>
+                    <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">inv</span><span class="p">)</span>
+                    <span class="c1"># flip all edges incident to u</span>
+                    <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">in_edges</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)):</span>
+                        <span class="n">G</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+                        <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="o">**</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">inv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">G</span>
+
+    <span class="k">def</span> <span class="nf">__dirty</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__dirty</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">go</span>
+
+    <span class="k">def</span> <span class="nf">__assert_normalized</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">dirty</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__dirty&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dirty</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize_graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dirty</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">go</span>
+
+    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">const_zero</span><span class="p">,</span> <span class="n">const_one</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">in_edges</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="p">(</span><span class="n">const_zero</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">const_one</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">const_zero</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">const_zero</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = 0; &#39;</span>
+        <span class="k">if</span> <span class="n">const_one</span><span class="p">:</span>  <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">const_one</span><span class="p">)</span>  <span class="o">+</span> <span class="s1">&#39; = 1; &#39;</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="n">us_pos</span><span class="p">,</span> <span class="n">us_neg</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">in_edges</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                <span class="p">(</span><span class="n">us_neg</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">us_pos</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">us_pos</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">us_pos</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; = &#39;</span>   <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span>
+            <span class="k">if</span> <span class="n">us_neg</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">us_neg</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; != &#39;</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># remove trailing separator</span>
+
+    <span class="k">def</span> <span class="nf">__from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">unpack_ranges</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="c1"># handle expressions like &#39;x{1-5}&#39;</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;{&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+                    <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                    <span class="k">yield from</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">node</span>
+        <span class="n">PAG</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="n">PAG</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+        <span class="n">assignments</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">assignment</span> <span class="ow">in</span> <span class="n">assignments</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">assignment</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;!=&#39;</span><span class="p">)</span>
+                <span class="n">inv</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">assignment</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">assignment</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+                <span class="n">inv</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">nodes_left</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">methodcaller</span><span class="p">(</span><span class="s1">&#39;strip&#39;</span><span class="p">),</span> <span class="n">left</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+            <span class="n">node_right</span> <span class="o">=</span> <span class="n">right</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">node_right</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+                <span class="n">inv</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">node_right</span>
+            <span class="n">PAG</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">([(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;inverse&#39;</span><span class="p">:</span> <span class="n">inv</span><span class="p">})</span>
+                                <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">unpack_ranges</span><span class="p">(</span><span class="n">nodes_left</span><span class="p">)])</span>
+        <span class="c1"># add potentially missing nodes</span>
+        <span class="n">n_</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">PAG</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span> <span class="k">if</span> <span class="n">u</span><span class="o">!=</span><span class="s1">&#39;1&#39;</span><span class="p">],</span>
+                         <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">n_</span> <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">max</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n_</span><span class="p">)</span>
+        <span class="n">PAG</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">PAG</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Total number of bits described by the partial assignment, including</span>
+<span class="sd">        fixed/tied and free bits.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Number of bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">free_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">free_nodes</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">num_free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    
+    <span class="nd">@property</span>
+    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">num_fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">)</span>
+
+<div class="viewcode-block" id="partial_assignment.assign_constant"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.assign_constant">[docs]</a>    <span class="nd">@__dirty</span>
+    <span class="k">def</span> <span class="nf">assign_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fix a bit at the given index to a constant 0 or 1. If the index is</span>
+<span class="sd">        larger than the current size, add all intermediate bits.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u (int): Bit index.</span>
+<span class="sd">            const (int or str): Constant value; must be 0 or 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">const_</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">const</span><span class="p">))</span>
+        <span class="k">assert</span> <span class="n">const_</span> <span class="ow">in</span> <span class="s1">&#39;01&#39;</span><span class="p">,</span> <span class="s1">&#39;`const` must be 0 or 1&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">u</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">out_edges</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">const_</span><span class="o">==</span><span class="s1">&#39;0&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="partial_assignment.assign_index"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.assign_index">[docs]</a>    <span class="nd">@__dirty</span>
+    <span class="k">def</span> <span class="nf">assign_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tie a bit to another. If either of the indices is larger than the</span>
+<span class="sd">        current size, add all intermediate bits.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            u (int): Bit index to tie to another index</span>
+<span class="sd">            v (int): Second bit index  that ``u`` is tied to.</span>
+<span class="sd">            inverse (bool, optional): Indicates if the first bit is tied</span>
+<span class="sd">                inversely to the second. Defaults to False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">))])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">remove_edges_from</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">out_edges</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">inverse</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="partial_assignment.to_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.to_expression">[docs]</a>    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">to_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;0&#39;</span> <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="s2">&quot;!&quot;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;inverse&quot;</span><span class="p">]</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="si">}{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                <span class="n">tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+        <span class="c1"># group tokens</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span>
+            <span class="n">rep</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">rep</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grouping_limit</span><span class="p">:</span>
+                <span class="n">expr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="se">{{</span><span class="si">{</span><span class="n">rep</span><span class="si">}</span><span class="se">}}</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">expr</span> <span class="o">+=</span> <span class="n">token</span><span class="o">*</span><span class="n">rep</span>
+        <span class="k">return</span> <span class="n">expr</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_ungrouped_tokens</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__BITVEC_EXPR</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">):</span>
+                <span class="n">rep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">assert</span> <span class="n">rep</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;repetition numbers must be &gt;= 1&#39;</span>
+                <span class="k">yield from</span> <span class="n">repeat</span><span class="p">(</span><span class="n">last_token</span><span class="p">,</span> <span class="n">rep</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">token</span>
+                <span class="n">last_token</span> <span class="o">=</span> <span class="n">token</span>
+
+<div class="viewcode-block" id="partial_assignment.from_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.from_expression">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a partial assignment from a string containing a bit vector</span>
+<span class="sd">        expression. Such an expression consists of a sequence of these tokens: ``0``</span>
+<span class="sd">        - a constant 0, ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,</span>
+<span class="sd">        ``[i]`` - the same as the bit at index i, ``[!i]`` - the inverse of the bit</span>
+<span class="sd">        at index i.</span>
+
+<span class="sd">        The last two tokens are called references, with ``i`` being their pointing</span>
+<span class="sd">        index (counting from 0), where ``i`` refers to the i-th token of the</span>
+<span class="sd">        bitvector expression itself. Note that a ``RuntimeError`` is raised if there</span>
+<span class="sd">        is a circular reference chain.</span>
+
+<span class="sd">        If a token is repeated, you can use specify a number of repetitions in</span>
+<span class="sd">        curly braces, e.g., ``*{5}`` is the same as ``*****``. This also works with</span>
+<span class="sd">        references.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            expr (str): Bit vector expression.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            partial_assignment: The partial assignment described by the</span>
+<span class="sd">                expression.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            This function is useful for generating arrays of bit vectors</span>
+<span class="sd">            with a prescribed structure. For instance, &quot;all bit vectors</span>
+<span class="sd">            of length 4 that start with 1 and where the last two bits are</span>
+<span class="sd">            the same&quot; can be expressed as</span>
+
+<span class="sd">            &gt;&gt;&gt; PA = from_expression(&#39;1**[2]&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; PA</span>
+<span class="sd">            x0 = 1; x3 = x2</span>
+<span class="sd">            &gt;&gt;&gt; PA.all()</span>
+<span class="sd">            array([[1., 0., 0., 0.],</span>
+<span class="sd">            ...    [1., 1., 0., 0.],</span>
+<span class="sd">            ...    [1., 0., 1., 1.],</span>
+<span class="sd">            ...    [1., 1., 1., 1.]])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+        <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_ungrouped_tokens</span><span class="p">(</span><span class="n">expr</span><span class="p">)):</span>
+            <span class="n">xi</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span> <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span> <span class="k">continue</span>
+            <span class="n">xj</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span> <span class="o">+</span> <span class="n">token</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[!]&#39;</span><span class="p">)</span>
+            <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="s1">&#39;!&#39;</span> <span class="ow">in</span> <span class="n">token</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">G</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="partial_assignment.infer"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.infer">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">infer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">N</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;At least one example is required!&#39;</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="c1"># find constants</span>
+        <span class="n">col_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">col_sum</span><span class="p">):</span>
+            <span class="k">if</span>   <span class="n">s</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+            <span class="k">elif</span> <span class="n">s</span> <span class="o">==</span> <span class="n">N</span><span class="p">:</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="c1"># find correspondences</span>
+        <span class="n">free</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;*&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">col_eq</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_</span><span class="p">[:,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:]</span><span class="o">==</span><span class="n">X_</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">free</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">col_eq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[!</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">]&#39;</span>
+            <span class="k">elif</span> <span class="n">col_eq</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">N</span><span class="p">:</span>
+                <span class="n">S</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s1">]&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">S</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="partial_assignment.simplify_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.simplify_expression">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">simplify_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">pa</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pa</span><span class="o">.</span><span class="n">to_expression</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="partial_assignment.to_matrix"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.to_matrix">[docs]</a>    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># construct transformation matrix</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">one</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span> <span class="c1"># index of constant 1</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+            <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                <span class="c1"># no outgoing edges -&gt; free variable</span>
+                <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]:</span>
+                    <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">one</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]:</span>
+                    <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+                    <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">one</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">T</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">return</span> <span class="n">T</span></div>
+
+<div class="viewcode-block" id="partial_assignment.apply"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.apply">[docs]</a>    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply this partial assignment either to a ``qubo`` instance. The</span>
+<span class="sd">        result is a new, smaller instance where the variables fixed by this</span>
+<span class="sd">        partial assignment are made implicit. E.g., if this assignment</span>
+<span class="sd">        corresponds to the expression ``*1**[0]`` and we apply it to a ``qubo``</span>
+<span class="sd">        of size 5, the resulting ``qubo`` will have size 3 (which is ``num_free``</span>
+<span class="sd">        of this assignment), and its variables correspond to the ``*`` in the</span>
+<span class="sd">        expression.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            expr (str): Bit vector expression.</span>
+<span class="sd">            x (np.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``</span>
+<span class="sd">                where ``m`` is the number of ``*`` tokens in ``expr``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the</span>
+<span class="sd">                number of tokens in ``expr``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span>
+        <span class="k">assert</span> <span class="n">Q</span><span class="o">.</span><span class="n">n</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="s1">&#39;Size of partial assignment does not match QUBO size&#39;</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">make_upper_triangle</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Q</span><span class="o">.</span><span class="n">m</span> <span class="o">@</span> <span class="n">T</span><span class="p">)</span>
+        <span class="c1"># eliminate constant 1 from matrix (last row and column)</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">m</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">m</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">offset</span></div>
+            
+
+<div class="viewcode-block" id="partial_assignment.expand"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.expand">[docs]</a>    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the free variables of this partial assignments with bits</span>
+<span class="sd">        provided by ``x``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (np.ndarray): Bits to fill the free variables of this partial</span>
+<span class="sd">                assignment with. Must have shape ``(m?, n)``, where ``n`` is the</span>
+<span class="sd">                number of free variables of this partial assignment, as given by</span>
+<span class="sd">                the property ``num_free``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: (Array of) bit vector(s) expanded by the partial</span>
+<span class="sd">                assignment. The shape is ``(m?, s)``, where ``s`` is the size</span>
+<span class="sd">                of this partial assignment as given by the property ``size``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">k</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="p">,</span> <span class="s1">&#39;Dimension of `x` does not match free variables in expression&#39;</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="n">ix</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ungrouped_tokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_expression</span><span class="p">())):</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="ow">in</span> <span class="s1">&#39;01&#39;</span><span class="p">:</span>
+                <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[!&#39;</span><span class="p">):</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">token</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">):</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">z</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">ix</span><span class="p">]</span>
+                <span class="n">ix</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">z</span></div>
+
+<div class="viewcode-block" id="partial_assignment.random"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.random">[docs]</a>    <span class="nd">@__assert_normalized</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="o">*</span><span class="n">to_shape</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">0.5</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">rand</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="partial_assignment.all"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate all vectors matching this given partial assignment.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: Array containing all bit vectors that match this</span>
+<span class="sd">                partial assignment. If ``n`` is the size of this assignment and</span>
+<span class="sd">                ``m`` the number of free variables, the resulting shape will be</span>
+<span class="sd">                ``(2**m, n)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span>
+        <span class="n">all_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">m</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">all_</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="partial_assignment.match"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a given bit vector or array of bit vectors matches this</span>
+<span class="sd">        partial assignment, i.e., if it represents a valid realization.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (np.ndarray): Bit vector or array of bit vectors of shape ``(m?, n)``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Boolean ``np.ndarray`` of shape ``(m?,)`` or single Boolean value</span>
+<span class="sd">            indicating if the bit vectors match this partial assignment.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_shape</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">out_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">out</span> <span class="o">&amp;</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">token</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ungrouped_tokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_expression</span><span class="p">())):</span>
+            <span class="k">if</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="k">elif</span> <span class="n">token</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">token</span> <span class="o">!=</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[!]&#39;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="s1">&#39;!&#39;</span> <span class="ow">in</span> <span class="n">token</span><span class="p">:</span> <span class="c1"># inverse</span>
+                    <span class="n">out</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">&amp;=</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sascha Mücke, Thore Gerlach
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023, Sascha Mücke, Thore Gerlach.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

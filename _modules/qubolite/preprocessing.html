@@ -1,0 +1,914 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>qubolite.preprocessing &#8212; qubolite 0.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/qubolite/preprocessing';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../../_static/logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/smuecke/qubolite">Source Code</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for qubolite.preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">portion</span> <span class="k">as</span> <span class="nn">P</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span> <span class="nn">.bounds</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">lb_roof_dual</span><span class="p">,</span>
+    <span class="n">lb_negative_parameters</span><span class="p">,</span>
+    <span class="n">ub_local_descent</span><span class="p">,</span>
+    <span class="n">ub_sample</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">._heuristics</span> <span class="kn">import</span> <span class="n">MatrixOrder</span><span class="p">,</span> <span class="n">HEURISTICS</span>
+<span class="kn">from</span> <span class="nn">._misc</span>       <span class="kn">import</span> <span class="n">get_random_state</span>
+<span class="kn">from</span> <span class="nn">.assignment</span>  <span class="kn">import</span> <span class="n">partial_assignment</span>
+
+<span class="c1">################################################################################</span>
+<span class="c1"># Dynamic Range Compression                                                    #</span>
+<span class="c1">################################################################################</span>
+
+
+<span class="k">def</span> <span class="nf">_get_random_index_pair</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">npr</span><span class="p">):</span>
+    <span class="n">row_indices</span><span class="p">,</span> <span class="n">column_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">invert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">random_index</span> <span class="o">=</span> <span class="n">npr</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">row_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">row_indices</span><span class="p">[</span><span class="n">random_index</span><span class="p">],</span> <span class="n">column_indices</span><span class="p">[</span><span class="n">random_index</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+
+<span class="k">def</span> <span class="nf">_compute_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">npr</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">decision</span><span class="o">=</span><span class="s1">&#39;heuristic&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">bound_params</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">decision</span> <span class="o">==</span> <span class="s1">&#39;random&#39;</span><span class="p">:</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">_get_random_index_pair</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">npr</span><span class="p">)</span>
+        <span class="n">change</span> <span class="o">=</span> <span class="n">_compute_index_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="n">heuristic</span><span class="p">,</span> <span class="o">**</span><span class="n">bound_params</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">decision</span> <span class="o">==</span> <span class="s1">&#39;heuristic&#39;</span><span class="p">:</span>
+        <span class="n">order_indices</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">dynamic_range_impact</span><span class="p">()</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">to_matrix_indices</span><span class="p">(</span><span class="n">order_indices</span><span class="p">,</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">changes</span> <span class="o">=</span> <span class="p">[</span><span class="n">_compute_index_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                         <span class="n">heuristic</span><span class="o">=</span><span class="n">heuristic</span><span class="p">,</span>
+                                         <span class="o">**</span><span class="n">bound_params</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+        <span class="n">drs</span> <span class="o">=</span> <span class="p">[</span><span class="n">_dynamic_range_change</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">changes</span><span class="p">[</span><span class="n">index</span><span class="p">],</span>
+                                     <span class="n">matrix_order</span><span class="p">)</span> <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">indices</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">drs</span><span class="p">):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">drs</span><span class="p">)</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="n">changes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">_get_random_index_pair</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">npr</span><span class="p">)</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="n">_compute_index_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span>
+                                           <span class="n">heuristic</span><span class="o">=</span><span class="n">heuristic</span><span class="p">,</span>
+                                           <span class="o">**</span><span class="n">bound_params</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="k">return</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span>
+
+<span class="k">def</span> <span class="nf">_compute_pre_opt_bounds</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;roof_dual&#39;</span><span class="p">:</span> <span class="n">lb_roof_dual</span><span class="p">,</span>
+        <span class="s1">&#39;min_sum&#39;</span><span class="p">:</span> <span class="n">lb_negative_parameters</span>
+    <span class="p">}[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower_bound&#39;</span><span class="p">,</span> <span class="s1">&#39;roof_dual&#39;</span><span class="p">)]</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;local_descent&#39;</span><span class="p">:</span> <span class="n">ub_local_descent</span><span class="p">,</span>
+        <span class="s1">&#39;sample&#39;</span><span class="p">:</span> <span class="n">ub_sample</span>
+    <span class="p">}[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper_bound&#39;</span><span class="p">,</span> <span class="s1">&#39;local_descent&#39;</span><span class="p">)]</span>
+    <span class="n">lower_bound</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lower_bound_kwargs&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">upper_bound</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">upper_bound</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;upper_bound_kwargs&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+    <span class="n">change_diff</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;change_diff&#39;</span><span class="p">,</span> <span class="mf">1e-08</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">:</span>
+        <span class="c1"># Define sub-qubos</span>
+        <span class="n">Q_00</span><span class="p">,</span> <span class="n">c_00</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">Q_01</span><span class="p">,</span> <span class="n">c_01</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+        <span class="n">Q_10</span><span class="p">,</span> <span class="n">c_10</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">Q_11</span><span class="p">,</span> <span class="n">c_11</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+        <span class="c1"># compute bounds</span>
+        <span class="n">upper_00</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_00</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_00</span>
+        <span class="n">upper_01</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_01</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_01</span>
+        <span class="n">upper_10</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_10</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_10</span>
+        <span class="n">lower_11</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_11</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_11</span>
+        <span class="n">upper_or</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_00</span><span class="p">,</span> <span class="n">upper_01</span><span class="p">,</span> <span class="n">upper_10</span><span class="p">)</span>
+
+        <span class="n">lower_00</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_00</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_00</span>
+        <span class="n">lower_01</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_01</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_01</span>
+        <span class="n">lower_10</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_10</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_10</span>
+        <span class="n">upper_11</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_11</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_11</span>
+        <span class="n">lower_or</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lower_00</span><span class="p">,</span> <span class="n">lower_01</span><span class="p">,</span> <span class="n">lower_10</span><span class="p">)</span>
+
+        <span class="n">suboptimal</span> <span class="o">=</span> <span class="n">lower_11</span> <span class="o">&gt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">upper_00</span><span class="p">,</span> <span class="n">upper_01</span><span class="p">,</span> <span class="n">upper_10</span><span class="p">)</span>
+        <span class="n">optimal</span> <span class="o">=</span> <span class="n">upper_11</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">lower_00</span><span class="p">,</span> <span class="n">lower_01</span><span class="p">,</span> <span class="n">lower_10</span><span class="p">)</span>
+        <span class="n">upper_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">suboptimal</span> <span class="k">else</span> <span class="n">lower_or</span> <span class="o">-</span> <span class="n">upper_11</span> <span class="o">-</span> <span class="n">change_diff</span>
+        <span class="n">lower_bound</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimal</span> <span class="k">else</span> <span class="n">upper_or</span> <span class="o">-</span> <span class="n">lower_11</span> <span class="o">+</span> <span class="n">change_diff</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Define sub-qubos</span>
+        <span class="n">Q_0</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">Q_1</span><span class="p">,</span> <span class="n">c_1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">clamp</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+        <span class="c1"># Compute bounds</span>
+        <span class="n">upper_0</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_0</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_0</span>
+        <span class="n">lower_1</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_1</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_1</span>
+
+        <span class="n">lower_0</span> <span class="o">=</span> <span class="n">lower_bound</span><span class="p">(</span><span class="n">Q_0</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_0</span>
+        <span class="n">upper_1</span> <span class="o">=</span> <span class="n">upper_bound</span><span class="p">(</span><span class="n">Q_1</span><span class="p">)</span> <span class="o">+</span> <span class="n">c_1</span>
+        <span class="n">suboptimal</span> <span class="o">=</span> <span class="n">lower_1</span> <span class="o">&gt;</span> <span class="n">upper_0</span>
+        <span class="n">optimal</span> <span class="o">=</span> <span class="n">upper_1</span> <span class="o">&lt;</span> <span class="n">lower_0</span>
+        <span class="n">upper_bound</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">suboptimal</span> <span class="k">else</span> <span class="n">lower_0</span> <span class="o">-</span> <span class="n">upper_1</span> <span class="o">-</span> <span class="n">change_diff</span>
+        <span class="n">lower_bound</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">optimal</span> <span class="k">else</span> <span class="n">upper_0</span> <span class="o">-</span> <span class="n">lower_1</span> <span class="o">+</span> <span class="n">change_diff</span>
+    <span class="k">return</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span>
+
+<span class="k">def</span> <span class="nf">_compute_pre_opt_bounds_all</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">index_pair</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">index_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">_compute_pre_opt_bounds</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qubo</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Optimal configuration is found, clamped QUBO should be returned!&#39;</span><span class="p">)</span>
+            <span class="c1"># return res</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">bounds</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">bounds</span>
+
+<span class="k">def</span> <span class="nf">_dynamic_range_change</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">matrix_order</span><span class="p">):</span>
+    <span class="n">old_dynamic_range</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">dynamic_range</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">update_entry</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">new_dynamic_range</span> <span class="o">=</span> <span class="n">qubo</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span><span class="o">.</span><span class="n">dynamic_range</span><span class="p">()</span>
+    <span class="n">dynamic_range_diff</span> <span class="o">=</span> <span class="n">old_dynamic_range</span> <span class="o">-</span> <span class="n">new_dynamic_range</span>
+    <span class="k">return</span> <span class="n">dynamic_range_diff</span>
+
+<span class="k">def</span> <span class="nf">_check_to_next_increase</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="n">current_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="n">new_entry</span> <span class="o">=</span> <span class="n">current_entry</span> <span class="o">+</span> <span class="n">change</span>
+    <span class="n">lower_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">,</span> <span class="n">new_entry</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">lower_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">[</span><span class="n">lower_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">min_dis</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">min_distance</span>
+    <span class="n">lower_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">lower_entry</span> <span class="o">-</span> <span class="n">min_dis</span><span class="p">,</span> <span class="n">lower_entry</span> <span class="o">+</span> <span class="n">min_dis</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">upper_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">[</span><span class="n">lower_index</span><span class="p">]</span>
+        <span class="n">upper_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">upper_entry</span> <span class="o">-</span> <span class="n">min_dis</span><span class="p">,</span> <span class="n">upper_entry</span> <span class="o">+</span> <span class="n">min_dis</span><span class="p">)</span>
+        <span class="n">forbidden_interval</span> <span class="o">=</span> <span class="n">lower_interval</span> <span class="o">|</span> <span class="n">upper_interval</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">forbidden_interval</span> <span class="o">=</span> <span class="n">lower_interval</span>
+    <span class="n">possible_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">openclosed</span><span class="p">(</span><span class="o">-</span><span class="n">P</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="n">new_entry</span><span class="p">)</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">possible_interval</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">forbidden_interval</span><span class="p">)</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">difference</span> <span class="o">|</span> <span class="n">P</span><span class="o">.</span><span class="n">singleton</span><span class="p">(</span><span class="n">lower_entry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">difference</span><span class="o">.</span><span class="n">upper</span> <span class="o">-</span> <span class="n">current_entry</span>
+
+<span class="k">def</span> <span class="nf">_check_to_next_decrease</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span>
+    <span class="n">current_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="n">new_entry</span> <span class="o">=</span> <span class="n">current_entry</span> <span class="o">+</span> <span class="n">change</span>
+    <span class="n">upper_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">,</span> <span class="n">new_entry</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+    <span class="n">upper_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">[</span><span class="n">upper_index</span><span class="p">]</span>
+    <span class="n">min_dis</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">min_distance</span>
+    <span class="n">upper_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">upper_entry</span> <span class="o">-</span> <span class="n">min_dis</span><span class="p">,</span> <span class="n">upper_entry</span> <span class="o">+</span> <span class="n">min_dis</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lower_entry</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">unique</span><span class="p">[</span><span class="n">upper_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">lower_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">lower_entry</span> <span class="o">-</span> <span class="n">min_dis</span><span class="p">,</span> <span class="n">lower_entry</span> <span class="o">+</span> <span class="n">min_dis</span><span class="p">)</span>
+        <span class="n">forbidden_interval</span> <span class="o">=</span> <span class="n">lower_interval</span> <span class="o">|</span> <span class="n">upper_interval</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="n">forbidden_interval</span> <span class="o">=</span> <span class="n">upper_interval</span>
+    <span class="n">possible_interval</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">openclosed</span><span class="p">(</span><span class="n">new_entry</span><span class="p">,</span> <span class="n">P</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">possible_interval</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">forbidden_interval</span><span class="p">)</span>
+    <span class="n">difference</span> <span class="o">=</span> <span class="n">difference</span> <span class="o">|</span> <span class="n">P</span><span class="o">.</span><span class="n">singleton</span><span class="p">(</span><span class="n">upper_entry</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">difference</span><span class="o">.</span><span class="n">lower</span> <span class="o">-</span> <span class="n">current_entry</span>
+
+<span class="k">def</span> <span class="nf">_compute_index_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># Decide whether to increase or decrease</span>
+    <span class="n">increase</span> <span class="o">=</span> <span class="n">heuristic</span><span class="o">.</span><span class="n">decide_increase</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="c1"># Bounds on changes based on reducing the dynamic range</span>
+    <span class="n">dyn_range_change</span> <span class="o">=</span> <span class="n">heuristic</span><span class="o">.</span><span class="n">compute_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">increase</span><span class="p">)</span>
+    <span class="c1"># Bounds on changes based on preserving the optimum</span>
+    <span class="k">if</span> <span class="n">increase</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">pre_opt_change</span> <span class="o">=</span> <span class="n">_compute_pre_opt_bounds</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pre_opt_change</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_compute_pre_opt_bounds</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">set_to_zero</span> <span class="o">=</span> <span class="n">heuristic</span><span class="o">.</span><span class="n">set_to_zero</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">increase</span><span class="p">:</span>
+        <span class="n">change</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">pre_opt_change</span><span class="p">,</span> <span class="n">dyn_range_change</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">change</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">change</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span> <span class="n">change</span> <span class="ow">and</span> <span class="n">set_to_zero</span><span class="p">:</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="o">-</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="n">_check_to_next_increase</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">change</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">pre_opt_change</span><span class="p">,</span> <span class="n">dyn_range_change</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">change</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">change</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="n">change</span> <span class="ow">and</span> <span class="n">set_to_zero</span><span class="p">:</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="o">-</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">change</span> <span class="o">=</span> <span class="n">_check_to_next_decrease</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">change</span>
+
+<div class="viewcode-block" id="reduce_dynamic_range"><a class="viewcode-back" href="../../api.html#qubolite.preprocessing.reduce_dynamic_range">[docs]</a><span class="k">def</span> <span class="nf">reduce_dynamic_range</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span>
+        <span class="n">iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">heuristic</span><span class="o">=</span><span class="s1">&#39;greedy0&#39;</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">decision</span><span class="o">=</span><span class="s1">&#39;heuristic&#39;</span><span class="p">,</span>
+        <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Iterative procedure for reducing the dynammic range of a given QUBO, while preserving an</span>
+<span class="sd">    optimum, described in `Mücke et al. (2023)&lt;http://arxiv.org/abs/2307.02195&gt;`__.</span>
+<span class="sd">    For this, at every step we choose a specific QUBO weight and change it according to</span>
+<span class="sd">    some heuristic.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubolite.qubo): QUBO</span>
+<span class="sd">        iterations (int, optional): Number of iterations. Defaults to 100.</span>
+<span class="sd">        heuristic (str, optional): Used heuristic for computing weight change. Possible heuristics</span>
+<span class="sd">            are &#39;greedy0&#39;, &#39;greedy&#39; and &#39;order&#39;. Defaults to &#39;greedy0&#39;.</span>
+<span class="sd">        random_state (optional): A numerical or lexical seed, or a NumPy random generator.</span>
+<span class="sd">            Defaults to None.</span>
+<span class="sd">        decision (str, optional): Method for deciding which QUBO weight to change next.</span>
+<span class="sd">            Possibilities are &#39;random&#39; and &#39;heuristic&#39;. Defaults to &#39;heuristic&#39;.</span>
+<span class="sd">        callback (optional): Callback function which obtains the following inputs after each step:</span>
+<span class="sd">            i (int), j (int) , change (float), current matrix order (MatrixOrder), current</span>
+<span class="sd">            iteration (int). Defaults to None.</span>
+<span class="sd">        **kwargs (optional): Keyword arguments for determining the upper and lower bound</span>
+<span class="sd">            computations of the optimal QUBO value.</span>
+<span class="sd">    Keyword Args:</span>
+<span class="sd">        change_diff (float): Distance to optimum for avoiding numerical madness. Defaults to 1e-8.</span>
+<span class="sd">        upper_bound (str): Method for upper bound, possibilities are &#39;local_descent&#39; and &#39;sample&#39;.</span>
+<span class="sd">            Defaults to &#39;local_descent&#39;.</span>
+<span class="sd">        lower_bound (str): Method for lower bound, possibilities are &#39;roof_dual&#39; and &#39;min_sum&#39;.</span>
+<span class="sd">            Defaults to &#39;roof_dual&#39;.</span>
+<span class="sd">        upper_bound_kwargs (dict): Additional keyword arguments for upper bound method.</span>
+<span class="sd">        lower_bound_kwargs (dict): Additional keyword arguments for lower bound method.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        qubolite.qubo: Compressed QUBO with reduced dynamic range.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">heuristic</span> <span class="o">=</span> <span class="n">HEURISTICS</span><span class="p">[</span><span class="n">heuristic</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown heuristic &quot;</span><span class="si">{</span><span class="n">heuristic</span><span class="si">}</span><span class="s1">&quot;, available are &quot;greedy0&quot;, &quot;greedy&quot; and &quot;order&quot;&#39;</span><span class="p">)</span>
+    <span class="n">npr</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">Q_copy</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">matrix_order</span> <span class="o">=</span> <span class="n">MatrixOrder</span><span class="p">(</span><span class="n">Q_copy</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">stop_update</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">stop_update</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span> <span class="o">=</span> <span class="n">_compute_change</span><span class="p">(</span><span class="n">matrix_order</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="n">heuristic</span><span class="p">,</span> <span class="n">npr</span><span class="o">=</span><span class="n">npr</span><span class="p">,</span>
+                                           <span class="n">decision</span><span class="o">=</span><span class="n">decision</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">stop_update</span> <span class="o">=</span> <span class="n">matrix_order</span><span class="o">.</span><span class="n">update_entry</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">change</span><span class="p">,</span> <span class="n">matrix_order</span><span class="p">,</span> <span class="n">it</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">matrix_order</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span></div>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1"># QPRO+ Algorithm                                                              #</span>
+<span class="c1">################################################################################</span>
+
+<span class="k">def</span> <span class="nf">_calculate_Dplus_and_Dminus</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates a bound for each variable of the possible impact of the variable.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (np.ndarray): Array that contains the QUBO</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: A 2d array, where the first column contains the positive bounds and the second</span>
+<span class="sd">            column the negative bounds</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Q_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">Q</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">Q_plus</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">row_sums_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q_plus</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">coulumn_sums_plus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q_plus</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">d_plus</span> <span class="o">=</span> <span class="n">row_sums_plus</span> <span class="o">+</span> <span class="n">coulumn_sums_plus</span>
+    <span class="n">Q_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">Q</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">Q_minus</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">row_sums_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q_minus</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">coulumn_sums_minus</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Q_minus</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">d_minus</span> <span class="o">=</span> <span class="n">row_sums_minus</span> <span class="o">+</span> <span class="n">coulumn_sums_minus</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">d_minus</span><span class="p">,</span> <span class="n">d_plus</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_reduceQ</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">assignment</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given an assignment, updates the Q matrix so that the QUBO stays</span>
+<span class="sd">    equivalent but the assigned variable can be removed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (np.ndarray): containing the QUBO</span>
+<span class="sd">        assignment (tuple): first element is the variabe index, second elment is the assignment,</span>
+<span class="sd">            i.e. 0 or 1</span>
+<span class="sd">        D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: updated Q</span>
+<span class="sd">        np.ndarray: updated D_list</span>
+<span class="sd">        list: updated indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#does change input D_list</span>
+    <span class="c1">#value is assumed to be either 0 or 1</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">Q</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="n">indices</span><span class="p">]</span> <span class="o">+=</span> <span class="n">Q</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">indices</span><span class="p">]</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">indices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="c1"># drop node i</span>
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span>
+
+<span class="k">def</span> <span class="nf">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes influence of variable i in D_list. Used in reduceQ2_5 and reduceQ2_6</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (np.ndarray): containing the QUBO</span>
+<span class="sd">        D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus</span>
+<span class="sd">        i (int): variable whose values are to be removed</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: updated D_list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d_ij</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">d_plus</span> <span class="o">=</span> <span class="n">d_ij</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">d_minus</span> <span class="o">=</span> <span class="n">d_ij</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">d_plus</span><span class="p">]</span> <span class="o">-=</span> <span class="n">d_ij</span><span class="p">[</span><span class="n">d_plus</span><span class="p">]</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">d_minus</span><span class="p">]</span> <span class="o">-=</span> <span class="n">d_ij</span><span class="p">[</span><span class="n">d_minus</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">D_list</span>
+
+<span class="k">def</span> <span class="nf">_D_list_correct_i</span><span class="p">(</span>
+        <span class="n">new_i_row_column</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">h</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Corrects the entry of the i-th variable in D_list in reduceQ2_5 and reduceQ2_6</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_i_row_column (np.ndarray): containing the updated row and column of variable i</span>
+<span class="sd">        D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus</span>
+<span class="sd">        i (int): variable whose value is corrected</span>
+<span class="sd">        h (int): variable that is removed by 2.5 or 2.6</span>
+<span class="sd">        indices (list): of variables that have not been assigned yet</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: updated D_list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#add new elements d_hj</span>
+    <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">positive</span> <span class="o">=</span> <span class="n">new_i_row_column</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">negative</span> <span class="o">=</span> <span class="n">new_i_row_column</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="p">]</span> <span class="o">+=</span> <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">positive</span><span class="p">]</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">negative</span><span class="p">]</span> <span class="o">+=</span> <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">negative</span><span class="p">]</span>
+    <span class="c1">#fix D_i^+ and D_i^-</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_i_row_column</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="n">positive</span><span class="p">[</span><span class="n">indices</span><span class="p">]])</span>
+    <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">new_i_row_column</span><span class="p">[</span><span class="n">indices</span><span class="p">][</span><span class="n">negative</span><span class="p">[</span><span class="n">indices</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">D_list</span>
+
+<span class="k">def</span> <span class="nf">_reduceQ2_5</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">assignment</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements updates according to rule 2.5, i.e. assumes x_h = 1 - x_i and updates QUBO</span>
+<span class="sd">    accordingly</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (np.ndarray): containing the QUBO</span>
+<span class="sd">        assignment (tuple): first element is the variabe h, second elment is the variable h</span>
+<span class="sd">        D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus</span>
+<span class="sd">        indices (list): of variables that have not been assigned yet</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: updated Q</span>
+<span class="sd">        np.ndarray: updated D_list</span>
+<span class="sd">        list: updated indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#x_h = 1 - x_i</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c_i</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">c_h</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">h</span><span class="p">]</span>
+    <span class="c1">#D_list update</span>
+    <span class="c1">#remove h and i from all calculations</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="n">new_i_row_column</span> <span class="o">=</span> <span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">-</span> <span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">Q</span><span class="p">[:</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_i_row_column</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="n">indices</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="n">indices</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">indices</span><span class="p">])</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_i</span> <span class="o">-</span> <span class="n">c_h</span>
+    <span class="c1">#add new elements d_hj and fix D_i^+ and D_i^-</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_correct_i</span><span class="p">(</span><span class="n">new_i_row_column</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="c1">#remove variable x_h from matrix by deleting row and column h</span>
+    <span class="n">indices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span>
+
+<span class="k">def</span> <span class="nf">_reduceQ2_6</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">assignment</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span><span class="nb">list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements updates according to rule 2.6, i.e. assumes x_h = x_i and updates QUBO accordingly</span>
+
+<span class="sd">    Args;</span>
+<span class="sd">        Q (np.ndarray): containing the QUBO</span>
+<span class="sd">        assignment (tuple): first element is the variabe h, second elment is the variable h</span>
+<span class="sd">        D_list (np.ndarray): containing bounds as calculated by calculate_Dplus_and_Dminus</span>
+<span class="sd">        indices (list): variables that have not been assigned yet</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: updated Q</span>
+<span class="sd">        np.ndarray: updated D_list</span>
+<span class="sd">        np.ndarray: updated indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#x_h = x_i</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">assignment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">c_i</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">c_h</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">h</span><span class="p">]</span>
+    <span class="n">d_hi</span> <span class="o">=</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+    <span class="c1">#D_list update</span>
+    <span class="c1">#remove h and i from all calculations</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_remove</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="c1">#calculate new x_i values as d_ij + d_hj</span>
+    <span class="n">new_i_row_column</span> <span class="o">=</span> <span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span> <span class="p">(</span><span class="n">Q</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">Q</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">Q</span><span class="p">[:</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_i_row_column</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">new_i_row_column</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c_i</span> <span class="o">+</span> <span class="n">c_h</span> <span class="o">+</span> <span class="n">d_hi</span>
+    <span class="c1">#add new elements d_hj and fix D_i^+ and D_i^-</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_D_list_correct_i</span><span class="p">(</span><span class="n">new_i_row_column</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="c1">#remove variable x_h from matrix by deleting row and column h</span>
+    <span class="n">indices</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Q</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span>
+
+<span class="k">def</span> <span class="nf">_assign_1</span><span class="p">(</span>
+        <span class="n">Qmatrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">assignments</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">last_assignment</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">c_0</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">c_i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#store what assignment is being made</span>
+    <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">_reduceQ</span><span class="p">(</span><span class="n">Qmatrix</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="n">c_0</span> <span class="o">+=</span> <span class="n">c_i</span>
+    <span class="k">return</span> <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span>
+
+<span class="k">def</span> <span class="nf">_assign_0</span><span class="p">(</span>
+        <span class="n">Qmatrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">assignments</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">last_assignment</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#store what assignment is beeing made</span>
+    <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">_reduceQ</span><span class="p">(</span><span class="n">Qmatrix</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span>
+
+<span class="k">def</span> <span class="nf">_apply_rule2_5</span><span class="p">(</span>
+        <span class="n">Qmatrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">assignments</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">last_assignment</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">c_0</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">h</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">c_h</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[!</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s1">]&#39;</span> <span class="c1">#store what assignment is being made</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">h</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[!</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">]&#39;</span> <span class="c1">#store what assignment is being made</span>
+    <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">_reduceQ2_5</span><span class="p">(</span><span class="n">Qmatrix</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="n">c_0</span> <span class="o">+=</span> <span class="n">c_h</span>
+    <span class="k">return</span> <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span>
+
+<span class="k">def</span> <span class="nf">_apply_rule2_6</span><span class="p">(</span>
+        <span class="n">Qmatrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">D_list</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+        <span class="n">assignments</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span>
+        <span class="n">last_assignment</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">h</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">h</span><span class="si">}</span><span class="s1">]&#39;</span>  <span class="c1">#store what assignment is being made</span>
+    <span class="n">assignments</span><span class="p">[</span><span class="s2">&quot;x_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">h</span><span class="p">)]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">]&#39;</span>  <span class="c1">#store what assignment is being made</span>
+    <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">_reduceQ2_6</span><span class="p">(</span><span class="n">Qmatrix</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Qmatrix</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span>
+
+<div class="viewcode-block" id="qpro_plus"><a class="viewcode-back" href="../../api.html#qubolite.preprocessing.qpro_plus">[docs]</a><span class="k">def</span> <span class="nf">qpro_plus</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements the routine applying rules described in</span>
+<span class="sd">    `Glover et al., 2018&lt;https://www.sciencedirect.com/science/article/pii/S0377221717307567&gt;`__</span>
+<span class="sd">    for reducing the QUBO size by applying logical implications.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Q (qubo): QUBO instance to be reduced.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Instance of :class:`assignment.partial_assignment` representing the</span>
+<span class="sd">        reduction. See example.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import qubolite as ql</span>
+<span class="sd">        &gt;&gt;&gt; Q = ql.qubo.random(32, density=0.2, random_state=&#39;example&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; PA = ql.preprocessing.qpro_plus(Q)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&#39;{PA.num_fixed} variables were eliminated!&#39;)</span>
+<span class="sd">        9 variables were eliminated!</span>
+<span class="sd">        &gt;&gt;&gt; Q_reduced, offset = PA.apply(Q)</span>
+<span class="sd">        &gt;&gt;&gt; Q_reduced.n</span>
+<span class="sd">        23</span>
+<span class="sd">        &gt;&gt;&gt; x = ql.bitvec.from_string(&#39;10011101011011110001011&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; Q_reduced(x)+offset</span>
+<span class="sd">        -0.5215481745331401</span>
+<span class="sd">        &gt;&gt;&gt; Q(PA.expand(x))</span>
+<span class="sd">        -0.5215481745331385</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#assumes QUBO to be upper triangluar</span>
+    <span class="c1">#paper assumes maximazation hence we need to flip the sign for minimization</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="o">-</span><span class="n">Q</span><span class="o">.</span><span class="n">m</span>
+    <span class="n">assignments</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span> <span class="c1"># dict of assignments</span>
+    <span class="n">hList</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">c_0</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># offset to restore original energy function</span>
+    <span class="c1">#calculate D_i^+ and D_i^- for each variable</span>
+    <span class="n">D_list</span> <span class="o">=</span> <span class="n">_calculate_Dplus_and_Dminus</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">last_assignment</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#index of the most recent variable that has been assigned</span>
+    <span class="c1">#variables that have not been assigned yet</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">last_assignment</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">last_assignment</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="c1">#apply rules</span>
+        <span class="n">hList</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="c1">#apply rule 1.0 and 2.0</span>
+            <span class="n">c_i</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">c_i</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1">#rule 1.0</span>
+                <span class="c1">#x_i = 1</span>
+                <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span> <span class="o">=</span> <span class="n">_assign_1</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c_i</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1">#rule 2.0</span>
+                <span class="c1">#x_i = 0</span>
+                <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">)</span> <span class="o">=</span> <span class="n">_assign_0</span><span class="p">(</span>
+                    <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">hList</span><span class="p">:</span>
+                    <span class="c1">#define variables:</span>
+                    <span class="n">d_ih</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                    <span class="n">c_i</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
+                    <span class="n">c_h</span> <span class="o">=</span> <span class="n">m</span><span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">c_h</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1">#rule 1.0</span>
+                        <span class="c1">#x_h = 1</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span> <span class="o">=</span> <span class="n">_assign_1</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">c_h</span><span class="p">)</span>
+                        <span class="c1"># drop node h</span>
+                        <span class="n">hList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+                    <span class="k">elif</span> <span class="n">c_h</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1">#rule 2.0</span>
+                        <span class="c1">#x_h = 0</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">_assign_0</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+                        <span class="c1"># drop node h</span>
+                        <span class="n">hList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+                    <span class="c1">#rule 3.1</span>
+                    <span class="k">elif</span> <span class="n">d_ih</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">c_i</span> <span class="o">+</span> <span class="n">c_h</span> <span class="o">-</span> <span class="n">d_ih</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1">#set x_i = x_h = 0</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">_assign_0</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="c1">#rule 3.2 </span>
+                    <span class="k">elif</span> <span class="n">d_ih</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="o">-</span><span class="n">c_i</span> <span class="o">+</span> <span class="n">c_h</span> <span class="o">+</span> <span class="n">d_ih</span> <span class="o">-</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1">#set x_i = 1, x_h = 0</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span> <span class="o">=</span> <span class="n">_assign_1</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="c1">#rule 3.3</span>
+                    <span class="k">elif</span> <span class="n">d_ih</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="o">-</span><span class="n">c_h</span> <span class="o">+</span> <span class="n">c_i</span> <span class="o">+</span> <span class="n">d_ih</span> <span class="o">-</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1">#set x_i = 0, x_h = 1</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">_assign_0</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="c1">#rule 3.4</span>
+                    <span class="k">elif</span> <span class="n">d_ih</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="o">-</span><span class="n">c_i</span> <span class="o">-</span> <span class="n">c_h</span> <span class="o">-</span> <span class="n">d_ih</span> <span class="o">-</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="p">]</span> <span class="o">-</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1">#set x_i = 1, x_h = 1</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span> <span class="o">=</span> <span class="n">_assign_1</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">)</span>
+                        <span class="k">break</span>
+                    <span class="c1">#rule 2.5</span>
+                    <span class="k">elif</span> <span class="p">(</span><span class="n">d_ih</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">c_i</span> <span class="o">-</span> <span class="n">d_ih</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+                                        <span class="ow">or</span> <span class="n">c_h</span> <span class="o">-</span> <span class="n">d_ih</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">h</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                                  <span class="ow">and</span> <span class="p">(</span><span class="n">c_i</span> <span class="o">+</span> <span class="n">d_ih</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+                                       <span class="ow">or</span> <span class="n">c_h</span> <span class="o">+</span> <span class="n">d_ih</span> <span class="o">+</span> <span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">h</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="c1"># x_h = 1 - x_i</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span> <span class="o">=</span> <span class="n">_apply_rule2_5</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">c_0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">c_h</span><span class="p">)</span>
+                        <span class="c1"># drop node h</span>
+                        <span class="n">hList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+                    <span class="c1">#rule 2.6</span>
+                    <span class="k">elif</span> <span class="p">(</span><span class="n">d_ih</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">c_i</span><span class="o">-</span><span class="n">d_ih</span><span class="o">+</span><span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+                                        <span class="ow">or</span> <span class="n">c_h</span><span class="o">+</span><span class="n">d_ih</span><span class="o">+</span><span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">h</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+                                   <span class="ow">and</span> <span class="p">(</span><span class="n">c_i</span><span class="o">+</span><span class="n">d_ih</span><span class="o">+</span><span class="n">D_list</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+                                        <span class="ow">or</span> <span class="n">c_h</span><span class="o">-</span><span class="n">d_ih</span><span class="o">+</span><span class="n">D_list</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">h</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="c1"># x_h = x_i</span>
+                        <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">last_assignment</span> <span class="o">=</span> <span class="n">_apply_rule2_6</span><span class="p">(</span>
+                            <span class="n">m</span><span class="p">,</span> <span class="n">D_list</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">assignments</span><span class="p">,</span> <span class="n">last_assignment</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+                        <span class="c1"># drop node h</span>
+                        <span class="n">hList</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">last_assignment</span> <span class="o">!=</span> <span class="n">i</span><span class="p">:</span> <span class="c1"># this means x_i could not be assigned</span>
+                <span class="n">hList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="n">assignment_pattern</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">assignments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Q</span><span class="o">.</span><span class="n">n</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">partial_assignment</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="n">assignment_pattern</span><span class="p">)</span></div>
+    <span class="c1"># reduced qubo: qubo(-m[np.ix_(indices, indices)])</span>
+    <span class="c1"># offset: -c_0</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Sascha Mücke, Thore Gerlach
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023, Sascha Mücke, Thore Gerlach.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
