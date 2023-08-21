@@ -43,7 +43,8 @@ autodoc_mock_imports = [
     '_c_utils',
     'sklearn',
     'portion',
-    'igraph'
+    'igraph',
+    'networkx'
 ]
 
 # -- Options for HTML output -------------------------------------------------
