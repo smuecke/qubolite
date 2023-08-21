@@ -28,6 +28,34 @@ The submodule `bitvec` contains useful methods for working with bit vectors, whi
 ```
 
 
+## Partial Assignment
+
+The submodule `assignment` implements a powerful tool that allows for partial
+assignments of bit vectors and, consequently, QUBO instances. This means that,
+given a bit vector of length `n`, a partial assignment fixes a subset of bits
+to either constant `0` or `1`, or to the (inverse) value of other variables.
+
+```{eval-rst}
+.. automodule:: qubolite.assignment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```
+
+
+## Preprocessing
+
+The submodule `preprocessing` contains pre-processing methods for QUBO.
+
+```{eval-rst}
+.. automodule:: qubolite.preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```
+
+
+
 ## Solving
 
 `qubolite` provides the following methods for solving (exactly or approximately) QUBO instances to obtain their minimizing vector and minimal energy.
@@ -67,13 +95,3 @@ Functions that return lower bounds are prefixed with `lb_`, and those that retur
 ```
 
 
-## Parameter Compression
-
-The submodule `compression` implements the optimum-preserving parameter compression algorithm by [Mücke et al. (2023)](http://arxiv.org/abs/2307.02195).
-It aims to reduce the parameters' dynamic range, which positively affects the problem's solvability on quantum annealers.
-
-```{eval-rst}
-.. automodule:: qubolite.compression
-   :members:
-   :undoc-members:
-```

@@ -1,4 +1,3 @@
-from collections import namedtuple
 from functools import partial
 
 import numpy as np
@@ -201,7 +200,8 @@ def reduce_dynamic_range(
         callback=None,
         **kwargs):
     """Iterative procedure for reducing the dynammic range of a given QUBO, while preserving an
-    optimum. For this, at every step we choose a specific QUBO weight and change it according to
+    optimum, described in `Mücke et al. (2023)<http://arxiv.org/abs/2307.02195>`__.
+    For this, at every step we choose a specific QUBO weight and change it according to
     some heuristic.
 
     Args:
