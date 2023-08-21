@@ -7,6 +7,29 @@ import numpy as np
 from ._misc  import get_random_state, set_suffix
 from .bitvec import all_bitvectors_array, from_string, to_string
 
+from .qubo    import qubo
+from _c_utils import gibbs_sample as _gibbs_sample_c
+
+def gibbs_native(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1):
+    """Sample from induced Gibbs distribution.
+
+    Args:
+        Q (qubo): QUBO instance.
+        samples (int, optional): Sample size. Defaults to 1.
+        burn_in (int, optional): Number of initial iterations that are discarded,
+            the so-called *burn-in* phase. Defaults to 100.
+        keep_interval (int, optional): Number of samples out of which
+            only one is kept, and the others discarded. Choosing a high
+            value makes the samples more independent, but slows down 
+            the sampling procedure. Defaults to 100.
+        max_threads (int): Upper limit for the number of threads. Defaults to
+            256.
+
+    Returns:
+        A numpy.ndarray that contains the samples.
+    """
+    S = _gibbs_sample_c(Q.m, samples, burn_in, max_threads, keep_interval, None)
+    return S
 
 class BinarySample:
     """Class for representing samples of binary vectors,
@@ -245,8 +268,8 @@ def _marginal(qm, x, i, temp=1.0):
 
 def gibbs(qubo,
           samples: int=1,
-          burn_in: int=1000,
-          keep_interval: int=10,
+          burn_in: int=100,
+          keep_interval: int=100,
           initial=None,
           temp=1.0,
           random_state=None):
@@ -262,11 +285,11 @@ def gibbs(qubo,
         qubo (qubo): QUBO instance.
         samples (int, optional): Sample size. Defaults to 1.
         burn_in (int, optional): Number of initial iterations that are discarded,
-            the so-called *burn-in* phase. Defaults to 1000.
+            the so-called *burn-in* phase. Defaults to 100.
         keep_interval (int, optional): Number of samples out of which
             only one is kept, and the others discarded. Choosing a high
             value makes the samples more independent, but slows down 
-            the sampling procedure. Defaults to 10.
+            the sampling procedure. Defaults to 100.
         initial (numpy.ndarray, optional): Bit vector to use as a starting
             point for the Markov chain. Using a representative sample from
             the Gibbs distribution can make the burn-in phase obsolete.

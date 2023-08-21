@@ -12,7 +12,7 @@ if SYSTEM == 'Windows':
     C_COMP_FLAGS = ['/O2', '/openmp']
 else: # GCC flags for Linux
     C_LINK_FLAGS = ['-fopenmp']
-    C_COMP_FLAGS = ['-O3', '-fopenmp', '-march=native']
+    C_COMP_FLAGS = ['-O0', '-g', '-fopenmp', '-march=native']
 
 NP_INCL = numpy_incl()
 

@@ -17,7 +17,7 @@ void print_bits(bit *x, size_t n) {
     printf("\n");
 }
 
-double qubo_score(double **qubo, bit *x, size_t n) {
+double qubo_score(double **qubo, bit *x, const size_t n) {
     double v = 0.0;
     for (size_t i=0; i<n; ++i) {
         if (x[i]<=0)
@@ -28,6 +28,20 @@ double qubo_score(double **qubo, bit *x, size_t n) {
     }
     return v;
 }
+
+
+double qubo_score_flip(double **qubo, bit *x, const size_t n, const size_t i) {
+    const double b = (1-x[i]) - x[i];
+    double v = b * qubo[i][i];
+
+    for (size_t j=i+1; j<n; ++j)  {
+	const double a = b * x[j];
+        v += a * qubo[i][j];
+    }
+
+    return v;
+}
+
 
 struct _brute_force_result {
     bit *min_x;
@@ -104,7 +118,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
         PyArray_DescrFromType(NPY_DOUBLE));
     if (PyErr_Occurred())
         return NULL;
-    
+
 #ifdef _MSC_VER
     size_t m = 63-__lzcnt64(max_threads); // floor(log2(MAX_THREADS))
 #else
@@ -178,10 +192,100 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * Gibbs sampling
  * ################################################ */
 
-int gibbs_sample(double **qubo, bit *state, size_t burn_in, double temp) {
-    return -1;
+void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in) {
+
+    for (size_t i=0; i<n*burn_in; ++i) {
+        size_t v = i % n;
+
+        double p0 = 0; // qubo_score(qubo, state, n);
+        double p1 = p0 + qubo_score_flip(qubo, state, n, v);
+
+	if( state[v] != 0 ){
+	    const double temp = p0;
+            p0 = p1;
+            p1 = temp;
+	}
+
+        p0 = exp(-p0);
+        p1 = exp(-p1);
+        const double Z = p0 + p1;
+
+        p0 /= Z;
+        p1 /= Z;
+
+	const double u = ((double)(unsigned int)rand())/(double)UINT_MAX;
+	if( u > p0 )
+		state[v] = 1;
+	else
+		state[v] = 0;
+    }
+
+    return;
 }
 
+PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
+    const size_t MAX_THREADS = omp_get_max_threads();
+    PyArrayObject *arr;
+    size_t max_threads = MAX_THREADS;
+    size_t num_samples = 1;
+    size_t burn = 100;
+    size_t keep = 100;
+    PyObject *bitgencap = Py_None;
+    PyArg_ParseTuple(args, "O|kkkkO", &arr, &num_samples, &burn, &max_threads, &keep, &bitgencap);
+    if (PyErr_Occurred() || !PyArray_Check(arr))
+            return NULL;
+
+    // max_threads = min(num_samples, max_threads);
+    max_threads = 1; // don't know (yet) how to draw random numbers in a threadsafe way..
+
+    // gen default bitgen when no bitgencapsule is provided
+    if(bitgencap == Py_None) {
+        PyObject *nprand = PyImport_ImportModule( "numpy.random" );
+        PyObject *get_bit_generator = PyObject_GetAttrString(nprand, "get_bit_generator");
+
+        PyObject *pyBitgen = PyObject_CallNoArgs(get_bit_generator);
+        bitgencap = PyObject_GetAttrString(pyBitgen, "capsule");
+    }
+
+    bitgen_t* random_engine = (bitgen_t*) PyCapsule_GetPointer(bitgencap, "BitGenerator");
+
+    size_t seeds[max_threads];
+    bool burned[max_threads];
+    for (size_t i=0; i<max_threads; ++i) {
+        seeds[i] = random_uint(random_engine);
+        burned[i] = false;
+    }
+
+    const size_t n = PyArray_DIM(arr, 0);
+    double **qubo;
+    npy_intp dims[] = { [0] = n, [1] = n };
+    PyArray_AsCArray((PyObject**) &arr, &qubo, dims, 2,
+        PyArray_DescrFromType(NPY_DOUBLE));
+    if (PyErr_Occurred())
+        return NULL;
+
+    bit* samples = (bit*)malloc(sizeof(bit)*num_samples*n);
+    memset(samples, 0, num_samples*n*sizeof(bit));
+
+    bit* chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
+    for (size_t i=0; i<max_threads*n; ++i)
+        chain_state[i] = (bit) (random_uint(random_engine) % 2);
+
+//    omp_set_dynamic(0);
+// #pragma omp parallel for
+    for (size_t j=0; j<num_samples; ++j) {
+        const size_t tid = omp_get_thread_num();
+	_gibbs_sample(n, qubo, chain_state+(tid*n), burned[tid] ? keep : burn);
+        memcpy(samples+(j*n), chain_state+(tid*n), sizeof(bit)*n);
+    }
+
+    free(chain_state);
+
+    npy_intp rdims[] = { [0] = num_samples, [1] = n };
+    PyObject* res = PyArray_SimpleNewFromData(2, rdims, NPY_UINT8, samples);
+    Py_INCREF(res);
+    return res;
+}
 
 /* ################################################
  * Python module def                              
@@ -189,6 +293,7 @@ int gibbs_sample(double **qubo, bit *state, size_t burn_in, double temp) {
 
 static PyMethodDef methods[] = {
     {"brute_force", py_brute_force, METH_VARARGS, "Solves QUBO the hard way"},
+    {"gibbs_sample", py_gibbs_sample, METH_VARARGS, "Sample from the induced exponential family"},
     {NULL, NULL, 0, NULL}
 };
 
