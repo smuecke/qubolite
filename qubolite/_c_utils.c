@@ -192,27 +192,33 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * ################################################ */
 
 void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in) {
+    size_t v;
+    double p, u;
+    //double p0, p1;
 
     for (size_t i=0; i<n*burn_in; ++i) { 
-        size_t v = i % n;
-
-        double p0 = 0; // qubo_score(qubo, state, n);
-        double p1 = qubo_score_flip(qubo, state, n, v); // + p0;
-
-        if( state[v] != 0 ){
+        v = i % n;
+        p = exp(-qubo_score_flip(qubo, state, n, v));
+        p = p/(p+1.0);
+        u = ((double)(unsigned int)rand())/(double)UINT_MAX;
+        if ((state[v] == 0) ^ (u < p))
+            state[v] = 1-state[v];
+        /*
+        p0 = 0; // qubo_score(qubo, state, n);
+        p1 = qubo_score_flip(qubo, state, n, v); // + p0;
+        if( state[v] == 1 ){
             const double temp = p0;
             p0 = p1;
             p1 = temp;
         }
-
         p0 = exp(-p0);
         p1 = exp(-p1);
         const double inv_Z = 1.0/(p0+p1);
         //p0 *= invZ;
         p1 *= inv_Z;
-
         const double u = ((double)(unsigned int)rand())/(double)UINT_MAX;
         state[v] = u < p1 ? 1 : 0;
+        */
     }
     return;
 }
