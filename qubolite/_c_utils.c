@@ -31,15 +31,14 @@ double qubo_score(double **qubo, bit *x, const size_t n) {
 
 
 double qubo_score_flip(double **qubo, bit *x, const size_t n, const size_t i) {
-    const double b = (1-x[i]) - x[i];
-    double v = b * qubo[i][i];
-
-    for (size_t j=i+1; j<n; ++j)  {
-	const double a = b * x[j];
-        v += a * qubo[i][j];
-    }
-
-    return v;
+    const double b = 1-2*x[i];
+    double v = qubo[i][i];
+    size_t j;
+    for (j=0; j<i; ++j)
+        v += x[j] * qubo[j][i];
+    for (j=i+1; j<n; ++j)
+        v += x[j] * qubo[i][j];
+    return b*v;
 }
 
 
@@ -194,32 +193,27 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 
 void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in) {
 
-    for (size_t i=0; i<n*burn_in; ++i) {
+    for (size_t i=0; i<n*burn_in; ++i) { 
         size_t v = i % n;
 
         double p0 = 0; // qubo_score(qubo, state, n);
-        double p1 = p0 + qubo_score_flip(qubo, state, n, v);
+        double p1 = qubo_score_flip(qubo, state, n, v); // + p0;
 
-	if( state[v] != 0 ){
-	    const double temp = p0;
+        if( state[v] != 0 ){
+            const double temp = p0;
             p0 = p1;
             p1 = temp;
-	}
+        }
 
         p0 = exp(-p0);
         p1 = exp(-p1);
-        const double Z = p0 + p1;
+        const double inv_Z = 1.0/(p0+p1);
+        //p0 *= invZ;
+        p1 *= inv_Z;
 
-        p0 /= Z;
-        p1 /= Z;
-
-	const double u = ((double)(unsigned int)rand())/(double)UINT_MAX;
-	if( u > p0 )
-		state[v] = 1;
-	else
-		state[v] = 0;
+        const double u = ((double)(unsigned int)rand())/(double)UINT_MAX;
+        state[v] = u < p1 ? 1 : 0;
     }
-
     return;
 }
 
