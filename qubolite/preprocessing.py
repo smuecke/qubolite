@@ -200,7 +200,7 @@ def reduce_dynamic_range(
         callback=None,
         **kwargs):
     """Iterative procedure for reducing the dynammic range of a given QUBO, while preserving an
-    optimum, described in `Mücke et al. (2023)<http://arxiv.org/abs/2307.02195>`__.
+    optimum, described in `Mücke et al. (2023) <http://arxiv.org/abs/2307.02195>`__.
     For this, at every step we choose a specific QUBO weight and change it according to
     some heuristic.
 
@@ -483,7 +483,7 @@ def _apply_rule2_6(
 
 def qpro_plus(Q: qubo):
     """Implements the routine applying rules described in
-    `Glover et al., 2018<https://www.sciencedirect.com/science/article/pii/S0377221717307567>`__
+    `Glover et al. (2018) <https://www.sciencedirect.com/science/article/pii/S0377221717307567>`__
     for reducing the QUBO size by applying logical implications.
 
     Args:

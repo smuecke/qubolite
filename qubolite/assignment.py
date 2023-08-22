@@ -200,24 +200,44 @@ class partial_assignment:
     @property
     @__assert_normalized
     def free(self):
+        """List of variable indices that are not fixed.
+
+        Returns:
+            np.ndarray: Free indices.
+        """
         free_nodes = set(range(self.size)).difference([int(u[1:]) for u, _ in self.__PAG.edges])
         return np.fromiter(sorted(free_nodes), dtype=int)
 
     @property
     @__assert_normalized
     def num_free(self):
+        """Number of free variables, i.e., variables that are not fixed.
+
+        Returns:
+            int: Number of free variables.
+        """
         nodes_with_out_edges = { u for u, _ in self.__PAG.edges }
         return self.__PAG.number_of_nodes()-len(nodes_with_out_edges)-1
 
     @property
     @__assert_normalized
     def fixed(self):
+        """List of variable indices that are fixed.
+
+        Returns:
+            np.ndarray: Fixed indices.
+        """
         nodes_with_out_edges = { int(u[1:]) for u, _ in self.__PAG.edges }
         return np.fromiter(sorted(nodes_with_out_edges), dtype=int)
     
     @property
     @__assert_normalized
     def num_fixed(self):
+        """Number of variables that are fixed.
+
+        Returns:
+            int: Number of fixed variables.
+        """
         nodes_with_out_edges = { u for u, _ in self.__PAG.edges }
         return len(nodes_with_out_edges)
 
@@ -253,6 +273,16 @@ class partial_assignment:
 
     @__assert_normalized
     def to_expression(self):
+        """Inverse operation of ``from_expression``, creates a bit vector
+        expression representing this partial assignment. See there for detailed
+        info about these expressions.
+        By default, grouping is used for 10 or more identical tokens in a row.
+        To change this, set the ``grouping_limit`` property to a positive integer
+        value.
+
+        Returns:
+            str: Bit vector expression.
+        """
         n = self.__PAG.number_of_nodes()-1
         nodes = [f'x{i}' for i in range(n)]
         tokens = []
@@ -405,11 +435,11 @@ class partial_assignment:
 
         Args:
             expr (str): Bit vector expression.
-            x (np.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``
+            x (numpy.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``
                 where ``m`` is the number of ``*`` tokens in ``expr``.
 
         Returns:
-            np.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the
+            numpy.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the
                 number of tokens in ``expr``.
         """
         Q = Q
@@ -432,7 +462,7 @@ class partial_assignment:
                 the property ``num_free``.
 
         Returns:
-            np.ndarray: (Array of) bit vector(s) expanded by the partial
+            numpy.ndarray: (Array of) bit vector(s) expanded by the partial
                 assignment. The shape is ``(m?, s)``, where ``s`` is the size
                 of this partial assignment as given by the property ``size``.
         """
@@ -455,7 +485,17 @@ class partial_assignment:
         return z
 
     @__assert_normalized
-    def random(self, size, random_state=None):
+    def random(self, size=1, random_state=None):
+        """Generate random bit vectors matching the constraints emposed by this
+        bit vector expression.
+
+        Args:
+            size (int, optional): Number of bit vectors to generate.
+            random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
+
+        Returns:
+            numpy.ndarray: ``(m?, n)`` array of bit vectors. If ``size`` is 1, then the output shape is ``(n,)``.
+        """
         rng = get_random_state(random_state)
         rand = rng.random((*to_shape(size), self.num_free))<0.5
         return self.expand(rand)
