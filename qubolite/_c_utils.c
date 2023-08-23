@@ -191,18 +191,18 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * Gibbs sampling
  * ################################################ */
 
-void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in, bitgen_t *random_engine) {
-    size_t v;
+void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bitgen_t *random_engine) {
     double p, u;
 
-    for (size_t i=0; i<n*burn_in; ++i) { 
-        v = i % n;
-        p = exp(-qubo_score_flip(qubo, state, n, v));
-        p = p/(p+1.0);
-        u = (double) random_uniform(random_engine, 0.0, 1.0);
-        //printf("u=%f, p=%f, x=%hhu\n",u,p,state[v]);
-        if ( !state[v] ^ (u > p) )
-            state[v] = ~state[v];
+    for (size_t i=0; i<rounds; ++i) {
+        for (size_t v=0; v<n; ++v) {
+            p = exp(-qubo_score_flip(qubo, state, n, v));
+            p = p/(p+1.0);
+            u = (double) random_uniform(random_engine, 0.0, 1.0);
+            printf("u=%f, p=%f, x=%hhu\n",u,p,state[v]);
+            if ( !state[v] ^ (u > p) )
+                state[v] = 1-state[v];
+        }
     }
 }
 
@@ -235,7 +235,7 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     npy_intp rdims[] = { [0] = num_samples, [1] = n };
     PyObject *res = PyArray_SimpleNew(2, rdims, NPY_UINT8);
     Py_INCREF(res);
-    bit *samples = (bit*)PyArray_DATA(res);
+    bit *samples = (bit*)PyArray_DATA((PyArrayObject*)res);
 
     bit *chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
     for (size_t i=0; i<max_threads*n; ++i)
@@ -245,8 +245,9 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
 #pragma omp parallel for num_threads(max_threads)
     for (size_t j=0; j<num_samples; ++j) {
         const size_t tid = omp_get_thread_num();
-	_gibbs_sample(n, qubo, chain_state+(tid*n), j==tid ? keep : burn, random_engine[tid]);
-        memcpy(samples+(j*n), chain_state+(tid*n), sizeof(bit)*n);
+        bit *tstate = chain_state+(tid*n);
+	_gibbs_sample(n, qubo, tstate, j==tid ? burn : keep, random_engine[tid]);
+        memcpy(samples+(j*n), tstate, sizeof(bit)*n);
     }
 
     free(chain_state);
