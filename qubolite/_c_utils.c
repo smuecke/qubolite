@@ -201,8 +201,8 @@ void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in, bi
         p = p/(p+1.0);
         u = (double) random_uniform(random_engine, 0.0, 1.0);
         //printf("u=%f, p=%f, x=%hhu\n",u,p,state[v]);
-        if ( !state[v] ^ (u < p) )
-            state[v] = 1-state[v];
+        if ( !state[v] ^ (u > p) )
+            state[v] = ~state[v];
     }
 }
 
