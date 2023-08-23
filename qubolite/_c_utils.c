@@ -232,8 +232,10 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     if (PyErr_Occurred())
         return NULL;
 
-    bit *samples = (bit*)malloc(sizeof(bit)*num_samples*n);
-    memset(samples, 0, num_samples*n*sizeof(bit));
+    npy_intp rdims[] = { [0] = num_samples, [1] = n };
+    PyObject *res = PyArray_SimpleNew(2, rdims, NPY_UINT8);
+    Py_INCREF(res);
+    bit *samples = (bit*)PyArray_DATA(res);
 
     bit *chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
     for (size_t i=0; i<max_threads*n; ++i)
@@ -248,10 +250,6 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     }
 
     free(chain_state);
-
-    npy_intp rdims[] = { [0] = num_samples, [1] = n };
-    PyObject *res = PyArray_SimpleNewFromData(2, rdims, NPY_UINT8, samples);
-    Py_INCREF(res);
     return res;
 }
 
