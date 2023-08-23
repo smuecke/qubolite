@@ -10,7 +10,7 @@ from .bitvec import all_bitvectors_array, from_string, to_string
 from .qubo    import qubo
 from _c_utils import gibbs_sample as _gibbs_sample_c
 
-def gibbs_native(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1):
+def gibbs_native(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, random_state=None):
     """Sample from induced Gibbs distribution.
 
     Args:
@@ -24,11 +24,14 @@ def gibbs_native(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threa
             the sampling procedure. Defaults to 100.
         max_threads (int): Upper limit for the number of threads. Defaults to
             256.
+        random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
 
     Returns:
         A numpy.ndarray that contains the samples.
     """
-    S = _gibbs_sample_c(Q.m, samples, burn_in, max_threads, keep_interval, None)
+    bitgencaps = [r.bit_generator.capsule for r in get_random_state(random_state).spawn(max_threads)]
+
+    S = _gibbs_sample_c(Q.m, bitgencaps, samples, burn_in, max_threads, keep_interval)
     return S
 
 class BinarySample:

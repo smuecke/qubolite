@@ -33,8 +33,8 @@ double qubo_score(double **qubo, bit *x, const size_t n) {
 double qubo_score_flip(double **qubo, bit *x, const size_t n, const size_t i) {
     const double b = 1-2*x[i];
     double v = qubo[i][i];
-    size_t j;
-    for (j=0; j<i; ++j)
+    size_t j=0;
+    for (; j<i; ++j)
         v += x[j] * qubo[j][i];
     for (j=i+1; j<n; ++j)
         v += x[j] * qubo[i][j];
@@ -52,7 +52,7 @@ brute_force_result _brute_force(
         double **qubo,
         const size_t n,
         size_t n_fixed_bits) {
-    bit* x = (bit*)malloc(n*sizeof(bit)); // bit vector
+    bit *x = (bit*)malloc(n*sizeof(bit)); // bit vector
     memset(x, 0, n);
 
     // fix some bits
@@ -137,14 +137,14 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 
     const size_t M = 1ULL<<m; // first power of 2 less or equals MAX_THREADS
     omp_set_dynamic(0);
-    brute_force_result* ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
+    brute_force_result *ress = (brute_force_result*)malloc(M*sizeof(brute_force_result));
     #pragma omp parallel num_threads(M)
     {
         ress[omp_get_thread_num()] = _brute_force(qubo, n, m);
     }
 
     // collect all min values (except first result)
-    double* all_vals = (double*)malloc((2*M-2)*sizeof(double));
+    double *all_vals = (double*)malloc((2*M-2)*sizeof(double));
     for (size_t j=1; j<M; ++j) {
         all_vals[2*j-2] = ress[j].min_val0;
         all_vals[2*j-1] = ress[j].min_val1;
@@ -191,36 +191,19 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * Gibbs sampling
  * ################################################ */
 
-void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in) {
+void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t burn_in, bitgen_t *random_engine) {
     size_t v;
     double p, u;
-    //double p0, p1;
 
     for (size_t i=0; i<n*burn_in; ++i) { 
         v = i % n;
         p = exp(-qubo_score_flip(qubo, state, n, v));
         p = p/(p+1.0);
-        u = ((double)(unsigned int)rand())/(double)UINT_MAX;
-        if ((state[v] == 0) ^ (u < p))
+        u = (double) random_uniform(random_engine, 0.0, 1.0);
+        //printf("u=%f, p=%f, x=%hhu\n",u,p,state[v]);
+        if ( !state[v] ^ (u < p) )
             state[v] = 1-state[v];
-        /*
-        p0 = 0; // qubo_score(qubo, state, n);
-        p1 = qubo_score_flip(qubo, state, n, v); // + p0;
-        if( state[v] == 1 ){
-            const double temp = p0;
-            p0 = p1;
-            p1 = temp;
-        }
-        p0 = exp(-p0);
-        p1 = exp(-p1);
-        const double inv_Z = 1.0/(p0+p1);
-        //p0 *= invZ;
-        p1 *= inv_Z;
-        const double u = ((double)(unsigned int)rand())/(double)UINT_MAX;
-        state[v] = u < p1 ? 1 : 0;
-        */
     }
-    return;
 }
 
 PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
@@ -230,31 +213,16 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     size_t num_samples = 1;
     size_t burn = 100;
     size_t keep = 100;
-    PyObject *bitgencap = Py_None;
-    PyArg_ParseTuple(args, "O|kkkkO", &arr, &num_samples, &burn, &max_threads, &keep, &bitgencap);
+    PyObject *bitgencaps = Py_None;
+    PyArg_ParseTuple(args, "OO|kkkk", &arr, &bitgencaps, &num_samples, &burn, &max_threads, &keep);
     if (PyErr_Occurred() || !PyArray_Check(arr))
             return NULL;
 
-    // max_threads = min(num_samples, max_threads);
-    max_threads = 1; // don't know (yet) how to draw random numbers in a threadsafe way..
+    max_threads = (num_samples < max_threads) ? num_samples : max_threads;
 
-    // gen default bitgen when no bitgencapsule is provided
-    if(bitgencap == Py_None) {
-        PyObject *nprand = PyImport_ImportModule( "numpy.random" );
-        PyObject *get_bit_generator = PyObject_GetAttrString(nprand, "get_bit_generator");
-
-        PyObject *pyBitgen = PyObject_CallNoArgs(get_bit_generator);
-        bitgencap = PyObject_GetAttrString(pyBitgen, "capsule");
-    }
-
-    bitgen_t* random_engine = (bitgen_t*) PyCapsule_GetPointer(bitgencap, "BitGenerator");
-
-    size_t seeds[max_threads];
-    bool burned[max_threads];
-    for (size_t i=0; i<max_threads; ++i) {
-        seeds[i] = random_uint(random_engine);
-        burned[i] = false;
-    }
+    bitgen_t *random_engine[max_threads];
+    for (size_t i=0; i<max_threads; ++i)
+        random_engine[i] = (bitgen_t*) PyCapsule_GetPointer(PyList_GET_ITEM(bitgencaps, i), "BitGenerator");
 
     const size_t n = PyArray_DIM(arr, 0);
     double **qubo;
@@ -264,25 +232,25 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     if (PyErr_Occurred())
         return NULL;
 
-    bit* samples = (bit*)malloc(sizeof(bit)*num_samples*n);
+    bit *samples = (bit*)malloc(sizeof(bit)*num_samples*n);
     memset(samples, 0, num_samples*n*sizeof(bit));
 
-    bit* chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
+    bit *chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
     for (size_t i=0; i<max_threads*n; ++i)
-        chain_state[i] = (bit) (random_uint(random_engine) % 2);
+        chain_state[i] = (bit) (random_uint(*random_engine) % 2);
 
-//    omp_set_dynamic(0);
-// #pragma omp parallel for
+    omp_set_dynamic(0);
+#pragma omp parallel for num_threads(max_threads)
     for (size_t j=0; j<num_samples; ++j) {
         const size_t tid = omp_get_thread_num();
-	_gibbs_sample(n, qubo, chain_state+(tid*n), burned[tid] ? keep : burn);
+	_gibbs_sample(n, qubo, chain_state+(tid*n), j==tid ? keep : burn, random_engine[tid]);
         memcpy(samples+(j*n), chain_state+(tid*n), sizeof(bit)*n);
     }
 
     free(chain_state);
 
     npy_intp rdims[] = { [0] = num_samples, [1] = n };
-    PyObject* res = PyArray_SimpleNewFromData(2, rdims, NPY_UINT8, samples);
+    PyObject *res = PyArray_SimpleNewFromData(2, rdims, NPY_UINT8, samples);
     Py_INCREF(res);
     return res;
 }
