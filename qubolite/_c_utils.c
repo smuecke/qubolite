@@ -191,10 +191,9 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bitgen_t *random_engine) {
     double p, u;
     for (size_t i=0; i<rounds; ++i) {
-        for (size_t v=0; v<n; ++v) { // "mod" is too expensive
+        for (size_t v=0; v<n; ++v) {
             p = exp(-qubo_score_condition_1(qubo, state, n, v));
-            p = p/(p+1.0); // p is P(x_v == 1 | .. )
-            u = (double) random_uniform(random_engine, 0.0, 1.0);
+            u = (double) random_uniform(random_engine, 0.0, p+1.0);
             if ( !(!state[v] ^ (u < p)) )
                 state[v] = !state[v];
         }

@@ -252,7 +252,7 @@ def gibbs(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, t
             value makes the samples more independent, but slows down 
             the sampling procedure. Defaults to 100.
         max_threads (int): Upper limit for the number of threads. Defaults to
-            256.
+            1.
         temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
         return_raw (bool, optional): If true, returns the raw Gibbs samples without wrapping them
             in a BinarySample object. Defaults to false.
