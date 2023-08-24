@@ -243,6 +243,78 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     return res;
 }
 
+
+/* ################################################
+ * Annealing
+ * ################################################ */
+
+double beta_ip1(double b) {
+    return ( 1.0 + sqrt(4.0*b*b+1.0) ) / 2.0;
+}
+
+void _anneal(const size_t n, double **qubo, bit *state, const size_t rounds, bitgen_t *random_engine) {
+    double p, u, bip1, tempi, bi = 1;
+    for (size_t i=0; i<rounds; ++i) {
+        bip1 = beta_ip1(bi);
+        tempi = 1.0 - ((bi-1.0) / bip1);
+        for (size_t v=0; v<n; ++v) {
+            p = exp(-qubo_score_condition_1(qubo, state, n, v) / tempi);
+            u = (double) random_uniform(random_engine, 0.0, p+1.0);
+            if ( !(!state[v] ^ (u < p)) )
+                state[v] = !state[v];
+        }
+        bi = bip1;
+    }
+}
+
+PyObject *py_anneal(PyObject *self, PyObject *args) {
+    PyArrayObject *arr;
+    size_t max_threads = 1;
+    size_t num_samples = 1;
+    size_t burn = 100;
+    size_t keep = 100;
+    PyObject *bitgencaps = Py_None;
+    PyArg_ParseTuple(args, "OO|kkkk", &arr, &bitgencaps, &num_samples, &burn, &max_threads, &keep);
+    if (PyErr_Occurred() || !PyArray_Check(arr))
+            return NULL;
+
+    max_threads = (num_samples < max_threads) ? num_samples : max_threads;
+
+    bitgen_t *random_engine[max_threads];
+    for (size_t i=0; i<max_threads; ++i)
+        random_engine[i] = (bitgen_t*) PyCapsule_GetPointer(PyList_GET_ITEM(bitgencaps, i), "BitGenerator");
+
+    const size_t n = PyArray_DIM(arr, 0);
+    double **qubo;
+    npy_intp dims[] = { [0] = n, [1] = n };
+    PyArray_AsCArray((PyObject**) &arr, &qubo, dims, 2,
+        PyArray_DescrFromType(NPY_DOUBLE));
+    if (PyErr_Occurred())
+        return NULL;
+
+    npy_intp rdims[] = { [0] = num_samples, [1] = n };
+    PyObject *res = PyArray_SimpleNew(2, rdims, NPY_UINT8);
+    Py_INCREF(res);
+    bit *samples = (bit*)PyArray_DATA((PyArrayObject*)res);
+
+    bit *chain_state = (bit*)malloc(sizeof(bit)*max_threads*n);
+    for (size_t i=0; i<max_threads*n; ++i)
+        chain_state[i] = (bit) (random_uint(*random_engine) % 2);
+
+    omp_set_dynamic(0);
+#pragma omp parallel for num_threads(max_threads)
+    for (size_t j=0; j<num_samples; ++j) {
+        const size_t tid = omp_get_thread_num();
+        bit *tstate = chain_state+(tid*n);
+	_anneal(n, qubo, tstate, j==tid ? burn : keep, random_engine[tid]);
+        memcpy(samples+(j*n), tstate, sizeof(bit)*n);
+    }
+
+    free(chain_state);
+    return res;
+}
+
+
 /* ################################################
  * Python module def                              
  * ################################################ */
@@ -250,6 +322,7 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
 static PyMethodDef methods[] = {
     {"brute_force", py_brute_force, METH_VARARGS, "Solves QUBO the hard way"},
     {"gibbs_sample", py_gibbs_sample, METH_VARARGS, "Sample from the induced exponential family"},
+    {"anneal", py_anneal, METH_VARARGS, "Experimental QUBO solver, based on magic annealing schedule"},
     {NULL, NULL, 0, NULL}
 };
 

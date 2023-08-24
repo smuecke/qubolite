@@ -10,7 +10,6 @@ from .bitvec import all_bitvectors_array, from_string, to_string
 from .qubo    import qubo
 from _c_utils import gibbs_sample as _gibbs_sample_c
 
-
 class BinarySample:
     """Class for representing samples of binary vectors,
     e.g., measurements of a qubit system.
