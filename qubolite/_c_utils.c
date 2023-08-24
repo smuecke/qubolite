@@ -8,9 +8,6 @@
 
 typedef unsigned char bit;
 
-bitgen_t *B = 0;
-
-
 void print_bits(bit *x, size_t n) {
     for (size_t i=0; i<n; ++i)
         printf("%d ", x[i]);
