@@ -29,7 +29,7 @@ double qubo_score(double **qubo, bit *x, const size_t n) {
     return v;
 }
 
-double qubo_score_fixed_1(double **qubo, bit *x, const size_t n, const size_t i) {
+double qubo_score_condition_1(double **qubo, bit *x, const size_t n, const size_t i) {
     double v = qubo[i][i];
     size_t j=0;
     for (; j<i; ++j)
@@ -38,7 +38,6 @@ double qubo_score_fixed_1(double **qubo, bit *x, const size_t n, const size_t i)
         v += x[j] * qubo[i][j];
     return v;
 }
-
 
 struct _brute_force_result {
     bit *min_x;
@@ -191,10 +190,9 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 
 void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bitgen_t *random_engine) {
     double p, u;
-
     for (size_t i=0; i<rounds; ++i) {
         for (size_t v=0; v<n; ++v) { // "mod" is too expensive
-            p = exp(-qubo_score_fixed_1(qubo, state, n, v));
+            p = exp(-qubo_score_condition_1(qubo, state, n, v));
             p = p/(p+1.0); // p is P(x_v == 1 | .. )
             u = (double) random_uniform(random_engine, 0.0, 1.0);
             if ( !(!state[v] ^ (u < p)) )
