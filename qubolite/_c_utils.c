@@ -183,7 +183,6 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     return tup;
 }
 
-
 /* ################################################
  * Gibbs sampling
  * ################################################ */
@@ -201,9 +200,8 @@ void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bit
 }
 
 PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
-    const size_t MAX_THREADS = omp_get_max_threads();
     PyArrayObject *arr;
-    size_t max_threads = MAX_THREADS;
+    size_t max_threads = 1;
     size_t num_samples = 1;
     size_t burn = 100;
     size_t keep = 100;
