@@ -315,7 +315,7 @@ def subspace_search(Q: qubo, steps=1000, random_state=None, max_threads=256):
     return x, Q(x)
     
 
-def anneal(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, return_raw=False, random_state=None):
+def anneal(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=256, return_raw=False, random_state=None):
     """Perform Gibbs sampling with magic annealing schedule.
 
     Args:
@@ -328,7 +328,7 @@ def anneal(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, 
             value makes the samples more independent, but slows down 
             the sampling procedure. Defaults to 100.
         max_threads (int): Upper limit for the number of threads. Defaults to
-            1.
+            256.
         return_raw (bool, optional): If true, returns the raw Gibbs samples without wrapping them
             in a BinarySample object. Defaults to false.
         random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.

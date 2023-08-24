@@ -232,7 +232,7 @@ def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_stat
     return BinarySample(counts=dict(counts))
 
 
-def gibbs(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, temp=1.0, return_raw=False, random_state=None):
+def gibbs(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=256, temp=1.0, return_raw=False, random_state=None):
     """Perform Gibbs sampling on the Gibbs distribution induced by
     the given QUBO instance. This method builds upon a Markov chain
     that converges to the true distribution after a certain number
@@ -251,7 +251,7 @@ def gibbs(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=1, t
             value makes the samples more independent, but slows down 
             the sampling procedure. Defaults to 100.
         max_threads (int): Upper limit for the number of threads. Defaults to
-            1.
+            256.
         temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
         return_raw (bool, optional): If true, returns the raw Gibbs samples without wrapping them
             in a BinarySample object. Defaults to false.

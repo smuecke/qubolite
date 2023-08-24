@@ -197,6 +197,7 @@ void _gibbs_sample(const size_t n, double **qubo, bit *state, const size_t round
 }
 
 PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
+    const size_t MAX_THREADS = omp_get_max_threads();
     PyArrayObject *arr;
     size_t max_threads = 1;
     size_t num_samples = 1;
@@ -208,6 +209,7 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
             return NULL;
 
     max_threads = (num_samples < max_threads) ? num_samples : max_threads;
+    max_threads = (MAX_THREADS < max_threads) ? MAX_THREADS : max_threads;
 
     bitgen_t *random_engine[max_threads];
     for (size_t i=0; i<max_threads; ++i)
@@ -268,6 +270,7 @@ void _anneal(const size_t n, double **qubo, bit *state, const size_t rounds, bit
 }
 
 PyObject *py_anneal(PyObject *self, PyObject *args) {
+    const size_t MAX_THREADS = omp_get_max_threads();
     PyArrayObject *arr;
     size_t max_threads = 1;
     size_t num_samples = 1;
@@ -279,6 +282,7 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
             return NULL;
 
     max_threads = (num_samples < max_threads) ? num_samples : max_threads;
+    max_threads = (MAX_THREADS < max_threads) ? MAX_THREADS : max_threads;
 
     bitgen_t *random_engine[max_threads];
     for (size_t i=0; i<max_threads; ++i)
