@@ -29,16 +29,14 @@ double qubo_score(double **qubo, bit *x, const size_t n) {
     return v;
 }
 
-
-double qubo_score_flip(double **qubo, bit *x, const size_t n, const size_t i) {
-    const double b = 1-2*x[i];
+double qubo_score_fixed_1(double **qubo, bit *x, const size_t n, const size_t i) {
     double v = qubo[i][i];
     size_t j=0;
     for (; j<i; ++j)
         v += x[j] * qubo[j][i];
     for (j=i+1; j<n; ++j)
         v += x[j] * qubo[i][j];
-    return b*v;
+    return v;
 }
 
 
@@ -195,13 +193,12 @@ void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bit
     double p, u;
 
     for (size_t i=0; i<rounds; ++i) {
-        for (size_t v=0; v<n; ++v) {
-            p = exp(-qubo_score_flip(qubo, state, n, v));
-            p = p/(p+1.0);
+        for (size_t v=0; v<n; ++v) { // "mod" is too expensive
+            p = exp(-qubo_score_fixed_1(qubo, state, n, v));
+            p = p/(p+1.0); // p is P(x_v == 1 | .. )
             u = (double) random_uniform(random_engine, 0.0, 1.0);
-            printf("u=%f, p=%f, x=%hhu\n",u,p,state[v]);
-            if ( !state[v] ^ (u > p) )
-                state[v] = 1-state[v];
+            if ( !(!state[v] ^ (u < p)) )
+                state[v] = !state[v];
         }
     }
 }
