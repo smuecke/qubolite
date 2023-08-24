@@ -187,7 +187,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * Gibbs sampling
  * ################################################ */
 
-void _gibbs_sample(const size_t n, double **qubo, bit *state, size_t rounds, bitgen_t *random_engine) {
+void _gibbs_sample(const size_t n, double **qubo, bit *state, const size_t rounds, bitgen_t *random_engine) {
     double p, u;
     for (size_t i=0; i<rounds; ++i) {
         for (size_t v=0; v<n; ++v) {
