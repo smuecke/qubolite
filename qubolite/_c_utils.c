@@ -257,15 +257,13 @@ double beta_ip1(double b) {
 void _anneal(const size_t n, double **qubo, bit *state, const size_t rounds, bitgen_t *random_engine) {
     double p, u, bip1, tempi, bi = 1;
     for (size_t i=0; i<rounds; ++i) {
-        bip1 = beta_ip1(bi);
-        tempi = 1.0 - ((bi-1.0) / bip1);
         for (size_t v=0; v<n; ++v) {
-            p = exp(-qubo_score_condition_1(qubo, state, n, v) / tempi);
+            p = exp(-qubo_score_condition_1(qubo, state, n, v) * bi);
             u = (double) random_uniform(random_engine, 0.0, p+1.0);
             if ( !(!state[v] ^ (u < p)) )
                 state[v] = !state[v];
         }
-        bi = bip1;
+        bi = beta_ip1(bi);
     }
 }
 
