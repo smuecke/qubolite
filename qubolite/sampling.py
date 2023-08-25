@@ -3,15 +3,16 @@ from collections import Counter, defaultdict
 from functools   import cached_property
 
 import numpy as np
-
-from .       import qubo
-from ._misc  import get_random_state, mock, set_suffix
-from .bitvec import all_bitvectors_array, from_string, to_string
-
 try:
     from tqdm import tqdm
 except ImportError:
     tqdm = mock
+
+from .       import qubo
+from ._misc  import get_random_state, mock, set_suffix
+from .bitvec import all_bitvectors_array, from_string, to_string
+from _c_utils import gibbs_sample as _gibbs_sample_c
+
 
 
 class BinarySample:
@@ -236,26 +237,7 @@ def mcmc(qubo, samples: int=1, burn_in=1000, initial=None, temp=1.0, random_stat
     return BinarySample(counts=dict(counts))
 
 
-def _marginal(qm, x, i, temp=1.0):
-    dxi = qm[i,i]+(x[:i]*qm[:i,i]).sum()+(x[i+1:]*qm[i,i+1:]).sum()
-    if x[i] == 0:
-        e0 = x @ qm @ x
-        e1 = e0+dxi
-    else:
-        e1 = x @ qm @ x
-        e0 = e1-dxi
-    p0 = np.exp(-e0/temp)
-    p1 = np.exp(-e1/temp)
-    return p1/(p0+p1)
-
-
-def gibbs(qubo,
-          samples: int=1,
-          burn_in: int=1000,
-          keep_interval: int=10,
-          initial=None,
-          temp=1.0,
-          random_state=None):
+def gibbs(Q: qubo, samples=1, burn_in = 100, keep_interval=100, max_threads=256, temp=1.0, return_raw=False, random_state=None):
     """Perform Gibbs sampling on the Gibbs distribution induced by
     the given QUBO instance. This method builds upon a Markov chain
     that converges to the true distribution after a certain number
@@ -265,48 +247,28 @@ def gibbs(qubo,
     most samples are discarded (see ``keep_interval`` below).
 
     Args:
-        qubo (qubo): QUBO instance.
+        Q (qubo): QUBO instance.
         samples (int, optional): Sample size. Defaults to 1.
         burn_in (int, optional): Number of initial iterations that are discarded,
-            the so-called *burn-in* phase. Defaults to 1000.
+            the so-called *burn-in* phase. Defaults to 100.
         keep_interval (int, optional): Number of samples out of which
             only one is kept, and the others discarded. Choosing a high
             value makes the samples more independent, but slows down 
-            the sampling procedure. Defaults to 10.
-        initial (numpy.ndarray, optional): Bit vector to use as a starting
-            point for the Markov chain. Using a representative sample from
-            the Gibbs distribution can make the burn-in phase obsolete.
-            Defaults to None, which samples a random bit vector.
+            the sampling procedure. Defaults to 100.
+        max_threads (int): Upper limit for the number of threads. Defaults to
+            256.
         temp (float, optional): Temperature parameter of the Gibbs distribution. Defaults to 1.0.
+        return_raw (bool, optional): If true, returns the raw Gibbs samples without wrapping them
+            in a BinarySample object. Defaults to false.
         random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.
 
     Returns:
         BinarySample: Random sample.
     """
-    npr = get_random_state(random_state)
-    counts = defaultdict(int)
-    x = initial if initial is not None else (npr.random(qubo.n)<0.5).astype(np.float64)
-    sampled = -burn_in
-    skip = 0
-    while sampled < samples:
-        # iterate over all indices in random order
-        for i in npr.permutation(qubo.n):
-            # get marginal Bernoulli probability for component i
-            p = _marginal(qubo.m, x, i, temp)
-            # sample with given probability
-            x[i] = 1 if npr.random() < p else 0
-        if sampled >= 0:
-            if skip <= 0:
-                counts[to_string(x)] += 1
-                sampled += 1
-                skip = keep_interval-1
-            else:
-                skip -= 1
-        else:
-            # still in burn-in phase -> discard sample
-            sampled += 1
-    return BinarySample(counts=dict(counts))
-
+    rng = get_random_state(random_state)
+    bitgencaps = [r.bit_generator.capsule for r in rng.spawn(max_threads)]
+    sample = _gibbs_sample_c(Q.m/temp, bitgencaps, samples, burn_in, max_threads, keep_interval)
+    return sample if return_raw else BinarySample(raw=sample)
 
 ################################################################################
 # Train QUBO parameters                                                        #
