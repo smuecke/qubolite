@@ -97,3 +97,10 @@ def try_import(*libs):
         except ModuleNotFoundError:
             continue
         libdict[lib] = module
+
+
+class __mock_cls:
+    def __getattribute__(self, attrname):
+        return lambda *args, **kwargs: None
+
+mock = __mock_cls()

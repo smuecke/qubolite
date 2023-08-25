@@ -178,8 +178,9 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
  * Gibbs sampling
  * ################################################ */
 
-int gibbs_sample(double **qubo, bit *state, size_t burn_in, double temp) {
+int gibbs_sample(double **qubo, bitgen_t *rng, size_t burn_in, double temp) {
     return -1;
+    double x = random_standard_uniform(rng);
 }
 
 

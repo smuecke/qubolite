@@ -4,8 +4,14 @@ from functools   import cached_property
 
 import numpy as np
 
-from ._misc  import get_random_state, set_suffix
+from .       import qubo
+from ._misc  import get_random_state, mock, set_suffix
 from .bitvec import all_bitvectors_array, from_string, to_string
+
+try:
+    from tqdm import tqdm
+except ImportError:
+    tqdm = mock
 
 
 class BinarySample:
@@ -300,3 +306,53 @@ def gibbs(qubo,
             # still in burn-in phase -> discard sample
             sampled += 1
     return BinarySample(counts=dict(counts))
+
+
+################################################################################
+# Train QUBO parameters                                                        #
+################################################################################
+
+
+class exponential_learning_rate:
+    def __init__(self, η0, η1):
+        self.η0 = η0
+        self.factor = (np.log(η1)/np.log(η0))-1
+    
+    def get_lr(self, t=0.0):
+        return self.η0**(1+t*self.factor)
+
+
+def train_gibbs(
+        target: BinarySample,
+        steps=1000,
+        temperature=1.0,
+        lr_schedule=None,
+        return_hellinger_distances=False,
+        random_state=None,
+        silent=False):
+    npr = get_random_state(random_state)
+    # initialize QUBO matrix
+    Q = qubo(np.zeros((target.n, target.n)))
+    # learning rate schedule
+    if lr_schedule is None:
+        lr_schedule = exponential_learning_rate(1e-1, 1e-4)
+    # space for Hellinger distances over time
+    hds = np.empty(steps)
+
+    progress = mock() if silent else tqdm(total=steps, desc='Train')
+    for i in range(steps):
+        # draw Gibbs samples
+        sample = gibbs(Q,
+            samples=target.size,
+            burn_in=1000,
+            temp=temperature,
+            random_state=npr)
+        hds[i] = target.hellinger_distance(sample)
+        # get gradient according to Nico's formula
+        Δ = (sample.suff_stat-target.suff_stat)/target.size
+        # update QUBO parameters (perform gradient ascent)
+        η = lr_schedule.get_lr(i/(steps-1))
+        Q.m += η*Δ
+        progress.set_postfix({'LR': η, 'HD': hds[i]}, refresh=False)
+        progress.update(1)
+    return (Q, hds) if return_hellinger_distances else Q
