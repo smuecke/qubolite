@@ -7,10 +7,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "qubolite"
-version = "0.8.3"
+version = "0.8.4"
 authors = [
     { name = "Sascha Mücke", email="sascha.muecke@tu-dortmund.de" },
-    { name = "Thore Gerlach", email="thore.gerlach@iais.fraunhofer.de" }
+    { name = "Thore Gerlach", email="thore.gerlach@iais.fraunhofer.de" },
+    { name = "Nico Piatkowski", email="nico.piatkowski@iais.fraunhofer.de" }
 ]
 description = "Toolbox for quadratic binary optimization"
 license = {file = "LICENSE"}
