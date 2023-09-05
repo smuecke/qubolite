@@ -10,6 +10,10 @@ SYSTEM = system()
 if SYSTEM == 'Windows':
     C_LINK_FLAGS = []
     C_COMP_FLAGS = ['/O2', '/openmp']
+    
+elif SYSTEM == 'Darwin': # clang flags for macos
+    C_COMP_FLAGS = ['-O3']
+
 else: # GCC flags for Linux
     C_LINK_FLAGS = ['-fopenmp']
     C_COMP_FLAGS = ['-O3', '-fopenmp', '-march=native']
