@@ -52,7 +52,7 @@ brute_force_result _brute_force(
     // fix some bits
 #ifndef __APPLE__
     const size_t thread_id = omp_get_thread_num();
-#elif
+#else
     const size_t thread_id = 0;
 #endif
     for (size_t k=0; k<n_fixed_bits; ++k)
@@ -103,7 +103,7 @@ brute_force_result _brute_force(
 PyObject *py_brute_force(PyObject *self, PyObject *args) {
 #ifndef __APPLE__
     const size_t MAX_THREADS = omp_get_max_threads();
-#elif
+#else
     const size_t MAX_THREADS = 1;
 #endif
     PyArrayObject *arr;
@@ -146,7 +146,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
     {
 #ifndef __APPLE__
         ress[omp_get_thread_num()] = _brute_force(qubo, n, m);
-#elif
+#else
         ress[0] = _brute_force(qubo, n, m);
 #endif
     }
@@ -213,7 +213,7 @@ void _gibbs_sample(const size_t n, double **qubo, bit *state, const size_t round
 PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
 #ifndef __APPLE__
     const size_t MAX_THREADS = omp_get_max_threads();
-#elif
+#else
     const size_t MAX_THREADS = 1;
 #endif
     PyArrayObject *arr;
@@ -257,7 +257,7 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     for (size_t j=0; j<num_samples; ++j) {
 #ifndef __APPLE__
         const size_t tid = omp_get_thread_num();
-#elif
+#else
         const size_t tid = 0;
 #endif
         bit *tstate = chain_state+(tid*n);
@@ -294,7 +294,7 @@ void _anneal(const size_t n, double **qubo, bit *state, const size_t rounds, bit
 PyObject *py_anneal(PyObject *self, PyObject *args) {
 #ifndef __APPLE__
     const size_t MAX_THREADS = omp_get_max_threads();
-#elif
+#else
     const size_t MAX_THREADS = 1;
 #endif
     PyArrayObject *arr;
@@ -338,7 +338,7 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
     for (size_t j=0; j<num_samples; ++j) {
 #ifndef __APPLE__
         const size_t tid = omp_get_thread_num();
-#elif
+#else
         const size_t tid = 0;
 #endif
         bit *tstate = chain_state+(tid*n);
