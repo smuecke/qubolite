@@ -12,8 +12,8 @@ if SYSTEM == 'Windows':
     C_COMP_FLAGS = ['/O2', '/openmp']
     
 elif SYSTEM == 'Darwin': # clang flags for macos (without omp)
-    C_LINK_FLAGS = ['-lomp']
-    C_COMP_FLAGS = ['-O3','-Xclang -fopenmp']
+    C_LINK_FLAGS = []
+    C_COMP_FLAGS = ['-O3']
 
 else: # GCC flags for Linux
     C_LINK_FLAGS = ['-fopenmp']
