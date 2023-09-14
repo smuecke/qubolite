@@ -1,11 +1,18 @@
+from collections import namedtuple
+
 import numpy as np
 
-from ._misc   import get_random_state, warn_size
-from .bitvec  import flip_index
-from .qubo    import qubo
+from ._misc    import get_random_state, warn_size
+from .bitvec   import flip_index
+from .qubo     import qubo
+from .sampling import BinarySample
 
 from _c_utils import brute_force as _brute_force_c
 from _c_utils import anneal as _anneal_c
+
+
+solution_t = namedtuple('qubo_solution', ['x', 'energy'])
+
 
 def brute_force(Q: qubo, max_threads=256):
     """Solve QUBO instance exactly by brute force. Note that this method is
@@ -29,7 +36,7 @@ def brute_force(Q: qubo, max_threads=256):
         x, v, _ = _brute_force_c(Q.m, max_threads)
     except TypeError:
         raise ValueError(f'n is too large to brute-force on this system')
-    return x, v
+    return solution_t(x, v)
 
 
 def simulated_annealing(Q: qubo,
@@ -140,7 +147,7 @@ def local_descent(Q: qubo, x=None, random_state=None):
         if Δx[am] >= 0:
             break
         x_[am] = 1 - x_[am]
-    return x_, Q(x_)
+    return solution_t(x_, Q(x_))
 
 
 def local2_descent(Q: qubo, x=None, random_state=None):
@@ -172,7 +179,7 @@ def local2_descent(Q: qubo, x=None, random_state=None):
         if Δx[i, j] >= 0:
             break
         flip_index(x_, [i, j], in_place=True)
-    return x_, Q(x_)
+    return solution_t(x_, Q(x_))
 
 
 def local_descent_search(Q: qubo, steps=1000, random_state=None):
@@ -205,7 +212,7 @@ def local_descent_search(Q: qubo, steps=1000, random_state=None):
         if y <= y_min:
             x_min[:] = x
             y_min = y
-    return x_min, y_min
+    return solution_t(x_min, y_min)
 
 
 def local2_descent_search(Q: qubo, steps=1000, random_state=None):
@@ -238,7 +245,7 @@ def local2_descent_search(Q: qubo, steps=1000, random_state=None):
         if y <= y_min:
             x_min[:] = x
             y_min = y
-    return x_min, y_min
+    return solution_t(x_min, y_min)
 
 
 def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
@@ -277,7 +284,7 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
             x_min[:] = x[i_min, :]
             y_min = y[i_min]
         remaining -= r
-    return x_min, y_min
+    return solution_t(x_min, y_min)
 
 
 def subspace_search(Q: qubo, steps=1000, random_state=None, max_threads=256):
@@ -312,7 +319,7 @@ def subspace_search(Q: qubo, steps=1000, random_state=None, max_threads=256):
         x_sub_opt, *_ = _brute_force_c(Q_sub.m, max_threads)
         # set variables in current solution to subspace-optimal bits
         x[free] = x_sub_opt
-    return x, Q(x)
+    return solution_t(x, Q(x))
     
 
 def anneal(Q: qubo, samples=1, iters = 100, max_threads=256, return_raw=False, random_state=None):

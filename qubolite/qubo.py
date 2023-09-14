@@ -1,4 +1,5 @@
 import struct
+from functools import cached_property
 
 import numpy as np
 from numpy import newaxis as na
@@ -733,6 +734,38 @@ class qubo:
         const = lin_neg.sum()
         return posiform, const
     
+    def support_graph(self):
+        """Return this QUBO instance's support graph. Its nodes are the set of
+        binary variables, and there is an edge between every pair of variables
+        that has a non-zero parameter.
+
+        Returns:
+            _type_: _description_
+        """
+        nodes = list(range(self.n))
+        edges = list(zip(np.where(~np.isclose(np.triu(self.m,1), 0))))
+        return nodes, edges
+    
+    @cached_property
+    def properties(self):
+        props = set()
+        lin = np.diag(self.m)
+        qua = np.triu(self.m, 1)
+        for x, name in [(lin, 'linear'), (qua, 'quadratic')]:
+            if   np.all(x >  0): props.add(f'{name}_positive')
+            elif np.all(x >= 0): props.add(f'{name}_nonnegative')
+            if   np.all(x <  0): props.add(f'{name}_negative')
+            elif np.all(x <= 0): props.add(f'{name}_nonpositive')
+            if   np.all(~np.isclose(x, 0)): props.add(f'{name}_nonzero')
+
+        # do some meta checks
+        and_checks = [
+            (['linear_nonnegative', 'linear_nonpositive'], 'linear_zero'),
+            (['quadratic_nonnegative', 'quadratic_nonpositive'], 'quadratic_zero')]
+        for ps, p in and_checks:
+            if all(p_ in props for p_ in ps): props.add(p)
+        return props
+
 
 def ordering_distance(Q1, Q2, X=None):
     try:

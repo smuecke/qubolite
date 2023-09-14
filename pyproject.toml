@@ -45,6 +45,7 @@ embedding = [
     "scikit-learn>=1.2.2"
 ]
 preprocessing = [
+    "igraph>=0.10.4",
     "portion>=2.4.0"
 ]
 all = [
