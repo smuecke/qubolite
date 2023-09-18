@@ -619,11 +619,11 @@ def qpro_plus(Q: qubo):
 
 
 def try_solve_polynomial(Q: qubo):
-    if 'quadratic_nonnegative' in Q.properties:
-        q = np.triu(Q.m, 1) #0.5*(np.triu(Q.m, 1) + np.triu(Q.m, 1).T)
+    if 'quadratic_nonpositive' in Q.properties:
+        q = np.triu(Q.m, 1)
         c = np.diag(Q.m)
         s, t = Q.n, Q.n+1 # source and target indices
-        r = q.sum(0) + q.sum(1) # XXX weicht von Def. etwas ab
+        r = q.sum(0) + q.sum(1)
         edges = np.r_[
             np.stack(np.where(~np.isclose(q, 0))).T, # (i, j)
             np.c_[np.full(Q.n, s), np.arange(Q.n)],  # (s, j)
@@ -632,10 +632,13 @@ def try_solve_polynomial(Q: qubo):
             -q[np.where(~np.isclose(q, 0))], # (i, j)
             np.minimum(0, -r-c),             # (s, j)
             np.minimum(0,  r+c)]             # (i, t)
-        G = ig.Graph(n=Q.n+2, edges=edges, edge_attrs={'w': -weights}) # note the "-"
-        res = G.st_mincut(source=s, target=t, capacity='w')
-        ones = res.partition[1][:-1] # omit t at the end
+        #print(f'Q:\n{q}\nc: {c}\nr: {r}\nedges:\n{edges}\nweights:\n{weights}')
+        G = ig.Graph(n=Q.n+2, edges=edges, edge_attrs={'w': weights}) # note the "-"
+        cut = G.st_mincut(source=s, target=t, capacity='w')
+        #print(cut.partition)
+        ones = cut.partition[0][:-1] # omit s at the end
         x = np.zeros(Q.n)
         x[ones] = 1
+        raise NotImplementedError('Not working')
         return solution_t(x, Q(x)) # XXX doesn't yield same result as brute force...
     return None
