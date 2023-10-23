@@ -241,7 +241,8 @@ document.write(`
   <h1>Source code for qubolite.preprocessing</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">igraph</span>  <span class="k">as</span> <span class="nn">ig</span>
+<span class="kn">import</span> <span class="nn">numpy</span>   <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">portion</span> <span class="k">as</span> <span class="nn">P</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">qubo</span>
@@ -254,6 +255,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">._heuristics</span> <span class="kn">import</span> <span class="n">MatrixOrder</span><span class="p">,</span> <span class="n">HEURISTICS</span>
 <span class="kn">from</span> <span class="nn">._misc</span>       <span class="kn">import</span> <span class="n">get_random_state</span>
 <span class="kn">from</span> <span class="nn">.assignment</span>  <span class="kn">import</span> <span class="n">partial_assignment</span>
+<span class="kn">from</span> <span class="nn">.solving</span>     <span class="kn">import</span> <span class="n">solution_t</span>
 
 <span class="c1">################################################################################</span>
 <span class="c1"># Dynamic Range Compression                                                    #</span>
@@ -850,6 +852,38 @@ document.write(`
     <span class="k">return</span> <span class="n">partial_assignment</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="n">assignment_pattern</span><span class="p">)</span></div>
     <span class="c1"># reduced qubo: qubo(-m[np.ix_(indices, indices)])</span>
     <span class="c1"># offset: -c_0</span>
+
+
+<span class="c1">################################################################################</span>
+<span class="c1"># Graph Transformation                                                         #</span>
+<span class="c1">################################################################################</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">def try_solve_polynomial(Q: qubo):</span>
+<span class="sd">    if &#39;quadratic_nonpositive&#39; in Q.properties:</span>
+<span class="sd">        q = np.triu(Q.m, 1)</span>
+<span class="sd">        c = np.diag(Q.m)</span>
+<span class="sd">        s, t = Q.n, Q.n+1 # source and target indices</span>
+<span class="sd">        r = q.sum(0) + q.sum(1)</span>
+<span class="sd">        edges = np.r_[</span>
+<span class="sd">            np.stack(np.where(~np.isclose(q, 0))).T, # (i, j)</span>
+<span class="sd">            np.c_[np.full(Q.n, s), np.arange(Q.n)],  # (s, j)</span>
+<span class="sd">            np.c_[np.arange(Q.n), np.full(Q.n, t)]]  # (i, t)</span>
+<span class="sd">        weights = np.r_[</span>
+<span class="sd">            -q[np.where(~np.isclose(q, 0))], # (i, j)</span>
+<span class="sd">            np.minimum(0, -r-c),             # (s, j)</span>
+<span class="sd">            np.minimum(0,  r+c)]             # (i, t)</span>
+<span class="sd">        #print(f&#39;Q:\n{q}\nc: {c}\nr: {r}\nedges:\n{edges}\nweights:\n{weights}&#39;)</span>
+<span class="sd">        G = ig.Graph(n=Q.n+2, edges=edges, edge_attrs={&#39;w&#39;: weights}) # note the &quot;-&quot;</span>
+<span class="sd">        cut = G.st_mincut(source=s, target=t, capacity=&#39;w&#39;)</span>
+<span class="sd">        #print(cut.partition)</span>
+<span class="sd">        ones = cut.partition[0][:-1] # omit s at the end</span>
+<span class="sd">        x = np.zeros(Q.n)</span>
+<span class="sd">        x[ones] = 1</span>
+<span class="sd">        raise NotImplementedError(&#39;Not working&#39;)</span>
+<span class="sd">        return solution_t(x, Q(x)) # XXX doesn&#39;t yield same result as brute force...</span>
+<span class="sd">    return None</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 
                 </article>

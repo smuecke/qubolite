@@ -304,12 +304,14 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.probabilities"><code class="docutils literal notranslate"><span class="pre">qubo.probabilities()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.properties"><code class="docutils literal notranslate"><span class="pre">qubo.properties</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.random"><code class="docutils literal notranslate"><span class="pre">qubo.random()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.round"><code class="docutils literal notranslate"><span class="pre">qubo.round()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save"><code class="docutils literal notranslate"><span class="pre">qubo.save()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save_qbsolv"><code class="docutils literal notranslate"><span class="pre">qubo.save_qbsolv()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.scale"><code class="docutils literal notranslate"><span class="pre">qubo.scale()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.spectral_gap"><code class="docutils literal notranslate"><span class="pre">qubo.spectral_gap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.support_graph"><code class="docutils literal notranslate"><span class="pre">qubo.support_graph()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_dict"><code class="docutils literal notranslate"><span class="pre">qubo.to_dict()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_ising"><code class="docutils literal notranslate"><span class="pre">qubo.to_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
@@ -358,6 +360,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.anneal"><code class="docutils literal notranslate"><span class="pre">anneal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.brute_force"><code class="docutils literal notranslate"><span class="pre">brute_force()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local2_descent"><code class="docutils literal notranslate"><span class="pre">local2_descent()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local2_descent_search"><code class="docutils literal notranslate"><span class="pre">local2_descent_search()</span></code></a></li>
@@ -365,6 +368,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local_descent_search"><code class="docutils literal notranslate"><span class="pre">local_descent_search()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.random_search"><code class="docutils literal notranslate"><span class="pre">random_search()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.solution_t"><code class="docutils literal notranslate"><span class="pre">solution_t</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.subspace_search"><code class="docutils literal notranslate"><span class="pre">subspace_search()</span></code></a></li>
 </ul>
 </li>
@@ -815,9 +819,14 @@ QUBO size. Defaults to True.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="qubolite.qubo.properties">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">properties</span></span><a class="headerlink" href="#qubolite.qubo.properties" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="qubolite.qubo.random">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.random" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_matrix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.random"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.random" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a QUBO instance with parameters sampled from a random
 distribution.</p>
 <dl class="field-list simple">
@@ -832,6 +841,9 @@ the corresponding methods from <code class="docutils literal notranslate"><span 
 <li><p><strong>density</strong> (<em>float</em><em>, </em><em>optional</em>) – Expected density of the parameter matrix.
 Each parameter is set to 0 with probability <code class="docutils literal notranslate"><span class="pre">1-density</span></code>.
 Defaults to 1.0.</p></li>
+<li><p><strong>full_matrix</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicate if the full n×n matrix should
+be sampled and then folded into upper triangle form, or if the
+triangular matrix should be sampled directly. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy
 random generator. Defaults to None.</p></li>
 </ul>
@@ -941,6 +953,22 @@ x (numpy.ndarray, optional): Minimizing bit vector.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>sgap (float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.support_graph">
+<span class="sig-name descname"><span class="pre">support_graph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.support_graph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.support_graph" title="Permalink to this definition">#</a></dt>
+<dd><p>Return this QUBO instance’s support graph. Its nodes are the set of
+binary variables, and there is an edge between every pair of variables
+that has a non-zero parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_description_</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>_type_</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1602,6 +1630,32 @@ Defaults to ‘roof_dual’.</p></li>
 <h2>Solving<a class="headerlink" href="#solving" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">qubolite</span></code> provides the following methods for solving (exactly or approximately) QUBO instances to obtain their minimizing vector and minimal energy.</p>
 <span class="target" id="module-qubolite.solving"></span><dl class="py function">
+<dt class="sig sig-object py" id="qubolite.solving.anneal">
+<span class="sig-name descname"><span class="pre">anneal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_raw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#anneal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.anneal" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform Gibbs sampling with magic annealing schedule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Q</strong> (<a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo"><em>qubo</em></a>) – QUBO instance.</p></li>
+<li><p><strong>samples</strong> (<em>int</em><em>, </em><em>optional</em>) – Sample size. Defaults to 1.</p></li>
+<li><p><strong>iters</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations. Defaults to 100.</p></li>
+<li><p><strong>max_threads</strong> (<em>int</em>) – Upper limit for the number of threads. Defaults to
+256. This value is capped to the actual number of hardware threads.</p></li>
+<li><p><strong>return_raw</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, returns the raw Gibbs samples without wrapping them
+in a BinarySample object. Defaults to false.</p></li>
+<li><p><strong>random_state</strong> (<em>optional</em>) – A numerical or lexical seed, or a NumPy random generator. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Random sample.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>BinarySample</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="qubolite.solving.brute_force">
 <span class="sig-name descname"><span class="pre">brute_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#qubolite.qubo" title="qubolite.qubo.qubo"><span class="pre">qubo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_threads</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">256</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/solving.html#brute_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.solving.brute_force" title="Permalink to this definition">#</a></dt>
 <dd><p>Solve QUBO instance exactly by brute force. Note that this method is
@@ -1777,6 +1831,12 @@ respective energies. The shape of <code class="docutils literal notranslate"><sp
 vector <code class="docutils literal notranslate"><span class="pre">x[i]</span></code> has energy <code class="docutils literal notranslate"><span class="pre">y[i]</span></code> for each <code class="docutils literal notranslate"><span class="pre">i</span></code>.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="qubolite.solving.solution_t">
+<span class="sig-name descname"><span class="pre">solution_t</span></span><a class="headerlink" href="#qubolite.solving.solution_t" title="Permalink to this definition">#</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">qubo_solution</span></code></p>
 </dd></dl>
 
 <dl class="py function">
@@ -2185,12 +2245,14 @@ and taking the minimal encountered value.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.probabilities"><code class="docutils literal notranslate"><span class="pre">qubo.probabilities()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.properties"><code class="docutils literal notranslate"><span class="pre">qubo.properties</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.random"><code class="docutils literal notranslate"><span class="pre">qubo.random()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.round"><code class="docutils literal notranslate"><span class="pre">qubo.round()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save"><code class="docutils literal notranslate"><span class="pre">qubo.save()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.save_qbsolv"><code class="docutils literal notranslate"><span class="pre">qubo.save_qbsolv()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.scale"><code class="docutils literal notranslate"><span class="pre">qubo.scale()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.spectral_gap"><code class="docutils literal notranslate"><span class="pre">qubo.spectral_gap()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.support_graph"><code class="docutils literal notranslate"><span class="pre">qubo.support_graph()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_dict"><code class="docutils literal notranslate"><span class="pre">qubo.to_dict()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_ising"><code class="docutils literal notranslate"><span class="pre">qubo.to_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
@@ -2239,6 +2301,7 @@ and taking the minimal encountered value.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solving">Solving</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.anneal"><code class="docutils literal notranslate"><span class="pre">anneal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.brute_force"><code class="docutils literal notranslate"><span class="pre">brute_force()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local2_descent"><code class="docutils literal notranslate"><span class="pre">local2_descent()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local2_descent_search"><code class="docutils literal notranslate"><span class="pre">local2_descent_search()</span></code></a></li>
@@ -2246,6 +2309,7 @@ and taking the minimal encountered value.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.local_descent_search"><code class="docutils literal notranslate"><span class="pre">local_descent_search()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.random_search"><code class="docutils literal notranslate"><span class="pre">random_search()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.simulated_annealing"><code class="docutils literal notranslate"><span class="pre">simulated_annealing()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.solution_t"><code class="docutils literal notranslate"><span class="pre">solution_t</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.solving.subspace_search"><code class="docutils literal notranslate"><span class="pre">subspace_search()</span></code></a></li>
 </ul>
 </li>

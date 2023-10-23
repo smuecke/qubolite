@@ -240,6 +240,7 @@ document.write(`
                   
   <h1>Source code for qubolite.qubo</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">newaxis</span> <span class="k">as</span> <span class="n">na</span>
@@ -366,6 +367,7 @@ document.write(`
     <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                <span class="n">distr</span><span class="o">=</span><span class="s1">&#39;normal&#39;</span><span class="p">,</span>
                <span class="n">density</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">full_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a QUBO instance with parameters sampled from a random</span>
@@ -381,6 +383,9 @@ document.write(`
 <span class="sd">            density (float, optional): Expected density of the parameter matrix.</span>
 <span class="sd">                Each parameter is set to 0 with probability ``1-density``.</span>
 <span class="sd">                Defaults to 1.0.</span>
+<span class="sd">            full_matrix (bool, optional): Indicate if the full n×n matrix should</span>
+<span class="sd">                be sampled and then folded into upper triangle form, or if the</span>
+<span class="sd">                triangular matrix should be sampled directly. Defaults to ``False``.</span>
 <span class="sd">            random_state (optional): A numerical or lexical seed, or a NumPy</span>
 <span class="sd">                random generator. Defaults to None.</span>
 
@@ -409,9 +414,9 @@ document.write(`
                 <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unknown distribution &quot;</span><span class="si">{</span><span class="n">distr</span><span class="si">}</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">density</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">:</span>
-            <span class="n">m</span> <span class="o">*=</span> <span class="n">npr</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&lt;</span><span class="n">density</span>
+            <span class="n">arr</span> <span class="o">*=</span> <span class="n">npr</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">&lt;</span><span class="n">density</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">full_matrix</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">m</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="qubo.save"><a class="viewcode-back" href="../../api.html#qubolite.qubo.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-16</span><span class="p">):</span>
@@ -972,8 +977,40 @@ document.write(`
         <span class="n">posiform</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">lin_neg</span>
         <span class="n">posiform</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">diag_ix</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">lin_</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">const</span> <span class="o">=</span> <span class="n">lin_neg</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">posiform</span><span class="p">,</span> <span class="n">const</span></div></div>
+        <span class="k">return</span> <span class="n">posiform</span><span class="p">,</span> <span class="n">const</span></div>
     
+<div class="viewcode-block" id="qubo.support_graph"><a class="viewcode-back" href="../../api.html#qubolite.qubo.support_graph">[docs]</a>    <span class="k">def</span> <span class="nf">support_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return this QUBO instance&#39;s support graph. Its nodes are the set of</span>
+<span class="sd">        binary variables, and there is an edge between every pair of variables</span>
+<span class="sd">        that has a non-zero parameter.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _type_: _description_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">))</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">))))</span>
+        <span class="k">return</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span></div>
+    
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">props</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="n">qua</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">lin</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">),</span> <span class="p">(</span><span class="n">qua</span><span class="p">,</span> <span class="s1">&#39;quadratic&#39;</span><span class="p">)]:</span>
+            <span class="k">if</span>   <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span>  <span class="mi">0</span><span class="p">):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_positive&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_nonnegative&#39;</span><span class="p">)</span>
+            <span class="k">if</span>   <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span>  <span class="mi">0</span><span class="p">):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_negative&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_nonpositive&#39;</span><span class="p">)</span>
+            <span class="k">if</span>   <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">_nonzero&#39;</span><span class="p">)</span>
+
+        <span class="c1"># do some meta checks</span>
+        <span class="n">and_checks</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">([</span><span class="s1">&#39;linear_nonnegative&#39;</span><span class="p">,</span> <span class="s1">&#39;linear_nonpositive&#39;</span><span class="p">],</span> <span class="s1">&#39;linear_zero&#39;</span><span class="p">),</span>
+            <span class="p">([</span><span class="s1">&#39;quadratic_nonnegative&#39;</span><span class="p">,</span> <span class="s1">&#39;quadratic_nonpositive&#39;</span><span class="p">],</span> <span class="s1">&#39;quadratic_zero&#39;</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">ps</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">and_checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">p_</span> <span class="ow">in</span> <span class="n">props</span> <span class="k">for</span> <span class="n">p_</span> <span class="ow">in</span> <span class="n">ps</span><span class="p">):</span> <span class="n">props</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">props</span></div>
+
 
 <span class="k">def</span> <span class="nf">ordering_distance</span><span class="p">(</span><span class="n">Q1</span><span class="p">,</span> <span class="n">Q2</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
