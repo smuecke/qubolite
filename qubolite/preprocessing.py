@@ -1,6 +1,7 @@
 from functools import partial
 
-import numpy as np
+import igraph  as ig
+import numpy   as np
 import portion as P
 
 from . import qubo
@@ -13,6 +14,7 @@ from .bounds import (
 from ._heuristics import MatrixOrder, HEURISTICS
 from ._misc       import get_random_state
 from .assignment  import partial_assignment
+from .solving     import solution_t
 
 ################################################################################
 # Dynamic Range Compression                                                    #
@@ -609,3 +611,35 @@ def qpro_plus(Q: qubo):
     return partial_assignment.from_expression(assignment_pattern)
     # reduced qubo: qubo(-m[np.ix_(indices, indices)])
     # offset: -c_0
+
+
+################################################################################
+# Graph Transformation                                                         #
+################################################################################
+
+"""
+def try_solve_polynomial(Q: qubo):
+    if 'quadratic_nonpositive' in Q.properties:
+        q = np.triu(Q.m, 1)
+        c = np.diag(Q.m)
+        s, t = Q.n, Q.n+1 # source and target indices
+        r = q.sum(0) + q.sum(1)
+        edges = np.r_[
+            np.stack(np.where(~np.isclose(q, 0))).T, # (i, j)
+            np.c_[np.full(Q.n, s), np.arange(Q.n)],  # (s, j)
+            np.c_[np.arange(Q.n), np.full(Q.n, t)]]  # (i, t)
+        weights = np.r_[
+            -q[np.where(~np.isclose(q, 0))], # (i, j)
+            np.minimum(0, -r-c),             # (s, j)
+            np.minimum(0,  r+c)]             # (i, t)
+        #print(f'Q:\n{q}\nc: {c}\nr: {r}\nedges:\n{edges}\nweights:\n{weights}')
+        G = ig.Graph(n=Q.n+2, edges=edges, edge_attrs={'w': weights}) # note the "-"
+        cut = G.st_mincut(source=s, target=t, capacity='w')
+        #print(cut.partition)
+        ones = cut.partition[0][:-1] # omit s at the end
+        x = np.zeros(Q.n)
+        x[ones] = 1
+        raise NotImplementedError('Not working')
+        return solution_t(x, Q(x)) # XXX doesn't yield same result as brute force...
+    return None
+"""

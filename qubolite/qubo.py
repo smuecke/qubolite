@@ -1,4 +1,5 @@
 import struct
+from functools import cached_property
 
 import numpy as np
 from numpy import newaxis as na
@@ -125,6 +126,7 @@ class qubo:
     def random(cls, n: int,
                distr='normal',
                density=1.0,
+               full_matrix=False,
                random_state=None,
                **kwargs):
         """Create a QUBO instance with parameters sampled from a random
@@ -140,6 +142,9 @@ class qubo:
             density (float, optional): Expected density of the parameter matrix.
                 Each parameter is set to 0 with probability ``1-density``.
                 Defaults to 1.0.
+            full_matrix (bool, optional): Indicate if the full n×n matrix should
+                be sampled and then folded into upper triangle form, or if the
+                triangular matrix should be sampled directly. Defaults to ``False``.
             random_state (optional): A numerical or lexical seed, or a NumPy
                 random generator. Defaults to None.
 
@@ -168,9 +173,9 @@ class qubo:
                 size=(n, n))
         else:
             raise ValueError(f'Unknown distribution "{distr}"')
-        m = np.triu(arr)
         if density < 1.0:
-            m *= npr.random(size=m.shape)<density
+            arr *= npr.random(size=arr.shape)<density
+        m = np.triu(arr + np.triu(arr.T, 1)) if full_matrix else np.triu(arr)
         return cls(m)
 
     def save(self, path: str, atol=1e-16):
@@ -733,6 +738,38 @@ class qubo:
         const = lin_neg.sum()
         return posiform, const
     
+    def support_graph(self):
+        """Return this QUBO instance's support graph. Its nodes are the set of
+        binary variables, and there is an edge between every pair of variables
+        that has a non-zero parameter.
+
+        Returns:
+            _type_: _description_
+        """
+        nodes = list(range(self.n))
+        edges = list(zip(np.where(~np.isclose(np.triu(self.m,1), 0))))
+        return nodes, edges
+    
+    @cached_property
+    def properties(self):
+        props = set()
+        lin = np.diag(self.m)
+        qua = np.triu(self.m, 1)
+        for x, name in [(lin, 'linear'), (qua, 'quadratic')]:
+            if   np.all(x >  0): props.add(f'{name}_positive')
+            elif np.all(x >= 0): props.add(f'{name}_nonnegative')
+            if   np.all(x <  0): props.add(f'{name}_negative')
+            elif np.all(x <= 0): props.add(f'{name}_nonpositive')
+            if   np.all(~np.isclose(x, 0)): props.add(f'{name}_nonzero')
+
+        # do some meta checks
+        and_checks = [
+            (['linear_nonnegative', 'linear_nonpositive'], 'linear_zero'),
+            (['quadratic_nonnegative', 'quadratic_nonpositive'], 'quadratic_zero')]
+        for ps, p in and_checks:
+            if all(p_ in props for p_ in ps): props.add(p)
+        return props
+
 
 def ordering_distance(Q1, Q2, X=None):
     try:
