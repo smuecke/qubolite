@@ -441,24 +441,44 @@ document.write(`
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
     <span class="k">def</span> <span class="nf">free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of variable indices that are not fixed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: Free indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">free_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">))</span><span class="o">.</span><span class="n">difference</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">free_nodes</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
     <span class="k">def</span> <span class="nf">num_free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of free variables, i.e., variables that are not fixed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Number of free variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
 
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
     <span class="k">def</span> <span class="nf">fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of variable indices that are fixed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            np.ndarray: Fixed indices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
     
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
     <span class="k">def</span> <span class="nf">num_fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of variables that are fixed.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Number of fixed variables.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes_with_out_edges</span> <span class="o">=</span> <span class="p">{</span> <span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">edges</span> <span class="p">}</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">)</span>
 
@@ -494,6 +514,16 @@ document.write(`
 
 <div class="viewcode-block" id="partial_assignment.to_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.to_expression">[docs]</a>    <span class="nd">@__assert_normalized</span>
     <span class="k">def</span> <span class="nf">to_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Inverse operation of ``from_expression``, creates a bit vector</span>
+<span class="sd">        expression representing this partial assignment. See there for detailed</span>
+<span class="sd">        info about these expressions.</span>
+<span class="sd">        By default, grouping is used for 10 or more identical tokens in a row.</span>
+<span class="sd">        To change this, set the ``grouping_limit`` property to a positive integer</span>
+<span class="sd">        value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Bit vector expression.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
         <span class="n">tokens</span> <span class="o">=</span> <span class="p">[]</span>
@@ -646,11 +676,11 @@ document.write(`
 
 <span class="sd">        Args:</span>
 <span class="sd">            expr (str): Bit vector expression.</span>
-<span class="sd">            x (np.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``</span>
+<span class="sd">            x (numpy.ndarray): Bit vector or array of bit vectors of shape ``(..., m)``</span>
 <span class="sd">                where ``m`` is the number of ``*`` tokens in ``expr``.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the</span>
+<span class="sd">            numpy.ndarray: Bit vector(s) of shape ``(..., n)`` where ``n`` is the</span>
 <span class="sd">                number of tokens in ``expr``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span>
@@ -673,7 +703,7 @@ document.write(`
 <span class="sd">                the property ``num_free``.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            np.ndarray: (Array of) bit vector(s) expanded by the partial</span>
+<span class="sd">            numpy.ndarray: (Array of) bit vector(s) expanded by the partial</span>
 <span class="sd">                assignment. The shape is ``(m?, s)``, where ``s`` is the size</span>
 <span class="sd">                of this partial assignment as given by the property ``size``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -696,7 +726,17 @@ document.write(`
         <span class="k">return</span> <span class="n">z</span></div>
 
 <div class="viewcode-block" id="partial_assignment.random"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.random">[docs]</a>    <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate random bit vectors matching the constraints emposed by this</span>
+<span class="sd">        bit vector expression.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            size (int, optional): Number of bit vectors to generate.</span>
+<span class="sd">            random_state (optional): A numerical or lexical seed, or a NumPy random generator. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: ``(m?, n)`` array of bit vectors. If ``size`` is 1, then the output shape is ``(n,)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
         <span class="n">rand</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="o">*</span><span class="n">to_shape</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">0.5</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">rand</span><span class="p">)</span></div>
