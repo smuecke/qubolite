@@ -617,7 +617,7 @@ def qpro_plus(Q: qubo):
 # Graph Transformation                                                         #
 ################################################################################
 
-
+"""
 def try_solve_polynomial(Q: qubo):
     if 'quadratic_nonpositive' in Q.properties:
         q = np.triu(Q.m, 1)
@@ -642,3 +642,4 @@ def try_solve_polynomial(Q: qubo):
         raise NotImplementedError('Not working')
         return solution_t(x, Q(x)) # XXX doesn't yield same result as brute force...
     return None
+"""
