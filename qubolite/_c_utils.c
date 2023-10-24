@@ -197,7 +197,7 @@ PyObject *py_brute_force(PyObject *self, PyObject *args) {
 /* ################################################
  * Gibbs sampling
  * ################################################ */
-
+/*
 void _gibbs_sample(const size_t n, double **qubo, bit *state, const size_t rounds, bitgen_t *random_engine) {
     double p, u;
     for (size_t i=0; i<rounds; ++i) {
@@ -268,12 +268,12 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     free(chain_state);
     return res;
 }
-
+*/
 
 /* ################################################
  * Annealing
  * ################################################ */
-
+/*
 double beta_ip1(double b) {
     return ( 1.0 + sqrt(4.0*b*b+1.0) ) / 2.0;
 }
@@ -349,7 +349,7 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
     free(chain_state);
     return res;
 }
-
+*/
 
 /* ################################################
  * Python module def                              
@@ -357,8 +357,8 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
 
 static PyMethodDef methods[] = {
     {"brute_force", py_brute_force, METH_VARARGS, "Solves QUBO the hard way"},
-    {"gibbs_sample", py_gibbs_sample, METH_VARARGS, "Sample from the induced exponential family"},
-    {"anneal", py_anneal, METH_VARARGS, "Experimental QUBO solver, based on magic annealing schedule"},
+    // {"gibbs_sample", py_gibbs_sample, METH_VARARGS, "Sample from the induced exponential family"},
+    // {"anneal", py_anneal, METH_VARARGS, "Experimental QUBO solver, based on magic annealing schedule"},
     {NULL, NULL, 0, NULL}
 };
 

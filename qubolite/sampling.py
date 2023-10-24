@@ -7,7 +7,7 @@ import numpy as np
 from .       import qubo
 from ._misc  import get_random_state, mock, set_suffix
 from .bitvec import all_bitvectors_array, from_string, to_string
-from _c_utils import gibbs_sample as _gibbs_sample_c
+# from _c_utils import gibbs_sample as _gibbs_sample_c
 
 try:
     from tqdm import tqdm
