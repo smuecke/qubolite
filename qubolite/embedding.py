@@ -58,7 +58,10 @@ class Kernel2MeansClustering(qubo_embedding):
 
     def __from_data(self):
         # calculate kernel matrix
-        K = pairwise_kernels(X=self.__data, metric=self.__kernel, **self.__kernel_params)
+        if isinstance(self.__kernel, np.ndarray):
+            K = self.__kernel.copy()
+        else:
+            K = pairwise_kernels(X=self.__data, metric=self.__kernel, **self.__kernel_params)
         # center kernel matrix
         if self.__centered:
             K = KernelCenterer().fit_transform(K)
