@@ -66,7 +66,7 @@ class Kernel2MeansClustering(qubo_embedding):
         if self.__centered:
             K = KernelCenterer().fit_transform(K)
         q = -K
-        np.fill_diagonal(q, K.sum(1) - 2 * K.diagonal())
+        np.fill_diagonal(q, K.sum(1) - K.diagonal())
         # fix z_n=0 for cluster assignment
         if self.__unambiguous:
             n = K.shape[0]
