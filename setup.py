@@ -10,7 +10,7 @@ SYSTEM = system()
 if SYSTEM == 'Windows':
     C_LINK_FLAGS = []
     C_COMP_FLAGS = ['/O2', '/openmp']
-    
+
 elif SYSTEM == 'Darwin': # clang flags for macos (without omp)
     C_LINK_FLAGS = []
     C_COMP_FLAGS = ['-O3']
