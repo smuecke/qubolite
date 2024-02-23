@@ -1,4 +1,5 @@
 from functools import partial
+from itertools import combinations
 
 import numpy as np
 from sklearn.metrics import pairwise_kernels, pairwise_distances
@@ -305,3 +306,82 @@ class KernelSVM(qubo_embedding):
     
     def map_solution(self, x):
         return np.where(x)[0]
+    
+
+class PairwiseMAP(qubo_embedding):
+    
+    def __init__(self, num_states, state_pair_weights, state_weights=None, penalty=None, encoding='auto'):
+        self.__num_states = np.asarray(num_states, dtype=int) # array[int]
+        self.__state_weights = state_weights # dict[(int, int) -> float]
+        self.__state_pair_weights = state_pair_weights # dict[(int, int, int, int) -> float]
+        self.__penalty = penalty
+        self.__encoding = encoding
+
+    def set_encoding(self, encoding: str):
+        enc = encoding.lower()
+        if enc in ['auto', 'edge', 'state']:
+            self.__encoding=enc
+        else:
+            raise ValueError(f'Unknown encoding `{encoding}`; possible are `state`, `edge` or `auto`.')
+
+    @property
+    def qubo(self):
+        if self.__encoding == 'auto':
+            if self.__state_weights is not None:
+                return self.__state_qubo()
+            n_state = self.__num_states.sum()
+            n_edge = len(self.__state_pair_weights.values())
+            if n_state <= n_edge:
+                return self.__state_qubo()
+            else:
+                return self.__edge_qubo()
+        if self.__encoding == 'state':
+            return self.__state_qubo()
+        elif self.__encoding == 'edge':
+            return self.__edge_qubo()
+        else:
+            raise ValueError(f'Unknown encoding `{self.__encoding}`')
+        
+    def __state_qubo(self):
+        n = self.__num_states.sum()
+        m = np.zeros((n, n))
+        start = np.cumsum(np.r_[0, self.__num_states[:-1]])
+        if self.__state_weights is not None:
+            for (u, xu), μ in self.__state_weights.items():
+                assert 0 <= xu < self.__num_states[u]
+                i = start[u]+xu
+                m[i] = -μ
+        for (u, xu, v, xv), θ in self.__state_pair_weights.items():
+            assert u != v
+            assert 0 <= xu < self.__num_states[u]
+            assert 0 <= xv < self.__num_states[v]
+            i = start[u]+xu
+            j = start[v]+xv
+            m[i, j] = -θ
+        # add penalties between disallowed combinations
+        λ = np.linalg.norm(m, np.inf) if self.__penalty is None else self.__penalty
+        for u, nu in enumerate(self.__num_states):
+            for i, j in combinations(range(start[u], start[u]+nu), r=2):
+                m[i, j] = λ
+        return qubo(m)
+    
+    def __edge_qubo(self):
+        assert self.__state_weights is None, 'The `edge` encoding cannot be used with state weights'
+        n = len(self.__state_pair_weights.values())
+        m = np.zeros((n, n))
+        for i, θ in enumerate(self.__state_pair_weights.values()):
+            m[i, i] = -θ
+        λ = np.linalg.norm(np.diag(m), np.inf) if self.__penalty is None else self.__penalty
+        for (i, key_i), (j, key_j) in combinations(enumerate(self.__state_pair_weights.keys())):
+            ui, xui, vi, xvi = key_i
+            uj, xuj, vj, xvj = key_j
+            assert ui!=vi and uj!=vj
+            if (ui!=uj or xui!=xuj or vi==vj) and (vi!=vj or xvi!=xvj or ui==uj):
+                m[i, j] = λ
+        return qubo(m)
+            
+    def map_solution(self, x):
+        b = np.cumsum(np.r_[0, self.__num_states])
+        ix = np.where(x)
+        u = np.digitize(ix, bins=b)-1
+        return list(zip(u, ix-u))

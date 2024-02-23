@@ -363,11 +363,23 @@ class partial_assignment:
             if token == '*':
                 continue
             if token == '0':
-                G.add_edge(xi, '1', inverse=True); continue
+                G.add_edge(xi, '1', inverse=True)
+                continue
             if token == '1':
-                G.add_edge(xi, '1', inverse=False); continue
+                G.add_edge(xi, '1', inverse=False)
+                continue
             xj = 'x' + token.strip('[!]')
             G.add_edge(xi, xj, inverse='!' in token)
+        return cls(graph=G)
+
+    @classmethod
+    def from_dict(cls, mapping: dict, n: int=None):
+        n = n or max(mapping)+1
+        G = nx.DiGraph()
+        G.add_node('1')
+        G.add_nodes_from([f'x{i}' for i in range(n)])
+        for i, v in mapping.items():
+            G.add_edge(f'x{i}', '1', inverse=(v==0))
         return cls(graph=G)
 
     @classmethod

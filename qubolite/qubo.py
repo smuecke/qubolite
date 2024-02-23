@@ -528,7 +528,7 @@ class qubo:
         m_  = np.triu(self.m, 1)
         m_ += m_.T
         sign = 1-2*x
-        return sign*(np.diag(self.m)+(m_ @ x.T).T)
+        return sign*(np.diag(self.m) + x@m_)
         
 
     def dx2(self, x: np.ndarray):

@@ -287,11 +287,13 @@ class exponential_learning_rate:
 def train_gibbs(
         target: BinarySample,
         steps=1000,
+        samples_per_step=1000,
         temperature=1.0,
         lr_schedule=None,
         return_hellinger_distances=False,
         random_state=None,
-        silent=False):
+        silent=False,
+        **gibbs_sampler_args):
     npr = get_random_state(random_state)
     # initialize QUBO matrix
     Q = qubo(np.zeros((target.n, target.n)))
@@ -305,13 +307,15 @@ def train_gibbs(
     for i in range(steps):
         # draw Gibbs samples
         sample = gibbs(Q,
-            samples=target.size,
-            burn_in=1000,
+            samples=samples_per_step,
+            burn_in=100,
+            keep_interval=10,
             temp=temperature,
+            **gibbs_sampler_args,
             random_state=npr)
         hds[i] = target.hellinger_distance(sample)
         # get gradient according to Nico's formula
-        Δ = (sample.suff_stat-target.suff_stat)/target.size
+        Δ = sample.suff_stat/samples_per_step-target.suff_stat/target.size
         # update QUBO parameters (perform gradient ascent)
         η = lr_schedule.get_lr(i/(steps-1))
         Q.m += η*Δ

@@ -120,6 +120,33 @@ def simulated_annealing(Q: qubo,
     return x[srt, :], y[srt]
 
 
+def dwave_simulated_annealing(Q: qubo, **kwargs):
+    """Use the ``SimulatedAnnealingSampler`` by DWave to find approximate
+    solutions of a given QUBO instance.
+
+    Args:
+        Q (qubo): QUBO instance.
+        **kwargs: Keyword arguments passed to ``SimulatedAnnealingSampler.sample_qubo``;
+            by default, the number of reads (``num_reads``) is set to 1000.
+
+    Raises:
+        ModuleNotFoundError: Raised if the package ``dwave_neal`` is not installed.
+
+    Returns:
+        A tuple containing the bit vector (numpy.ndarray) with lowest energy
+        found, and its energy (float).
+    """
+    # try to import SA from neal
+    from neal import SimulatedAnnealingSampler as _SASampler
+    # raises an exception if not installed
+
+    kwargs.setdefault('num_reads', 1000)
+
+    sampler = _SASampler()
+    rec = sampler.sample_qubo(Q.m, **kwargs).record
+    return solution_t(rec.sample[0], rec.energy[0])
+
+
 def local_descent(Q: qubo, x=None, random_state=None):
     """Starting from a given bit vector, find improvements in the 1-neighborhood
     and follow them until a local optimum is found. If no initial vector is
