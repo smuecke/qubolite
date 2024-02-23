@@ -66,7 +66,7 @@ brute_force_result _brute_force(
 
     size_t i, j;
     // make sure it_lim is correctly set
-    int64_t it_lim = (((1ULL)<<n)-n_fixed_bits)-1;
+    int64_t it_lim = (1ULL<<(n-n_fixed_bits))-1;
     for (int64_t it=0; it<it_lim; ++it) {
         // get next bit flip index (gray code)
 #ifdef _MSC_VER
