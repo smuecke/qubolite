@@ -165,6 +165,7 @@ class MatrixOrder:
             matrix[i, j] = new_value
             return matrix
         self.matrix[i, j] = new_value
+        self.matrix = np.round(self.matrix, decimals=self.precision)
         self.sorted = np.sort(self.matrix, axis=None)
         self.unique, self.indices, self.sorted_indices, self.counts = np.unique(self.matrix,
                                                                                 return_inverse=True,
