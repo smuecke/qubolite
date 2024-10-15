@@ -8,6 +8,12 @@ A light-weight toolbox for working with QUBO instances in NumPy.
 
 ## Installation
 
+Ensure you have the Python development package installed for your Python version, e.g., for Python 3.11 running on Ubuntu,
+```
+apt install python3.11-dev
+```
+
+Then simply install `qubolite` itself from the PyPI repository through 
 ```
 pip install qubolite
 ```
