@@ -176,7 +176,9 @@ class MatrixOrder:
         self.min_distance = self.distances[self.min_index_lower]
         self.dynamic_range = np.log2((self.unique[-1] - self.unique[0]) / self.min_distance)
         self.unique_elements = len(self.unique)
-        if (np.invert(self.distances > self.min_distance)).all():
+        # absolute tolerance can be adapted to QUBO size
+        # if (np.invert(self.distances > self.min_distance)).all():
+        if np.allclose(self.distances, self.min_distance, atol=1e-5):
             return True
 
         self.exclusive_min_distance = np.min(self.distances[self.distances > self.min_distance])
