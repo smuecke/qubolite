@@ -174,6 +174,8 @@ class MatrixOrder:
         self.min_index_lower = np.argmin(self.distances)
         self.min_index_upper = self.min_index_lower + 1
         self.min_distance = self.distances[self.min_index_lower]
+        self.dynamic_range = np.log2((self.unique[-1] - self.unique[0]) / self.min_distance)
+        self.unique_elements = len(self.unique)
         if (np.invert(self.distances > self.min_distance)).all():
             return True
 
@@ -181,8 +183,6 @@ class MatrixOrder:
         self.second_min_distance = np.min(np.r_[self.distances[:self.min_index_lower],
                                                 self.distances[self.min_index_lower + 1:]])
         self.extra_summand = self.exclusive_min_distance - self.min_distance
-        self.dynamic_range = np.log2((self.unique[-1] - self.unique[0]) / self.min_distance)
-        self.unique_elements = len(self.unique)
         return False
 
     def get_sorted_index(self, i, j):

@@ -89,8 +89,8 @@ def _compute_pre_opt_bounds(Q, i, j, **kwargs):
 
         suboptimal = lower_11 > min(upper_00, upper_01, upper_10)
         optimal = upper_11 < min(lower_00, lower_01, lower_10)
-        upper_bound = float('inf') if suboptimal else lower_or - upper_11 - change_diff
-        lower_bound = -float('inf') if optimal else upper_or - lower_11 + change_diff
+        upper_bound = float('inf') if suboptimal else max(0, lower_or - upper_11 - change_diff)
+        lower_bound = -float('inf') if optimal else min(0, upper_or - lower_11 + change_diff)
     else:
         # Define sub-qubos
         Q_0, c_0, _ = Q.clamp({i: 0})
@@ -103,8 +103,8 @@ def _compute_pre_opt_bounds(Q, i, j, **kwargs):
         upper_1 = upper_bound(Q_1) + c_1
         suboptimal = lower_1 > upper_0
         optimal = upper_1 < lower_0
-        upper_bound = float("inf") if suboptimal else lower_0 - upper_1 - change_diff
-        lower_bound = -float("inf") if optimal else upper_0 - lower_1 + change_diff
+        upper_bound = float("inf") if suboptimal else max(0, lower_0 - upper_1 - change_diff)
+        lower_bound = -float("inf") if optimal else min(0, upper_0 - lower_1 + change_diff)
     return lower_bound, upper_bound
 
 def _compute_pre_opt_bounds_all(Q, **kwargs):

@@ -8,7 +8,7 @@ from .qubo     import qubo
 from .sampling import BinarySample
 
 from _c_utils import brute_force as _brute_force_c
-from _c_utils import anneal      as _anneal_c
+# from _c_utils import anneal      as _anneal_c
 
 
 solution_t = namedtuple('qubo_solution', ['x', 'energy'])
