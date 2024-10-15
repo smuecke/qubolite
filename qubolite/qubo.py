@@ -114,6 +114,26 @@ class qubo:
     def __truediv__(self, other):
         return qubo(self.m / __unwrap_value(other))
 
+    def __format__(self, format_spec: str):
+        if format_spec == '':
+            return self.__repr__()
+        elif format_spec.lower() == 'ascii':
+            POS, NEG, RESET = '\033[1;32m', '\033[1;31m', '\033[0m'
+            gradient = ' .:-=+*#%@'
+            m_ = np.round((len(gradient)-1) * self.m / self.absmax())
+            s = POS if m_[0,0]>=0 else NEG
+            last_pos = m_[0,0]>=0
+            for line in m_:
+                for v in line:
+                    if last_pos ^ (v>0):
+                        s += POS if (v>0) else NEG
+                        last_pos = not last_pos
+                    s += gradient[int(abs(v))]
+                s += '\n'
+            return s[:-1]+RESET
+        else:
+            raise ValueError(f'Unknown format specification "{format_spec}"')
+
     def copy(self):
         """Create a copy of this instance.
 
