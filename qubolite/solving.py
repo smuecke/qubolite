@@ -225,7 +225,7 @@ def local_descent_search(Q: qubo, steps=1000, random_state=None):
     """
     rng = get_random_state(random_state)
     x_min = np.empty(Q.n)
-    y_min = np.infty
+    y_min = np.inf
     x = np.empty(Q.n)
     for _ in range(steps):
         x[:] = rng.random(Q.n) < 0.5
@@ -258,7 +258,7 @@ def local2_descent_search(Q: qubo, steps=1000, random_state=None):
     """
     rng = get_random_state(random_state)
     x_min = np.empty(Q.n)
-    y_min = np.infty
+    y_min = np.inf
     x = np.empty(Q.n)
     for _ in range(steps):
         x[:] = rng.random(Q.n) < 0.5
@@ -298,7 +298,7 @@ def random_search(Q: qubo, steps=100_000, n_parallel=None, random_state=None):
     if n_parallel is None:
         n_parallel = 32_000 // Q.n
     x_min = np.empty(Q.n)
-    y_min = np.infty
+    y_min = np.inf
     remaining = steps
     x = np.empty((n_parallel, Q.n))
     y = np.empty(n_parallel)
