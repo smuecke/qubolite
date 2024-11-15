@@ -66,7 +66,7 @@ brute_force_result _brute_force(
 
     size_t i, j;
     // make sure it_lim is correctly set
-    int64_t it_lim = (1ULL<<n-n_fixed_bits)-1;
+    int64_t it_lim = ((1ULL)<<(n-n_fixed_bits))-1;
     for (int64_t it=0; it<it_lim; ++it) {
         // get next bit flip index (gray code)
 #ifdef _MSC_VER
@@ -229,7 +229,7 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     max_threads = (num_samples < max_threads) ? num_samples : max_threads;
     max_threads = (MAX_THREADS < max_threads) ? MAX_THREADS : max_threads;
 
-    bitgen_t *random_engine[max_threads];
+    bitgen_t** random_engine = (bitgen_t**)malloc(sizeof(bitgen_t*)*max_threads);
     for (size_t i=0; i<max_threads; ++i)
         random_engine[i] = (bitgen_t*) PyCapsule_GetPointer(PyList_GET_ITEM(bitgencaps, i), "BitGenerator");
 
@@ -250,21 +250,25 @@ PyObject *py_gibbs_sample(PyObject *self, PyObject *args) {
     for (size_t i=0; i<max_threads*n; ++i)
         chain_state[i] = (bit) (random_uint(*random_engine) % 2);
 
+    const int nloops = (int)num_samples;
+
 #ifndef __APPLE__
     omp_set_dynamic(0);
 #endif
-#pragma omp parallel for num_threads(max_threads)
-    for (size_t j=0; j<num_samples; ++j) {
+    int j;
+#pragma omp parallel for
+    for (j=0; j<nloops; ++j) {
 #ifndef __APPLE__
         const size_t tid = omp_get_thread_num();
 #else
         const size_t tid = 0;
 #endif
         bit *tstate = chain_state+(tid*n);
-	_gibbs_sample(n, qubo, tstate, j==tid ? burn : keep, random_engine[tid]);
+        _gibbs_sample(n, qubo, tstate, j==tid ? burn : keep, random_engine[tid]);
         memcpy(samples+(j*n), tstate, sizeof(bit)*n);
     }
 
+    free(random_engine);
     free(chain_state);
     return res;
 }
@@ -310,7 +314,7 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
     max_threads = (num_samples < max_threads) ? num_samples : max_threads;
     max_threads = (MAX_THREADS < max_threads) ? MAX_THREADS : max_threads;
 
-    bitgen_t *random_engine[max_threads];
+    bitgen_t** random_engine = (bitgen_t**)malloc(sizeof(bitgen_t*)*max_threads);
     for (size_t i=0; i<max_threads; ++i)
         random_engine[i] = (bitgen_t*) PyCapsule_GetPointer(PyList_GET_ITEM(bitgencaps, i), "BitGenerator");
 
@@ -331,11 +335,14 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
     for (size_t i=0; i<max_threads*n; ++i)
         chain_state[i] = (bit) (random_uint(*random_engine) % 2);
 
+    const int nloops = (int)num_samples;
+
 #ifndef __APPLE__
     omp_set_dynamic(0);
 #endif
+    int j;
 #pragma omp parallel for num_threads(max_threads)
-    for (size_t j=0; j<num_samples; ++j) {
+    for (j=0; j<nloops; ++j) {
 #ifndef __APPLE__
         const size_t tid = omp_get_thread_num();
 #else
@@ -345,7 +352,7 @@ PyObject *py_anneal(PyObject *self, PyObject *args) {
 	_anneal(n, qubo, tstate, j==tid ? burn : keep, random_engine[tid]);
         memcpy(samples+(j*n), tstate, sizeof(bit)*n);
     }
-
+    free(random_engine);
     free(chain_state);
     return res;
 }
