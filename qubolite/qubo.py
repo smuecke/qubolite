@@ -11,6 +11,12 @@ from ._misc   import (
 from _c_utils import brute_force as _brute_force_c
 
 
+# constants for qubo.save()
+SAVE_FULL   = 0
+SAVE_SPARSE = 1
+SAVE_AUTO   = None
+
+
 def is_qubo_like(arr):
     """Check if given array defines a QUBO instance, i.e., if the array is
     2-dimensional and square.
@@ -45,7 +51,19 @@ def to_triu_form(arr):
         return make_upper_triangle(arr)
 
 
-def __unwrap_value(obj):
+def _optimal_integer_type(minv, maxv, signed=True):
+    if minv < 0 and not signed:
+        raise ValueError('Cannot represent negative integers with unsigned type!')
+    vs = 'bhiq' if signed else 'BHIQ'
+    for v, value_bytes in zip(vs, [1, 2, 4, 8]):
+        min_int = -(1<<(value_bytes*8-1))   if signed else 0
+        max_int =  (1<<(value_bytes*8-1))-1 if signed else (1<<(value_bytes*8))
+        if (min_int <= minv) and (maxv <= max_int):
+            break
+    return v, value_bytes
+
+
+def _unwrap_value(obj):
     try:
         v = obj.m
     except AttributeError:
@@ -103,16 +121,16 @@ class qubo:
             return self.m.__getitem__((k, k))
 
     def __add__(self, other):
-        return qubo(self.m + __unwrap_value(other))
+        return qubo(self.m + _unwrap_value(other))
     
     def __sub__(self, other):
-        return qubo(self.m - __unwrap_value(other))
+        return qubo(self.m - _unwrap_value(other))
 
     def __mul__(self, other):
-        return qubo(self.m * __unwrap_value(other))
+        return qubo(self.m * _unwrap_value(other))
 
     def __truediv__(self, other):
-        return qubo(self.m / __unwrap_value(other))
+        return qubo(self.m / _unwrap_value(other))
 
     def __format__(self, format_spec: str):
         if format_spec == '':
@@ -198,39 +216,64 @@ class qubo:
         m = np.triu(arr + np.triu(arr.T, 1)) if full_matrix else np.triu(arr)
         return cls(m)
 
-    def save(self, path: str, atol=1e-16):
+    def save(self, path: str, mode=SAVE_AUTO, atol=1e-16):
         """Save the QUBO instance to disk.
         If the file exists, it will be overwritten.
         
         Args:
             path (str): Target file path.
+            mode (int, optional): Force save mode to either SAVE_FULL (0),
+                SAVE_SPARSE (1), or SAVE_AUTO (None, default). The choice of
+                save mode has great impact on the file size, depending on the
+                QUBO matrix's sparsity. When set to SAVE_AUTO (default), the
+                most memory-efficient save mode is chosen automatically.
             atol (float, optional): Parameters with absolute value below this
                 value will be treated as 0. Defaults to 1e-16.
         """
+        m_flat = self.m[np.triu_indices(self.n)]
+        Is, Js = np.where(~np.isclose(self.m, 0, atol=atol))
+        nonzero = Is.size
+
         f = open(path, 'wb')
-        f.write(struct.pack('<4s', b'QUBO')) # magic string
-        f.write(struct.pack('<I', self.n)) # QUBO size
+        # write magic string QUBO, version number, QUBO size and #nonzero parameters
+        f.write(struct.pack('<4sHIQ', b'QUBO', 1, self.n, nonzero))
+
+        # determine value format
+        if np.allclose(m_flat % 1, 0, atol=atol):
+            # all values are (very close to) integers
+            minv, maxv = int(m_flat.min()), int(m_flat.max())
+            v, value_bytes = _optimal_integer_type(minv, maxv, signed=True)
+        else:
+            v, value_bytes = 'd', 8
+
+        # determine index format
+        t, index_bytes = _optimal_integer_type(0, self.n, signed=False)
+
         # determine mode
         #  0x00: save flattened parameter array
         #  0x01: save index-value pairs
-        n_nonzero = self.n**2-np.isclose(self.m, 0, atol=atol).sum()
-        index_bytes = 1 if self.n <= 256 else (2 if self.n <= 2 else 4)
-        size_mode0 = 4*self.n*(self.n+1)
-        size_mode1 = (2*index_bytes+8)*n_nonzero
-        mode = 0 if size_mode0 <= size_mode1 else 255
-        f.write(struct.pack('B', mode)) # mode indicator
+        if mode is None:
+            size_mode0 = value_bytes*((self.n*(self.n+1))//2)
+            size_mode1 = (index_bytes+value_bytes)*nonzero
+            size_mode1 += 2*index_bytes*np.unique(Is).size # run length encoding
+            mode = int(size_mode0 > size_mode1)
+        elif mode not in [0, 1]:
+            raise ValueError('Unknown argument for `mode`. Must be one of '
+                'SAVE_FULL (0), SAVE_SPARSE (1), or SAVE_AUTO (None).')
+
+        # write value type and save mode
+        f.write(struct.pack('<cB', v.encode(), mode))
+        
         if mode == 0:
             # save flattened parameter array
-            f.write(self.m[np.triu_indices_from(self.m)].tobytes())
+            f.write(self.m[np.triu_indices_from(self.m)].astype(v).tobytes())
         else:
-            # save index-value pairs;
-            # determine index type depending on size
-            t = 'B' if self.n <= 256 else ('H' if self.n <= 65536 else 'I')
-            fmt = f'<{t}{t}d'
-            # write only non-zero parameters
-            for i, j in zip(*np.triu_indices_from(self.m)):
-                if not np.isclose(self.m[i,j], 0, atol=atol):
-                    f.write(struct.pack(fmt, i, j, self.m[i,j]))
+            f.write(t.encode()) # write index type
+            # `Is` in run-length encoding
+            for i, rep in zip(*np.unique(Is, return_counts=True)):
+                f.write(struct.pack(t*2, i, rep))
+            f.write(Js.astype(t).tobytes()) # `Js` as is
+            f.write(self.m[(Is, Js)].astype(v).tobytes()) # values as is
         f.close()
 
     @classmethod
@@ -246,21 +289,32 @@ class qubo:
         Returns:
             qubo: QUBO instance loaded from disk.
         """
+        CURRENT_VERSION = 1
+
         f = open(path, 'rb')
-        magic, = struct.unpack('<4s', f.read(4))
+        magic, version, n, nonzero, v, mode = struct.unpack('<4sHIQcB', f.read(20))
+        v = v.decode()
         if magic != b'QUBO':
             raise RuntimeError('Invalid QUBO file')
-        n, mode = struct.unpack('<IB', f.read(5))
-        m = np.zeros((n, n))
+        if version != CURRENT_VERSION:
+            raise RuntimeError(f'Unknown QUBO file version {version}, must be <={CURRENT_VERSION}')
+        
+        m = np.zeros((n, n), dtype=v)
         if mode == 0:
-            m[np.triu_indices_from(m)] = np.frombuffer(f.read())
+            m[np.triu_indices_from(m)] = np.frombuffer(f.read(), dtype=v)
         else:
-            t = 'B' if n <= 256 else ('H' if n <= 65536 else 'I')
-            fmt = f'<{t}{t}d'
-            for i, j, value in struct.iter_unpack(fmt, f.read()):
-                m[i,j] = value
+            t = f.read(1).decode() # index type
+            index_bytes = struct.calcsize(t)
+            Is = np.empty(nonzero, dtype=t)
+            ix = 0
+            while ix < nonzero:
+                i, rep = struct.unpack(t*2, f.read(2*index_bytes))
+                Is[ix:ix+rep] = i
+                ix += rep
+            Js = np.frombuffer(f.read(nonzero*index_bytes), dtype=t)
+            m[(Is, Js)] = np.frombuffer(f.read(), dtype=v)
         f.close()
-        return cls(m)
+        return cls(m.astype(np.float64))
 
     def to_dict(self, names=None, double_indices=True, atol=1e-16):
         """Create a dictionary mapping variable indices to QUBO parameters.

@@ -6,6 +6,7 @@ from setuptools import Extension, setup
 from numpy      import get_include as numpy_incl
 
 
+
 SYSTEM = system()
 if SYSTEM == 'Windows':
     C_LINK_FLAGS = []

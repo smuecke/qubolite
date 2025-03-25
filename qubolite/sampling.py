@@ -7,7 +7,7 @@ import numpy as np
 from .       import qubo
 from ._misc  import get_random_state, mock, set_suffix
 from .bitvec import all_bitvectors_array, from_string, to_string
-# from _c_utils import gibbs_sample as _gibbs_sample_c
+from _c_utils import gibbs_sample as _gibbs_sample_c
 
 try:
     from tqdm import tqdm
@@ -286,17 +286,23 @@ class exponential_learning_rate:
 
 def train_gibbs(
         target: BinarySample,
-        steps=1000,
-        samples_per_step=1000,
-        temperature=1.0,
+        initial_qubo: qubo=None,
+        steps: int=1000,
+        min_gradient_norm: float=0.0,
+        samples_per_step: int=1000,
+        temperature: float=1.0,
         lr_schedule=None,
-        return_hellinger_distances=False,
+        return_hellinger_distances: bool=False,
         random_state=None,
-        silent=False,
+        silent: bool=False,
         **gibbs_sampler_args):
     npr = get_random_state(random_state)
     # initialize QUBO matrix
-    Q = qubo(np.zeros((target.n, target.n)))
+    if initial_qubo is None:
+        Q = qubo(np.zeros((target.n, target.n)))
+    else:
+        assert initial_qubo.n == target.n
+        Q = initial_qubo.copy()
     # learning rate schedule
     if lr_schedule is None:
         lr_schedule = exponential_learning_rate(1e-1, 1e-4)
@@ -316,9 +322,12 @@ def train_gibbs(
         hds[i] = target.hellinger_distance(sample)
         # get gradient according to Nico's formula
         Δ = sample.suff_stat/samples_per_step-target.suff_stat/target.size
+        norm_Δ = np.linalg.norm(Δ, np.inf)
+        if norm_Δ < min_gradient_norm:
+            break
         # update QUBO parameters (perform gradient ascent)
         η = lr_schedule.get_lr(i/(steps-1))
         Q.m += η*Δ
-        progress.set_postfix({'LR': η, 'HD': hds[i]}, refresh=False)
+        progress.set_postfix({'LR': η, '‖Δ‖': norm_Δ, 'HD': hds[i]}, refresh=False)
         progress.update(1)
     return (Q, hds) if return_hellinger_distances else Q
