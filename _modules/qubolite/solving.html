@@ -243,23 +243,23 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for qubolite.solving</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">._misc</span>    <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">warn_size</span>
-<span class="kn">from</span> <span class="nn">.bitvec</span>   <span class="kn">import</span> <span class="n">flip_index</span>
-<span class="kn">from</span> <span class="nn">.qubo</span>     <span class="kn">import</span> <span class="n">qubo</span>
-<span class="kn">from</span> <span class="nn">.sampling</span> <span class="kn">import</span> <span class="n">BinarySample</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._misc</span><span class="w">    </span><span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">warn_size</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.bitvec</span><span class="w">   </span><span class="kn">import</span> <span class="n">flip_index</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qubo</span><span class="w">     </span><span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">BinarySample</span>
 
-<span class="kn">from</span> <span class="nn">_c_utils</span> <span class="kn">import</span> <span class="n">brute_force</span> <span class="k">as</span> <span class="n">_brute_force_c</span>
-<span class="kn">from</span> <span class="nn">_c_utils</span> <span class="kn">import</span> <span class="n">anneal</span>      <span class="k">as</span> <span class="n">_anneal_c</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">_c_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">brute_force</span> <span class="k">as</span> <span class="n">_brute_force_c</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">_c_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">anneal</span>      <span class="k">as</span> <span class="n">_anneal_c</span>
 
 
 <span class="n">solution_t</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;qubo_solution&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;energy&#39;</span><span class="p">])</span>
 
 
-<div class="viewcode-block" id="brute_force"><a class="viewcode-back" href="../../api.html#qubolite.solving.brute_force">[docs]</a><span class="k">def</span> <span class="nf">brute_force</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+<div class="viewcode-block" id="brute_force"><a class="viewcode-back" href="../../api.html#qubolite.solving.brute_force">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">brute_force</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve QUBO instance exactly by brute force. Note that this method is</span>
 <span class="sd">    infeasible for instances with a size beyond around 30.</span>
 
@@ -284,7 +284,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="simulated_annealing"><a class="viewcode-back" href="../../api.html#qubolite.solving.simulated_annealing">[docs]</a><span class="k">def</span> <span class="nf">simulated_annealing</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span>
+<div class="viewcode-block" id="simulated_annealing"><a class="viewcode-back" href="../../api.html#qubolite.solving.simulated_annealing">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">simulated_annealing</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span>
                         <span class="n">schedule</span><span class="o">=</span><span class="s1">&#39;2+&#39;</span><span class="p">,</span>
                         <span class="n">halftime</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
                         <span class="n">steps</span><span class="o">=</span><span class="mi">100_000</span><span class="p">,</span>
@@ -365,7 +365,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">srt</span><span class="p">,</span> <span class="p">:],</span> <span class="n">y</span><span class="p">[</span><span class="n">srt</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="local_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent">[docs]</a><span class="k">def</span> <span class="nf">local_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="local_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">local_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Starting from a given bit vector, find improvements in the 1-neighborhood</span>
 <span class="sd">    and follow them until a local optimum is found. If no initial vector is</span>
 <span class="sd">    specified, a random vector is sampled. At each step, the method greedily</span>
@@ -395,7 +395,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x_</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="local2_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent">[docs]</a><span class="k">def</span> <span class="nf">local2_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="local2_descent"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">local2_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Starting from a given bit vector, find improvements in the 2-neighborhood</span>
 <span class="sd">    and follow them until a local optimum is found. If no initial vector is</span>
 <span class="sd">    specified, a random vector is sampled. At each step, the method greedily</span>
@@ -427,7 +427,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x_</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="local_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent_search">[docs]</a><span class="k">def</span> <span class="nf">local_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="local_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local_descent_search">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">local_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform local descent in a multistart fashion and return the lowest</span>
 <span class="sd">    observed bit vector. Use the 1-neighborhood as search radius.</span>
 
@@ -460,7 +460,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="local2_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent_search">[docs]</a><span class="k">def</span> <span class="nf">local2_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="local2_descent_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.local2_descent_search">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">local2_descent_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform local descent in a multistart fashion and return the lowest</span>
 <span class="sd">    observed bit vector. Use the 2-neighborhood as search radius.</span>
 
@@ -493,7 +493,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="random_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.random_search">[docs]</a><span class="k">def</span> <span class="nf">random_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100_000</span><span class="p">,</span> <span class="n">n_parallel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="random_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.random_search">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">random_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100_000</span><span class="p">,</span> <span class="n">n_parallel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform a random search in the space of bit vectors and return the</span>
 <span class="sd">    lowest-energy solution found.</span>
 
@@ -532,7 +532,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">y_min</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="subspace_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.subspace_search">[docs]</a><span class="k">def</span> <span class="nf">subspace_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
+<div class="viewcode-block" id="subspace_search"><a class="viewcode-back" href="../../api.html#qubolite.solving.subspace_search">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">subspace_search</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform search heuristic where :math:`n-\\log_2(n)` randomly selected</span>
 <span class="sd">    variables are fixed and the remaining :math:`\\log_2(n)` bits are solved by</span>
 <span class="sd">    brute force. The current solution is updated with the optimal sub-vector</span>
@@ -567,7 +567,7 @@ document.write(`
     <span class="k">return</span> <span class="n">solution_t</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Q</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
     
 
-<div class="viewcode-block" id="anneal"><a class="viewcode-back" href="../../api.html#qubolite.solving.anneal">[docs]</a><span class="k">def</span> <span class="nf">anneal</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iters</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="anneal"><a class="viewcode-back" href="../../api.html#qubolite.solving.anneal">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">anneal</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iters</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span> <span class="n">max_threads</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">return_raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perform Gibbs sampling with magic annealing schedule.</span>
 
 <span class="sd">    Args:</span>

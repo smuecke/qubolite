@@ -243,19 +243,19 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for qubolite.assignment</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span><span class="p">,</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">repeat</span>
-<span class="kn">from</span> <span class="nn">operator</span>  <span class="kn">import</span> <span class="n">methodcaller</span><span class="p">,</span> <span class="n">xor</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">combinations</span><span class="p">,</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">repeat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w">  </span><span class="kn">import</span> <span class="n">methodcaller</span><span class="p">,</span> <span class="n">xor</span>
 
-<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
-<span class="kn">import</span> <span class="nn">numpy</span>    <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">networkx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w">    </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.</span>       <span class="kn">import</span> <span class="n">qubo</span>
-<span class="kn">from</span> <span class="nn">._misc</span>  <span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">make_upper_triangle</span><span class="p">,</span> <span class="n">to_shape</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w">       </span><span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._misc</span><span class="w">  </span><span class="kn">import</span> <span class="n">get_random_state</span><span class="p">,</span> <span class="n">make_upper_triangle</span><span class="p">,</span> <span class="n">to_shape</span>
 
 
-<span class="k">def</span> <span class="nf">_follow_edges</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_follow_edges</span><span class="p">(</span><span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
     <span class="n">v</span><span class="p">,</span> <span class="n">inv</span> <span class="o">=</span> <span class="n">u</span><span class="p">,</span> <span class="kc">False</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -266,7 +266,7 @@ document.write(`
     <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">inv</span>
 
 
-<div class="viewcode-block" id="partial_assignment"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment">[docs]</a><span class="k">class</span> <span class="nc">partial_assignment</span><span class="p">:</span>
+<div class="viewcode-block" id="partial_assignment"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">partial_assignment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents bit vectors of a fixed size ``n`` where a number of</span>
 <span class="sd">    bits at certain positions are either fixed to a constant value (0 or 1), or </span>
 <span class="sd">    tied to the value of another bit (or its inverse). The bits that are not</span>
@@ -325,7 +325,7 @@ document.write(`
     <span class="n">__BITVEC_EXPR</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[01*]|\[!?\d+\]|\{\d+\}&#39;</span><span class="p">)</span>
     <span class="n">__NODE_NAME_PATTERN</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(x(0$|([1-9]\d*)))|1$&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># check if `graph` is a valid PAG (=Partial Assignment Graph)</span>
             <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__NODE_NAME_PATTERN</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> \
@@ -336,7 +336,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__dirty</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grouping_limit</span> <span class="o">=</span> <span class="mi">10</span>
 
-    <span class="k">def</span> <span class="nf">__normalize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__normalize_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">G</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">nodes</span> <span class="ow">in</span> <span class="n">nx</span><span class="o">.</span><span class="n">simple_cycles</span><span class="p">(</span><span class="n">G</span><span class="p">):</span>
             <span class="n">edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">+</span><span class="p">[</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]]))</span>
             <span class="n">conflict</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">xor</span><span class="p">,</span> <span class="p">[</span><span class="n">G</span><span class="o">.</span><span class="n">get_edge_data</span><span class="p">(</span><span class="o">*</span><span class="n">e</span><span class="p">)[</span><span class="s1">&#39;inverse&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">])</span>
@@ -363,14 +363,14 @@ document.write(`
                     <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">inv</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">G</span>
 
-    <span class="k">def</span> <span class="nf">__dirty</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__dirty</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">__dirty</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">go</span>
 
-    <span class="k">def</span> <span class="nf">__assert_normalized</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__assert_normalized</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">go</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">dirty</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__dirty&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dirty</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__normalize_graph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="p">)</span>
@@ -379,7 +379,7 @@ document.write(`
         <span class="k">return</span> <span class="n">go</span>
 
     <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="n">const_zero</span><span class="p">,</span> <span class="n">const_one</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">in_edges</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -395,8 +395,8 @@ document.write(`
             <span class="k">if</span> <span class="n">us_neg</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">us_neg</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; != &#39;</span> <span class="o">+</span> <span class="n">v</span> <span class="o">+</span> <span class="s1">&#39;; &#39;</span>
         <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># remove trailing separator</span>
 
-    <span class="k">def</span> <span class="nf">__from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">unpack_ranges</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">unpack_ranges</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
             <span class="c1"># handle expressions like &#39;x{1-5}&#39;</span>
             <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
                 <span class="k">if</span> <span class="s1">&#39;{&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
@@ -433,7 +433,7 @@ document.write(`
         <span class="k">return</span> <span class="n">PAG</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Total number of bits described by the partial assignment, including</span>
 <span class="sd">        fixed/tied and free bits.</span>
 
@@ -444,7 +444,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List of variable indices that are not fixed.</span>
 
 <span class="sd">        Returns:</span>
@@ -455,7 +455,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">num_free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_free</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of free variables, i.e., variables that are not fixed.</span>
 
 <span class="sd">        Returns:</span>
@@ -466,7 +466,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;List of variable indices that are fixed.</span>
 
 <span class="sd">        Returns:</span>
@@ -477,7 +477,7 @@ document.write(`
     
     <span class="nd">@property</span>
     <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">num_fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">num_fixed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of variables that are fixed.</span>
 
 <span class="sd">        Returns:</span>
@@ -487,7 +487,7 @@ document.write(`
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes_with_out_edges</span><span class="p">)</span>
 
 <div class="viewcode-block" id="partial_assignment.assign_constant"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.assign_constant">[docs]</a>    <span class="nd">@__dirty</span>
-    <span class="k">def</span> <span class="nf">assign_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_constant</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fix a bit at the given index to a constant 0 or 1. If the index is</span>
 <span class="sd">        larger than the current size, add all intermediate bits.</span>
 
@@ -502,7 +502,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">const_</span><span class="o">==</span><span class="s1">&#39;0&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="partial_assignment.assign_index"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.assign_index">[docs]</a>    <span class="nd">@__dirty</span>
-    <span class="k">def</span> <span class="nf">assign_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Tie a bit to another. If either of the indices is larger than the</span>
 <span class="sd">        current size, add all intermediate bits.</span>
 
@@ -517,7 +517,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__PAG</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">u</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;x</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="n">inverse</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="partial_assignment.to_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.to_expression">[docs]</a>    <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">to_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_expression</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inverse operation of ``from_expression``, creates a bit vector</span>
 <span class="sd">        expression representing this partial assignment. See there for detailed</span>
 <span class="sd">        info about these expressions.</span>
@@ -551,7 +551,7 @@ document.write(`
         <span class="k">return</span> <span class="n">expr</span></div>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">_ungrouped_tokens</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ungrouped_tokens</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__BITVEC_EXPR</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;{&#39;</span><span class="p">):</span>
                 <span class="n">rep</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">token</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
@@ -562,7 +562,7 @@ document.write(`
                 <span class="n">last_token</span> <span class="o">=</span> <span class="n">token</span>
 
 <div class="viewcode-block" id="partial_assignment.from_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.from_expression">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a partial assignment from a string containing a bit vector</span>
 <span class="sd">        expression. Such an expression consists of a sequence of these tokens: ``0``</span>
 <span class="sd">        - a constant 0, ``1`` - a constant 1, ``*`` - all combinations of 0 and 1,</span>
@@ -616,7 +616,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">G</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="partial_assignment.infer"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.infer">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">infer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">infer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">X_</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">N</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">shape</span>
         <span class="k">assert</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;At least one example is required!&#39;</span>
@@ -637,12 +637,12 @@ document.write(`
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">S</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="partial_assignment.simplify_expression"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.simplify_expression">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">simplify_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">simplify_expression</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">expr</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">pa</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pa</span><span class="o">.</span><span class="n">to_expression</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="partial_assignment.to_matrix"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.to_matrix">[docs]</a>    <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># construct transformation matrix</span>
         <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
         <span class="n">one</span> <span class="o">=</span> <span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span> <span class="c1"># index of constant 1</span>
@@ -669,7 +669,7 @@ document.write(`
         <span class="k">return</span> <span class="n">T</span></div>
 
 <div class="viewcode-block" id="partial_assignment.apply"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.apply">[docs]</a>    <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="o">.</span><span class="vm">__class__</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply this partial assignment either to a ``qubo`` instance. The</span>
 <span class="sd">        result is a new, smaller instance where the variables fixed by this</span>
 <span class="sd">        partial assignment are made implicit. E.g., if this assignment</span>
@@ -696,7 +696,7 @@ document.write(`
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">m</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="n">m</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">offset</span></div>
             
 
-<div class="viewcode-block" id="partial_assignment.expand"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.expand">[docs]</a>    <span class="k">def</span> <span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<div class="viewcode-block" id="partial_assignment.expand"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.expand">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">expand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill the free variables of this partial assignments with bits</span>
 <span class="sd">        provided by ``x``.</span>
 
@@ -730,7 +730,7 @@ document.write(`
         <span class="k">return</span> <span class="n">z</span></div>
 
 <div class="viewcode-block" id="partial_assignment.random"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.random">[docs]</a>    <span class="nd">@__assert_normalized</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate random bit vectors matching the constraints emposed by this</span>
 <span class="sd">        bit vector expression.</span>
 
@@ -745,7 +745,7 @@ document.write(`
         <span class="n">rand</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="o">*</span><span class="n">to_shape</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_free</span><span class="p">))</span><span class="o">&lt;</span><span class="mf">0.5</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">rand</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="partial_assignment.all"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="partial_assignment.all"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.all">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate all vectors matching this given partial assignment.</span>
 
 <span class="sd">        Returns:</span>
@@ -758,7 +758,7 @@ document.write(`
         <span class="n">all_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">m</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">all_</span><span class="p">)</span></div>
     
-<div class="viewcode-block" id="partial_assignment.match"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.match">[docs]</a>    <span class="k">def</span> <span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<div class="viewcode-block" id="partial_assignment.match"><a class="viewcode-back" href="../../api.html#qubolite.assignment.partial_assignment.match">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if a given bit vector or array of bit vectors matches this</span>
 <span class="sd">        partial assignment, i.e., if it represents a valid realization.</span>
 

@@ -243,14 +243,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for qubolite.bounds</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">._misc</span>   <span class="kn">import</span> <span class="n">get_random_state</span>
-<span class="kn">from</span> <span class="nn">.qubo</span>    <span class="kn">import</span> <span class="n">qubo</span>
-<span class="kn">from</span> <span class="nn">.solving</span> <span class="kn">import</span> <span class="n">random_search</span><span class="p">,</span> <span class="n">local_descent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._misc</span><span class="w">   </span><span class="kn">import</span> <span class="n">get_random_state</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qubo</span><span class="w">    </span><span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.solving</span><span class="w"> </span><span class="kn">import</span> <span class="n">random_search</span><span class="p">,</span> <span class="n">local_descent</span>
 
 
-<div class="viewcode-block" id="lb_roof_dual"><a class="viewcode-back" href="../../api.html#qubolite.bounds.lb_roof_dual">[docs]</a><span class="k">def</span> <span class="nf">lb_roof_dual</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
+<div class="viewcode-block" id="lb_roof_dual"><a class="viewcode-back" href="../../api.html#qubolite.bounds.lb_roof_dual">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">lb_roof_dual</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute the Roof Dual bound, as described in `[1] &lt;https://www.researchgate.net/publication/238379061_Preprocessing_of_unconstrained_quadratic_binary_optimization&gt;`__.</span>
 <span class="sd">    To this end, the QUBO instance is converted to a</span>
 <span class="sd">    corresponding flow network, whose maximum flow value</span>
@@ -267,14 +267,14 @@ document.write(`
 <span class="sd">        float: A lower bound on the minimal energy value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">igraph</span> <span class="kn">import</span> <span class="n">Graph</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">igraph</span><span class="w"> </span><span class="kn">import</span> <span class="n">Graph</span>
     <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
             <span class="s2">&quot;igraph needs to be installed prior to running qubolite.lb_roof_dual(). You can &quot;</span>
             <span class="s2">&quot;install igraph with:</span><span class="se">\n</span><span class="s2">&#39;pip install igraph&#39;&quot;</span>
-        <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
 
-    <span class="k">def</span> <span class="nf">to_flow_graph</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_flow_graph</span><span class="p">(</span><span class="n">P</span><span class="p">):</span>
         <span class="n">n</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">directed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -311,7 +311,7 @@ document.write(`
     <span class="k">return</span> <span class="n">const</span> <span class="o">+</span> <span class="n">v</span></div>
 
 
-<div class="viewcode-block" id="lb_negative_parameters"><a class="viewcode-back" href="../../api.html#qubolite.bounds.lb_negative_parameters">[docs]</a><span class="k">def</span> <span class="nf">lb_negative_parameters</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
+<div class="viewcode-block" id="lb_negative_parameters"><a class="viewcode-back" href="../../api.html#qubolite.bounds.lb_negative_parameters">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">lb_negative_parameters</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute a simple lower bound on the minimal energy</span>
 <span class="sd">    by summing up all negative parameters. As all QUBO</span>
 <span class="sd">    energy values are sums of parameter subsets, the</span>
@@ -330,7 +330,7 @@ document.write(`
 
 <span class="c1"># upper bounds ------------------------</span>
 
-<div class="viewcode-block" id="ub_sample"><a class="viewcode-back" href="../../api.html#qubolite.bounds.ub_sample">[docs]</a><span class="k">def</span> <span class="nf">ub_sample</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ub_sample"><a class="viewcode-back" href="../../api.html#qubolite.bounds.ub_sample">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">ub_sample</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">samples</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute an upper bound on the minimal energy by sampling</span>
 <span class="sd">    and taking the minimal encountered value.</span>
 
@@ -346,7 +346,7 @@ document.write(`
     <span class="k">return</span> <span class="n">v</span></div>
 
 
-<div class="viewcode-block" id="ub_local_descent"><a class="viewcode-back" href="../../api.html#qubolite.bounds.ub_local_descent">[docs]</a><span class="k">def</span> <span class="nf">ub_local_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">restarts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ub_local_descent"><a class="viewcode-back" href="../../api.html#qubolite.bounds.ub_local_descent">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">ub_local_descent</span><span class="p">(</span><span class="n">Q</span><span class="p">:</span> <span class="n">qubo</span><span class="p">,</span> <span class="n">restarts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute an upper bound on the minimal energy by repeatedly</span>
 <span class="sd">    performing a local optimization heuristic and returning the</span>
 <span class="sd">    lowest energy value encountered.</span>

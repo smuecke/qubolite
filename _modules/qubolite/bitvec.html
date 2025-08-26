@@ -243,15 +243,15 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for qubolite.bitvec</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
 
-<span class="kn">from</span> <span class="nn">._misc</span> <span class="kn">import</span> <span class="n">get_random_state</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_random_state</span>
 
 
-<div class="viewcode-block" id="all_bitvectors"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.all_bitvectors">[docs]</a><span class="k">def</span> <span class="nf">all_bitvectors</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="all_bitvectors"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.all_bitvectors">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">all_bitvectors</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate all bit vectors of size ``n`` in lexicographical order, starting from all zeros.</span>
 <span class="sd">    The least significant bit is at index 0. Note that always the same array object is yielded,</span>
 <span class="sd">    so to persist the bit vectors you need to make copies.</span>
@@ -285,7 +285,7 @@ document.write(`
         <span class="k">yield</span> <span class="n">x</span></div>
    
     
-<div class="viewcode-block" id="all_bitvectors_array"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.all_bitvectors_array">[docs]</a><span class="k">def</span> <span class="nf">all_bitvectors_array</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<div class="viewcode-block" id="all_bitvectors_array"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.all_bitvectors_array">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">all_bitvectors_array</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an array containing all bit vectors of size ``n`` in</span>
 <span class="sd">    lexicographical order.</span>
 
@@ -298,7 +298,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">n</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
 
-<div class="viewcode-block" id="random"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.random">[docs]</a><span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="random"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.random">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an array containing random bit vectors.</span>
 
 <span class="sd">    Args:</span>
@@ -322,7 +322,7 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="from_string"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_string">[docs]</a><span class="k">def</span> <span class="nf">from_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="from_string"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_string">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">from_string</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a string consisting of ``0`` and ``1`` to a bit vector.</span>
 
 <span class="sd">    Args:</span>
@@ -341,7 +341,7 @@ document.write(`
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="to_string"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.to_string">[docs]</a><span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">bitvec</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
+<div class="viewcode-block" id="to_string"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.to_string">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">to_string</span><span class="p">(</span><span class="n">bitvec</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a bit vector to a string.</span>
 <span class="sd">    If an array of bit vectors (shape ``(m, n)``) is passed, a numpy.ndarray</span>
 <span class="sd">    containing string objects is returned, one for each row.</span>
@@ -358,7 +358,7 @@ document.write(`
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="n">to_string</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">bitvec</span><span class="p">)</span></div>
     
 
-<div class="viewcode-block" id="from_dict"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_dict">[docs]</a><span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="from_dict"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.from_dict">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a dictionary to a bit vector.</span>
 <span class="sd">    The dictionary should map indices (int) to binary values (0 or 1).</span>
 <span class="sd">    If ``n`` is specified, the vector is padded with zeros to length ``n``.</span>
@@ -377,7 +377,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span></div>
 
 
-<div class="viewcode-block" id="to_dict"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.to_dict">[docs]</a><span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="n">bitvec</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
+<div class="viewcode-block" id="to_dict"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.to_dict">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="n">bitvec</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a bit vector to a dictionary mapping index (int)</span>
 <span class="sd">    to bit value (0 or 1).</span>
 
@@ -400,7 +400,7 @@ document.write(`
 <span class="c1"># Manipulate Bit Vectors</span>
 <span class="c1"># ======================</span>
 
-<div class="viewcode-block" id="flip_index"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.flip_index">[docs]</a><span class="k">def</span> <span class="nf">flip_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="flip_index"><a class="viewcode-back" href="../../api.html#qubolite.bitvec.flip_index">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">flip_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">in_place</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Flips the values of a given bit vector at the specified index or indices.</span>
 
 <span class="sd">    Args:</span>

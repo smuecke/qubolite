@@ -243,34 +243,34 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for qubolite.embedding</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">pairwise_kernels</span><span class="p">,</span> <span class="n">pairwise_distances</span>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">KernelCenterer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">pairwise_kernels</span><span class="p">,</span> <span class="n">pairwise_distances</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">KernelCenterer</span>
 
-<span class="kn">from</span> <span class="nn">._misc</span> <span class="kn">import</span> <span class="n">get_random_state</span>
-<span class="kn">from</span> <span class="nn">.qubo</span> <span class="kn">import</span> <span class="n">qubo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_random_state</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.qubo</span><span class="w"> </span><span class="kn">import</span> <span class="n">qubo</span>
 
 
-<div class="viewcode-block" id="qubo_embedding"><a class="viewcode-back" href="../../api.html#qubolite.embedding.qubo_embedding">[docs]</a><span class="k">class</span> <span class="nc">qubo_embedding</span><span class="p">:</span>
-<div class="viewcode-block" id="qubo_embedding.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.qubo_embedding.map_solution">[docs]</a>    <span class="k">def</span> <span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="qubo_embedding"><a class="viewcode-back" href="../../api.html#qubolite.embedding.qubo_embedding">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">qubo_embedding</span><span class="p">:</span>
+<div class="viewcode-block" id="qubo_embedding.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.qubo_embedding.map_solution">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span>
 
 <div class="viewcode-block" id="qubo_embedding.random"><a class="viewcode-back" href="../../api.html#qubolite.embedding.qubo_embedding.random">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">NotImplemented</span></div></div>
 
 
-<div class="viewcode-block" id="Kernel2MeansClustering"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Kernel2MeansClustering">[docs]</a><span class="k">class</span> <span class="nc">Kernel2MeansClustering</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
+<div class="viewcode-block" id="Kernel2MeansClustering"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Kernel2MeansClustering">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Kernel2MeansClustering</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Binary clustering based on kernel matrices.</span>
 
 <span class="sd">    Args:</span>
@@ -284,7 +284,7 @@ document.write(`
 <span class="sd">            symmetrical optimal cluster assignments. Defaults to False.</span>
 <span class="sd">        **kernel_params: Additional keyword arguments for the Kernel function, passed to ``sklearn.metrics.pairwise_kernels``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unambiguous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kernel_params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">unambiguous</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kernel_params</span><span class="p">):</span>
         <span class="c1"># for different kernels: https://scikit-learn.org/stable/modules/metrics.html</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__kernel</span> <span class="o">=</span> <span class="n">kernel</span>
@@ -294,14 +294,14 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__from_data</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># calculate kernel matrix</span>
         <span class="n">K</span> <span class="o">=</span> <span class="n">pairwise_kernels</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__kernel</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">__kernel_params</span><span class="p">)</span>
         <span class="c1"># center kernel matrix</span>
@@ -315,12 +315,12 @@ document.write(`
             <span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">[:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Kernel2MeansClustering.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Kernel2MeansClustering.map_solution">[docs]</a>    <span class="k">def</span> <span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Kernel2MeansClustering.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Kernel2MeansClustering.map_solution">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="c1"># return cluster assignments (-1, +1)</span>
         <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span></div>
 
 <div class="viewcode-block" id="Kernel2MeansClustering.random"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Kernel2MeansClustering.random">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                <span class="n">unambiguous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kernel_params</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kernel</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span>
@@ -334,7 +334,7 @@ document.write(`
                          <span class="o">**</span><span class="n">kernel_params</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="KMedoids"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KMedoids">[docs]</a><span class="k">class</span> <span class="nc">KMedoids</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
+<div class="viewcode-block" id="KMedoids"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KMedoids">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">KMedoids</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    K-medoids vector quantization problem: Given a dataset, find k representatives.</span>
 <span class="sd">    For the derivation see:</span>
@@ -352,7 +352,7 @@ document.write(`
 <span class="sd">        gamma: (float, optional): Parameter controlling the enforcement of exactly k</span>
 <span class="sd">            representatives. Defaults to 2.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_set</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_set</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">distance_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">data_set</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">distance_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;data_set or distance_matrix have to be given!&#39;</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">distance_matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -373,15 +373,15 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__from_data</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__data_set</span><span class="p">,</span>
                     <span class="n">distance_matrix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__distance_matrix</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Identification of far apart data points</span>
         <span class="n">far_apart_matrix</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">__alpha</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">__distance_matrix</span>
         <span class="c1"># Identification of central data points</span>
@@ -397,7 +397,7 @@ document.write(`
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="SubsetSum"><a class="viewcode-back" href="../../api.html#qubolite.embedding.SubsetSum">[docs]</a><span class="k">class</span> <span class="nc">SubsetSum</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
+<div class="viewcode-block" id="SubsetSum"><a class="viewcode-back" href="../../api.html#qubolite.embedding.SubsetSum">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">SubsetSum</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Subset Sum problem: Given a list of values, find</span>
 <span class="sd">    a subset that adds up to a given target value.</span>
 
@@ -406,32 +406,32 @@ document.write(`
 <span class="sd">            The resulting QUBO instance will have size ``len(values)``.</span>
 <span class="sd">        target (int | float): Target value which the subset must add up to.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__target</span> <span class="o">=</span> <span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__from_data</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__Q</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">values</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__values</span><span class="p">,</span>
             <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__target</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__from_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
         <span class="n">q</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">diag_indices_from</span><span class="p">(</span><span class="n">q</span><span class="p">)]</span> <span class="o">-=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">target</span> <span class="o">*</span> <span class="n">values</span>
         <span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">q</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubsetSum.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.SubsetSum.map_solution">[docs]</a>    <span class="k">def</span> <span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="SubsetSum.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.SubsetSum.map_solution">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__values</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">)]</span></div>
 
 <div class="viewcode-block" id="SubsetSum.random"><a class="viewcode-back" href="../../api.html#qubolite.embedding.SubsetSum.random">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">low</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">low</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
                <span class="n">summands</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">npr</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
         <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
@@ -443,7 +443,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="Max2Sat"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Max2Sat">[docs]</a><span class="k">class</span> <span class="nc">Max2Sat</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
+<div class="viewcode-block" id="Max2Sat"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Max2Sat">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Max2Sat</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum Satisfyability problem with clauses of size 2.</span>
 <span class="sd">    The problem is to find a variable assignment that maximizes</span>
 <span class="sd">    the number of true clauses.</span>
@@ -459,7 +459,7 @@ document.write(`
 <span class="sd">        penalty (float, optional): Penalty value for unsatisfied clauses.</span>
 <span class="sd">            Must be positive. Defaults to ``1.0``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clauses</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clauses</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">clauses</span><span class="p">),</span> <span class="s1">&#39;All clauses must consist of exactly 2 variables&#39;</span>
         <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="mi">0</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">clauses</span><span class="p">),</span> <span class="s1">&#39;&quot;0&quot; cannot be a variable, use indices &gt;= 1&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__clauses</span> <span class="o">=</span> <span class="n">clauses</span>
@@ -469,11 +469,11 @@ document.write(`
         <span class="k">assert</span> <span class="n">penalty</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Penalty must be positive &gt; 0&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__penalty</span> <span class="o">=</span> <span class="n">penalty</span>
 
-<div class="viewcode-block" id="Max2Sat.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Max2Sat.map_solution">[docs]</a>    <span class="k">def</span> <span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="Max2Sat.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Max2Sat.map_solution">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__indices</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__indices</span><span class="p">}</span></div>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clauses</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
         <span class="n">ix_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">qi</span> <span class="k">for</span> <span class="n">qi</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__indices</span><span class="p">)}</span>
@@ -497,11 +497,11 @@ document.write(`
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__clauses</span>
 
 <div class="viewcode-block" id="Max2Sat.random"><a class="viewcode-back" href="../../api.html#qubolite.embedding.Max2Sat.random">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">clauses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">clauses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">npr</span> <span class="o">=</span> <span class="n">get_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">clauses</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">clauses</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
@@ -509,7 +509,7 @@ document.write(`
         <span class="k">return</span> <span class="bp">NotImplemented</span></div></div>
 
 
-<div class="viewcode-block" id="KernelSVM"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KernelSVM">[docs]</a><span class="k">class</span> <span class="nc">KernelSVM</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
+<div class="viewcode-block" id="KernelSVM"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KernelSVM">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">KernelSVM</span><span class="p">(</span><span class="n">qubo_embedding</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Kernel Support Vector Machine learning: Given labeled numerical data,</span>
 <span class="sd">    and a kernel, determines the support vectors, which is a subset of the </span>
 <span class="sd">    data that lie on the margin of a separating hyperplane in the feature space </span>
@@ -526,7 +526,7 @@ document.write(`
 <span class="sd">        **kernel_params: Additional keyword arguments for the Kernel function, passed to ``sklearn.metrics.pairwise_kernels``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kernel_params</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kernel_params</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__X</span> <span class="o">=</span> <span class="n">X</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__C</span> <span class="o">=</span> <span class="n">C</span>
@@ -534,11 +534,11 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">__kernel_params</span> <span class="o">=</span> <span class="n">kernel_params</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__y</span><span class="p">)</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">K</span> <span class="o">=</span> <span class="n">pairwise_kernels</span><span class="p">(</span>
             <span class="n">X</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__X</span><span class="p">,</span>
             <span class="n">metric</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__kernel</span><span class="p">,</span>
@@ -548,7 +548,7 @@ document.write(`
         <span class="n">m</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__C</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">qubo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
     
-<div class="viewcode-block" id="KernelSVM.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KernelSVM.map_solution">[docs]</a>    <span class="k">def</span> <span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="KernelSVM.map_solution"><a class="viewcode-back" href="../../api.html#qubolite.embedding.KernelSVM.map_solution">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">map_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div></div>
 </pre></div>
 

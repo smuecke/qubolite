@@ -304,6 +304,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.from_ising"><code class="docutils literal notranslate"><span class="pre">qubo.from_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load"><code class="docutils literal notranslate"><span class="pre">qubo.load()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load_qbsolv"><code class="docutils literal notranslate"><span class="pre">qubo.load_qbsolv()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.mean"><code class="docutils literal notranslate"><span class="pre">qubo.mean()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.num_couplings"><code class="docutils literal notranslate"><span class="pre">qubo.num_couplings</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
@@ -320,6 +321,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_ising"><code class="docutils literal notranslate"><span class="pre">qubo.to_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.unique_parameters"><code class="docutils literal notranslate"><span class="pre">qubo.unique_parameters()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.variance"><code class="docutils literal notranslate"><span class="pre">qubo.variance()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -717,6 +719,26 @@ used by D-Wave’s <code class="docutils literal notranslate"><span class="pre">
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.mean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.mean" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute mean of <span class="math notranslate nohighlight">\(\boldsymbol x^{\top}Q\boldsymbol x\)</span>.
+Assumes <span class="math notranslate nohighlight">\(\boldsymbol x\)</span> is sampled from a uniform distribution.
+See <a class="reference external" href="https://arxiv.org/abs/2504.12419">[1]</a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Mean of the QUBO’s energy values.</dt><dd><p>Assumes solutions are sampled from a uniform distribution.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="qubolite.qubo.num_couplings">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_couplings</span></span><a class="headerlink" href="#qubolite.qubo.num_couplings" title="Permalink to this definition">#</a></dt>
@@ -1074,6 +1096,26 @@ float: Constant offset value</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="qubolite.qubo.variance">
+<span class="sig-name descname"><span class="pre">variance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/qubolite/qubo.html#qubo.variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#qubolite.qubo.variance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute variance of <span class="math notranslate nohighlight">\(\boldsymbol x^{\top}Q\boldsymbol x\)</span>.
+Assumes <span class="math notranslate nohighlight">\(\boldsymbol x\)</span> is sampled from a uniform distribution.
+See <a class="reference external" href="https://arxiv.org/abs/2504.12419">[1]</a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>Variance of the QUBO’s energy values.</dt><dd><p>Assumes solutions are sampled from a uniform distribution.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1567,7 +1609,7 @@ reduction. See example.</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">qubolite</span> <span class="k">as</span> <span class="nn">ql</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">qubolite</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ql</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="n">ql</span><span class="o">.</span><span class="n">qubo</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="s1">&#39;example&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">PA</span> <span class="o">=</span> <span class="n">ql</span><span class="o">.</span><span class="n">preprocessing</span><span class="o">.</span><span class="n">qpro_plus</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">PA</span><span class="o">.</span><span class="n">num_fixed</span><span class="si">}</span><span class="s1"> variables were eliminated!&#39;</span><span class="p">)</span>
@@ -2245,6 +2287,7 @@ and taking the minimal encountered value.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.from_ising"><code class="docutils literal notranslate"><span class="pre">qubo.from_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load"><code class="docutils literal notranslate"><span class="pre">qubo.load()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.load_qbsolv"><code class="docutils literal notranslate"><span class="pre">qubo.load_qbsolv()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.mean"><code class="docutils literal notranslate"><span class="pre">qubo.mean()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.num_couplings"><code class="docutils literal notranslate"><span class="pre">qubo.num_couplings</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.pairwise_marginals"><code class="docutils literal notranslate"><span class="pre">qubo.pairwise_marginals()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.partition_function"><code class="docutils literal notranslate"><span class="pre">qubo.partition_function()</span></code></a></li>
@@ -2261,6 +2304,7 @@ and taking the minimal encountered value.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_ising"><code class="docutils literal notranslate"><span class="pre">qubo.to_ising()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.to_posiform"><code class="docutils literal notranslate"><span class="pre">qubo.to_posiform()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.unique_parameters"><code class="docutils literal notranslate"><span class="pre">qubo.unique_parameters()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#qubolite.qubo.variance"><code class="docutils literal notranslate"><span class="pre">qubo.variance()</span></code></a></li>
 </ul>
 </li>
 </ul>
