@@ -402,6 +402,7 @@ class partial_assignment:
         T = np.zeros((self.size, self.num_free+1))
         one = T.shape[1]-1 # index of constant 1
         j = 0
+        free_variable = np.zeros(self.size, dtype=int) # maps variable indices to free variable indices
         for i in range(self.size):
             u = f'x{i}'
             try:
@@ -409,13 +410,15 @@ class partial_assignment:
             except StopIteration:
                 # no outgoing edges -> free variable
                 T[i, j] = 1.0
+                free_variable[i] = j
                 j += 1
                 continue
             if v == '1':
                 if not data['inverse']:
                     T[i, one] = 1.0
             else:
-                l = int(v[1:])
+                l = free_variable[int(v[1:])]
+
                 if data['inverse']:
                     T[i, l] = -1.0
                     T[i, one] = 1.0
